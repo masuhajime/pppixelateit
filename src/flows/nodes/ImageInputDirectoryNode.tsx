@@ -59,15 +59,15 @@ export const ImageInputDirectoryNode = ({ id, data }: NodeProps<NodeData>) => {
                 console.error("can't select file");
               } else {
                 // log
-                console.debug('selectedDir', selectedDir);
-                const files = await fs.readDir(selectedDir);
-                const filePaths = files.map((file) => {
-                  return file.path;
-                });
-                nodeStore.updateNodeData<NodeData>(id, {
-                  inputDirectoryPath: selectedDir,
-                  inputFilePaths: filePaths,
-                });
+                // console.debug('selectedDir', selectedDir);
+                // const files = await fs.readDir(selectedDir);
+                // const filePaths = files.map((file) => {
+                //   return file.path;
+                // });
+                // nodeStore.updateNodeData<NodeData>(id, {
+                //   inputDirectoryPath: selectedDir,
+                //   inputFilePaths: filePaths,
+                // });
               }
             }}
           >

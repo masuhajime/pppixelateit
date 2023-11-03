@@ -1,10 +1,8 @@
+/* eslint-disable import/prefer-default-export */
 import { NodeProps } from 'reactflow';
 
 import ImageIcon from '@mui/icons-material/Image';
 import { Box, Button, FormControl } from '@mui/material';
-// import { fs } from '@tauri-apps/api'
-// import { open } from '@tauri-apps/api/dialog'
-import { Buffer } from 'buffer';
 import path from 'path';
 import useNodeStore from '../../store/store';
 import { NodeData, handleSources } from './ImageInputNodeBehavior';
@@ -17,12 +15,12 @@ import { ImagePreview } from './items/ImagePreview';
 import { HandleSourceDirectory } from './items/HandleSourceDirectory';
 import { HandleSourceText } from './items/HandleSourceText';
 
-export const ImageInputNode = ({ id, data }: NodeProps<NodeData>) => {
+export function ImageInputNode({ id, data }: NodeProps<NodeData>) {
   const nodeStore = useNodeStore.getState();
 
   let inputFilePath = 'Select Image File';
-  let directoryPath = undefined;
-  if (!!data.inputFilePath) {
+  let directoryPath;
+  if (data.inputFilePath) {
     // get file name from path
     inputFilePath = path.basename(data.inputFilePath) || 'Select Image File';
     // get last directory name
@@ -50,38 +48,33 @@ export const ImageInputNode = ({ id, data }: NodeProps<NodeData>) => {
                 textTransform: 'none',
               }}
               onClick={async () => {
-                const selectedFile = await open({
-                  multiple: false,
-                  filters: [
-                    { name: 'Image', extensions: ['png', 'jpeg', 'gif'] },
-                  ],
-                });
-                console.log(selectedFile);
-                if (Array.isArray(selectedFile)) {
-                  // user selectedFile multiple files
-                  console.error("can't select multiple files");
-                } else if (selectedFile === null) {
-                  // user cancelled the selection
-                  console.error("can't select file");
-                } else {
-                  // user selected a single file
-                  fs.readBinaryFile(selectedFile).then((buffer) => {
-                    nodeStore.updateNodeData<NodeData>(id, {
-                      inputFilePath: selectedFile,
-                      imageBuffer: {
-                        buffer: Buffer.from(buffer),
-                        end: true,
-                      },
-                    });
-                  });
-                }
+                // const selectedFile = await open({
+                //   multiple: false,
+                //   filters: [
+                //     { name: 'Image', extensions: ['png', 'jpeg', 'gif'] },
+                //   ],
+                // });
+                // const selectedFile = ipcRenderer.sendSync(
+                //   'synchronous-message',
+                //   'ping',
+                // );
+                // console.log(selectedFile);
+                // if (Array.isArray(selectedFile)) {
+                //   // user selectedFile multiple files
+                //   console.error("can't select multiple files");
+                // } else if (selectedFile === null) {
+                //   // user cancelled the selection
+                //   console.error("can't select file");
+                // } else {
+                //   console.log('selected file', selectedFile);
+                // }
               }}
             >
               <ImageIcon
                 sx={{
                   marginRight: '8px',
                 }}
-              ></ImageIcon>
+              />
               <Box
                 sx={{
                   // ellipsis
@@ -100,25 +93,25 @@ export const ImageInputNode = ({ id, data }: NodeProps<NodeData>) => {
             </Button>
           </Box>
         </FormControl>
-        <NodeStatus nodeData={data}></NodeStatus>
+        <NodeStatus nodeData={data} />
         <HandleSourceImage
           handleId={handleSources.image.id}
           label="Image"
           nodeId={id}
-        ></HandleSourceImage>
+        />
         <HandleSourceDirectory
           handleId={handleSources.directory.id}
           label="Directory"
           nodeId={id}
           placeholder="Directory"
           directory={directoryPath}
-          disabled={true}
-        ></HandleSourceDirectory>
+          disabled
+        />
         <HandleSourceText
           handleId={handleSources.filename.id}
           label="File Name"
           nodeId={id}
-        ></HandleSourceText>
+        />
         <ImagePreview
           enabled={!!data.settings.enablePreview}
           completed={!!data.completed}
@@ -128,8 +121,8 @@ export const ImageInputNode = ({ id, data }: NodeProps<NodeData>) => {
               enablePreview: enabled,
             });
           }}
-        ></ImagePreview>
+        />
       </NodeContent>
     </Node>
   );
-};
+}

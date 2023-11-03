@@ -1,17 +1,18 @@
+/* eslint-disable import/prefer-default-export */
 import {
   EdgeProps,
   getBezierPath,
   EdgeLabelRenderer,
   BaseEdge,
-} from 'reactflow'
-import useNodeStore, { RFState } from '../../store/store'
-import { shallow } from 'zustand/shallow'
+} from 'reactflow';
+import { shallow } from 'zustand/shallow';
+import useNodeStore, { RFState } from '../../store/store';
 
 type CustomEdgeData = {
-  label?: string
-  onDelete: (id: string) => void
-}
-export const CustomEdge = ({
+  label?: string;
+  onDelete: (id: string) => void;
+};
+export function CustomEdge({
   id,
   sourceX,
   sourceY,
@@ -21,7 +22,7 @@ export const CustomEdge = ({
   targetPosition,
   data,
   selected,
-}: EdgeProps<CustomEdgeData>) => {
+}: EdgeProps<CustomEdgeData>) {
   const [edgePath, labelX, labelY] = getBezierPath({
     sourceX,
     sourceY,
@@ -29,14 +30,14 @@ export const CustomEdge = ({
     targetX,
     targetY,
     targetPosition,
-  })
+  });
 
   const { edgeDelete } = useNodeStore(
     (state: RFState) => ({
       edgeDelete: state.edgeDelete,
     }),
-    shallow
-  )
+    shallow,
+  );
 
   return (
     <>
@@ -56,7 +57,7 @@ export const CustomEdge = ({
             }}
             className="nodrag nopan"
             onClick={() => {
-              edgeDelete(id)
+              edgeDelete(id);
             }}
           >
             Delete
@@ -66,5 +67,5 @@ export const CustomEdge = ({
         )}
       </EdgeLabelRenderer>
     </>
-  )
+  );
 }

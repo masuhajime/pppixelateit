@@ -1,13 +1,14 @@
 import { fill00ColorToTransparent } from '../../process/w2b';
-import useNodeStore, { getNodeSnapshot } from '../../store/store';
+import useNodeStore, {
+  getNodeSnapshot,
+  handleSourceImageDefault,
+} from '../../store/store';
 import {
   HandleSource,
   HandleTarget,
   NodeBaseData,
   NodeBaseDataImageBuffer,
   NodeBehaviorInterface,
-  handleSourceImageDefault,
-  propagateValue,
 } from './data/NodeData';
 
 export const handleSources: Record<string, HandleSource> = {

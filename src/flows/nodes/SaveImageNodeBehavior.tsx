@@ -96,7 +96,7 @@ export const nodeBehavior: NodeBehaviorInterface = {
 
     // log
     console.log('saving image to ' + `${directory}/${filename}`);
-    await fs.writeBinaryFile(`${directory}/${filename}`, pngBuffer);
+    // await fs.writeBinaryFile(`${directory}/${filename}`, pngBuffer);
     console.log('saved image' + `${directory}/${filename}`);
 
     store.updateNodeData<NodeData>(nodeId, {

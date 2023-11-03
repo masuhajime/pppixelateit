@@ -1,6 +1,6 @@
 // @flow
 import { Box, Card, CardHeader, IconButton } from '@mui/material';
-import { getNodeTypes } from '../flows/nodes';
+import { getNodeTypes } from '../flows/nodes/data/NodeData';
 
 const nodeTypes = getNodeTypes();
 

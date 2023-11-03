@@ -1,13 +1,15 @@
 import { greyscale } from '../../process/w2b';
-import useNodeStore, { getNodeSnapshot } from '../../store/store';
+import useNodeStore, {
+  getNodeSnapshot,
+  handleSourceImageDefault,
+  propagateValue,
+} from '../../store/store';
 import {
   HandleSource,
   HandleTarget,
   NodeBaseData,
   NodeBaseDataImageBuffer,
   NodeBehaviorInterface,
-  handleSourceImageDefault,
-  propagateValue,
 } from './data/NodeData';
 
 export const handleSources: Record<string, HandleSource> = {
@@ -30,7 +32,7 @@ export const nodeBehavior: NodeBehaviorInterface = {
     dataType: string,
     data: any,
   ): void {
-    //data.completed = true
+    // data.completed = true
     console.log('dataIncoming:', nodeId, handleId, dataType);
 
     const store = useNodeStore.getState();
@@ -45,7 +47,7 @@ export const nodeBehavior: NodeBehaviorInterface = {
     // }
   },
   async nodeProcess(nodeId: string, callback: () => void): Promise<void> {
-    let node = getNodeSnapshot<NodeData>(nodeId);
+    const node = getNodeSnapshot<NodeData>(nodeId);
     if (!this.canStartProcess(node.id)) {
       return;
     }

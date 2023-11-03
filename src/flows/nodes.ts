@@ -1,92 +1,57 @@
-import { CallSharpNode } from './nodes/CallSharpNode';
-import { Fill00ColorToTransparentNode } from './nodes/Fill00ColorToTransparentNode';
-import { FillWithColorNode } from './nodes/FillWithColorNode';
-import { ImageInputDirectoryNode } from './nodes/ImageInputDirectoryNode';
-import { ImageInputNode } from './nodes/ImageInputNode';
-import { ImagePreviewCompare } from './nodes/ImagePreviewCompare';
-import { ImagePreviewNode } from './nodes/ImagePreviewNode';
-import { OutlineNode } from './nodes/OutlineNode';
-import { PixelateNode } from './nodes/PixelateNode';
-import { PosterizeNode } from './nodes/PosterizeNode';
-import { RemoveBackgroundNode } from './nodes/RemoveBackgroundNode';
-import { RemoveEdgePixelNode } from './nodes/RemoveEdgePixelNode';
-import { ResizeToSideNode } from './nodes/ResizeToSideNode';
-import { SaveImageNode } from './nodes/SaveImageNode';
-import { TestNode } from './nodes/TestNode';
-import { TextAppendNode } from './nodes/TextAppendNode';
-import { TextFileNameNode } from './nodes/TextFileNameNode';
-import { WhiteToBlackNode } from './nodes/WhiteToBlackNode';
-
-const nodeDefines: any[] = [
+const nodeDefines: { name: string }[] = [
   {
-    element: ImageInputDirectoryNode,
+    name: 'ImageInputNode',
   },
   {
-    element: TextAppendNode,
+    name: 'ResizeToSideNode',
   },
   {
-    element: TextFileNameNode,
+    name: 'ImageInputDirectoryNode',
   },
   {
-    element: ImageInputNode,
+    name: 'TextAppendNode',
   },
   {
-    element: WhiteToBlackNode,
+    name: 'TextFileNameNode',
   },
   {
-    element: ImagePreviewNode,
+    name: 'WhiteToBlackNode',
   },
   {
-    element: ResizeToSideNode,
+    name: 'ImagePreviewNode',
   },
   {
-    element: PosterizeNode,
+    name: 'PosterizeNode',
   },
   {
-    element: PixelateNode,
+    name: 'PixelateNode',
   },
   {
-    element: Fill00ColorToTransparentNode,
+    name: 'Fill00ColorToTransparentNode',
   },
   {
-    element: TestNode,
+    name: 'TestNode',
   },
   {
-    element: FillWithColorNode,
+    name: 'FillWithColorNode',
   },
   {
-    element: RemoveEdgePixelNode,
+    name: 'RemoveEdgePixelNode',
   },
   {
-    element: OutlineNode,
+    name: 'OutlineNode',
   },
   {
-    element: ImagePreviewCompare,
+    name: 'ImagePreviewCompare',
   },
   {
-    element: SaveImageNode,
+    name: 'SaveImageNode',
   },
   {
-    element: RemoveBackgroundNode,
+    name: 'RemoveBackgroundNode',
   },
   {
-    element: CallSharpNode,
+    name: 'CallSharpNode',
   },
 ];
-
-export const getNodeTypesForReactFlow = () => {
-  const nodeTypes: { [k: string]: any } = ({} = {});
-  nodeDefines.forEach((node) => {
-    nodeTypes[node.element.name] = node.element;
-  });
-  return nodeTypes;
-};
-
-export const getNodeTypes = () => {
-  return nodeDefines.map((node) => {
-    return {
-      ...node,
-      name: node.element.name,
-    };
-  });
-};
+export default nodeDefines;

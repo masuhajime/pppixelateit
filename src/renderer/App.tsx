@@ -21,8 +21,8 @@ import 'reactflow/dist/style.css';
 import useNodeStore, { RFState } from '../store/store';
 import processStore from '../store/processStore';
 import processController from '../process/imageProcess';
-import { getNodeTypesForReactFlow } from '../flows/nodes';
 import { CustomEdge } from '../flows/edges/CustomEdge';
+import { getNodeTypesForReactFlow } from '../flows/nodesEnabled';
 
 const theme = createTheme({
   palette: {
@@ -108,6 +108,7 @@ function Main() {
       });
       const newNode = {
         id: `node-${type}-${uuidv4()}`,
+        // id: `node-${type}`,
         type,
         position,
         data: { settings: {} },

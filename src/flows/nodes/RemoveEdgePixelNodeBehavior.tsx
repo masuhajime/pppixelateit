@@ -1,70 +1,72 @@
-import { removeEdge } from '../../process/w2b'
-import useNodeStore, { getNodeSnapshot } from '../../store/store'
+import { removeEdge } from '../../process/w2b';
+import useNodeStore, {
+  getNodeSnapshot,
+  handleSourceImageDefault,
+  propagateValue,
+} from '../../store/store';
 import {
   HandleSource,
   HandleTarget,
   NodeBaseData,
   NodeBaseDataImageBuffer,
   NodeBehaviorInterface,
-  handleSourceImageDefault,
-  propagateValue,
-} from './data/NodeData'
+} from './data/NodeData';
 
 export const handleSources: Record<string, HandleSource> = {
   image: handleSourceImageDefault,
-}
+};
 
 export const handleTargets: Record<string, HandleTarget> = {
   image: {
     id: 'image',
     dataType: 'image',
   },
-}
+};
 
 export type NodeData = {
   settings: {
-    threshold?: number
-  }
+    threshold?: number;
+  };
 } & NodeBaseData &
-  NodeBaseDataImageBuffer
+  NodeBaseDataImageBuffer;
 
 export const nodeBehavior: NodeBehaviorInterface = {
   dataIncoming(
     nodeId: string,
     handleId: string,
     dataType: string,
-    data: any
+    data: any,
   ): void {
-    const store = useNodeStore.getState()
+    const store = useNodeStore.getState();
     store.updateNodeData<NodeData>(nodeId, {
       imageBuffer: data,
       completed: false,
-    })
+    });
     // if (this.canStartProcess(node.id)) {
     //   this.nodeProcess(node.id)
     // }
   },
   nodeProcess(nodeId: string, callback: () => void): void {
-    const store = useNodeStore.getState()
+    const store = useNodeStore.getState();
     store.updateNodeData<NodeData>(nodeId, {
       completed: false,
-    })
-    let node = getNodeSnapshot<NodeData>(nodeId)
-    //data.completed = true
+    });
+    const node = getNodeSnapshot<NodeData>(nodeId);
+    // data.completed = true
     console.log(
       'node process resize to:',
-      //node.data.imageBase64,
+      // node.data.imageBase64,
       node.id,
-      node.type
-    )
+      node.type,
+    );
 
     if (!node.data.imageBuffer?.buffer || !node.data.settings.threshold) {
-      throw new Error('no image or number')
+      throw new Error('no image or number');
     }
 
     removeEdge(
       node.data.imageBuffer?.buffer,
-      node.data.settings.threshold
+      node.data.settings.threshold,
     ).then((w2b) => {
       store.updateNodeData<NodeData>(nodeId, {
         completed: true,
@@ -72,14 +74,14 @@ export const nodeBehavior: NodeBehaviorInterface = {
           buffer: w2b,
           end: true,
         },
-      })
+      });
 
-      propagateValue(nodeId, handleSources)
-      callback()
-    })
+      propagateValue(nodeId, handleSources);
+      callback();
+    });
   },
   canStartProcess(nodeId: string): boolean {
-    const node = getNodeSnapshot<NodeData>(nodeId)
-    return !!node.data.imageBuffer?.buffer && !!node.data.settings.threshold
+    const node = getNodeSnapshot<NodeData>(nodeId);
+    return !!node.data.imageBuffer?.buffer && !!node.data.settings.threshold;
   },
-}
+};

@@ -1,4 +1,4 @@
-import { createWithEqualityFn } from 'zustand/traditional'
+import { createWithEqualityFn } from 'zustand/traditional';
 import {
   Connection,
   Edge,
@@ -16,8 +16,12 @@ import {
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { initialEdges, initialNodes } from './initialNodesTransparent';
 import {
+  BufferSequenceable,
+  HandleSource,
   NodeBaseData,
   NodeBaseDataSettings,
+  NodeBehaviorInterface,
+  getNodeBehaviorCacheByType,
 } from '../flows/nodes/data/NodeData';
 
 export type RFState = {
@@ -45,6 +49,29 @@ export type RFState = {
   getPartialState(): Partial<RFState>;
   getPartialStateJsonString(): string;
   setPartialState: (partialState: Partial<RFState>) => void;
+};
+
+const partialize = (state: RFState): Partial<RFState> => {
+  const objects: Partial<RFState> = Object.fromEntries(
+    Object.entries(state).filter(([key]) => {
+      return ['nodes', 'edges'].includes(key);
+    }),
+  );
+
+  // remove keys in edges.data without "settings" key in objects.nodes
+  objects.nodes = (objects.nodes || []).map((node) => {
+    // if (node.type === 'ImageInputNode') return node;
+    const newNode = { ...node };
+    if (node.data && node.data.settings) {
+      const settings = { ...node.data.settings };
+      newNode.data = { settings };
+    } else {
+      newNode.data = { settings: {} };
+    }
+    return newNode;
+  });
+
+  return objects;
 };
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
@@ -128,7 +155,7 @@ const useNodeStore = createWithEqualityFn(
           });
         },
         nodeGetProcessing(nodeId: string): boolean {
-          const node = get().nodes.find((node) => node.id === nodeId);
+          const node = get().nodes.find((nodeA) => nodeA.id === nodeId);
           if (!node) throw new Error('node not found');
           return node.data.isProcessing;
         },
@@ -164,7 +191,7 @@ const useNodeStore = createWithEqualityFn(
           });
         },
         nodeGetCompleted(nodeId: string): boolean {
-          const node = get().nodes.find((node) => node.id === nodeId);
+          const node = get().nodes.find((nodeA) => nodeA.id === nodeId);
           if (!node) throw new Error('node not found');
           return node.data.completed;
         },
@@ -223,29 +250,6 @@ const useNodeStore = createWithEqualityFn(
   ),
 );
 
-const partialize = (state: RFState): Partial<RFState> => {
-  const objects: Partial<RFState> = Object.fromEntries(
-    Object.entries(state).filter(([key]) => {
-      return ['nodes', 'edges'].includes(key);
-    }),
-  );
-
-  // remove keys in edges.data without "settings" key in objects.nodes
-  objects.nodes = (objects.nodes || []).map((node) => {
-    // if (node.type === 'ImageInputNode') return node;
-    const newNode = { ...node };
-    if (node.data && node.data.settings) {
-      const settings = { ...node.data.settings };
-      newNode.data = { settings };
-    } else {
-      newNode.data = { settings: {} };
-    }
-    return newNode;
-  });
-
-  return objects;
-};
-
 export const getNodeSnapshot = <T = NodeBaseData>(nodeId: string) =>
   useNodeStore.getState().getNode<T>(nodeId);
 
@@ -260,4 +264,94 @@ export const updateSetting = (
   };
 };
 
+export const defaultNodeInitialize = (nodeId: string) => {
+  const store = useNodeStore.getState();
+  store.updateNodeData<NodeBaseData>(nodeId, {
+    completed: false,
+    isProcessing: false,
+    processTime: undefined,
+  });
+};
+
+export const handleSourceImageDefault = {
+  id: 'image',
+  dataType: 'buffer',
+  propagateValue: (nodeId: string) =>
+    getNodeSnapshot<{
+      imageBuffer: BufferSequenceable;
+    }>(nodeId).data.imageBuffer,
+} as HandleSource<BufferSequenceable>;
+
+export const handleSourceTextDefault = {
+  id: 'text',
+  dataType: 'text',
+  propagateValue: (nodeId: string) =>
+    getNodeSnapshot<{
+      text: string;
+    }>(nodeId).data.text,
+} as HandleSource<string>;
+
+export const handleSourceStringDefault = handleSourceTextDefault;
+
 export default useNodeStore;
+
+export const propagateValue = (
+  nodeId: string,
+  handleSources: Record<string, HandleSource>,
+  hasNextIteration?: boolean,
+) => {
+  const store = useNodeStore.getState();
+  store.getOutgoingEdgesFromSourceNode(nodeId).forEach((edge) => {
+    // edge = Handle source
+    const targetNode = store.getNode(edge.target);
+    if (!targetNode.type) {
+      return;
+    }
+    const nodeBehavior = getNodeBehaviorCacheByType(targetNode.type);
+
+    Object.values(handleSources).forEach((handleSource) => {
+      if (!edge.targetHandle) {
+        return;
+      }
+      if (handleSource.id !== edge.sourceHandle) {
+        return;
+      }
+      if (edge.target !== targetNode.id) {
+        return;
+      }
+      console.log('propagate value to: ', {
+        targetNode,
+        handleSource,
+        edge,
+        nodeId,
+      });
+      nodeBehavior.dataIncoming(
+        targetNode.id,
+        edge.targetHandle,
+        handleSource.dataType,
+        handleSource.propagateValue(nodeId),
+      );
+    });
+  });
+};
+
+export const createNodeBehavior = (
+  n: Partial<NodeBehaviorInterface>,
+): NodeBehaviorInterface => {
+  return { ...defaultNodeBehavior, ...n } as NodeBehaviorInterface;
+};
+export const defaultNodeBehavior: NodeBehaviorInterface = {
+  dataIncoming(nodeId, handleId, dataType, data) {
+    throw new Error(`node process: should not be incoming:${nodeId}`);
+  },
+  initialize: defaultNodeInitialize,
+  nodeProcess(nodeId, callback) {
+    throw new Error(`node process: should not be processing:${nodeId}`);
+  },
+  canStartProcess(nodeId) {
+    return false;
+  },
+  hasNextIteration(nodeId) {
+    return false;
+  },
+};

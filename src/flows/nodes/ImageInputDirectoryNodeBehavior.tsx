@@ -1,16 +1,25 @@
 // import { fs } from '@tauri-apps/api'
-import useNodeStore, { getNodeSnapshot } from '../../store/store';
+import { Buffer } from 'buffer';
+import useNodeStore, {
+  createNodeBehavior,
+  getNodeSnapshot,
+  handleSourceImageDefault,
+} from '../../store/store';
 import {
   HandleSource,
   NodeBaseData,
   NodeBaseDataImageBuffer,
   NodeBehaviorInterface,
-  createNodeBehavior,
-  handleSourceImageDefault,
-  propagateValue,
 } from './data/NodeData';
-import { Buffer } from 'buffer';
 // import path from 'path';
+
+export type NodeData = {
+  inputDirectoryPath?: string;
+  inputFilePaths?: string[];
+  inputFilePathsPointer?: number;
+  filename?: string;
+} & NodeBaseData &
+  NodeBaseDataImageBuffer;
 
 export const handleSources = {
   image: handleSourceImageDefault,
@@ -38,19 +47,11 @@ export const handleSources = {
   } as HandleSource,
 };
 
-export type NodeData = {
-  inputDirectoryPath?: string;
-  inputFilePaths?: string[];
-  inputFilePathsPointer?: number;
-  filename?: string;
-} & NodeBaseData &
-  NodeBaseDataImageBuffer;
-
 export const nodeBehavior: NodeBehaviorInterface = createNodeBehavior({
   async initialize(nodeId) {
     const store = useNodeStore.getState();
 
-    console.log('initialize: ' + nodeId);
+    console.log(`initialize: ${nodeId}`);
     const node = getNodeSnapshot<NodeData>(nodeId);
     store.updateNodeData<NodeData>(nodeId, {
       completed: false,
@@ -67,10 +68,10 @@ export const nodeBehavior: NodeBehaviorInterface = createNodeBehavior({
     //   inputFilePathsPointer: 0,
     // });
     // log
-    console.log('Image input dir files', filePaths);
+    // console.log('Image input dir files', filePaths);
   },
   async nodeProcess(nodeId: string, callback: () => void): Promise<void> {
-    console.log('process: ' + nodeId);
+    console.log(`process: ${nodeId}`);
 
     const node = getNodeSnapshot<NodeData>(nodeId);
 
@@ -91,23 +92,23 @@ export const nodeBehavior: NodeBehaviorInterface = createNodeBehavior({
     const isEnd =
       !node.data.inputFilePaths[node.data.inputFilePathsPointer + 1];
 
-    const buffer = await fs.readBinaryFile(currentFile);
-    console.log('image input dir process, set buffer', {
-      currentFile,
-      current: node.data.inputFilePathsPointer,
-      next: node.data.inputFilePathsPointer + 1,
-    });
-    nodeStore.updateNodeData<NodeData>(nodeId, {
-      imageBuffer: {
-        buffer: Buffer.from(buffer),
-        end: isEnd,
-      },
-      filename: 'filename', //path.basename(currentFile),
-      inputFilePathsPointer: node.data.inputFilePathsPointer + 1,
-      completed: true,
-    });
-    propagateValue(nodeId, handleSources);
-    callback();
+    // const buffer = await fs.readBinaryFile(currentFile);
+    // console.log('image input dir process, set buffer', {
+    //   currentFile,
+    //   current: node.data.inputFilePathsPointer,
+    //   next: node.data.inputFilePathsPointer + 1,
+    // });
+    // nodeStore.updateNodeData<NodeData>(nodeId, {
+    //   imageBuffer: {
+    //     buffer: Buffer.from(buffer),
+    //     end: isEnd,
+    //   },
+    //   filename: 'filename', //path.basename(currentFile),
+    //   inputFilePathsPointer: node.data.inputFilePathsPointer + 1,
+    //   completed: true,
+    // });
+    // propagateValue(nodeId, handleSources);
+    // callback();
   },
   hasNextIteration(nodeId: string): boolean {
     const node = getNodeSnapshot<NodeData>(nodeId);
@@ -122,7 +123,7 @@ export const nodeBehavior: NodeBehaviorInterface = createNodeBehavior({
   canStartProcess(nodeId: string): boolean {
     const node = getNodeSnapshot<NodeData>(nodeId);
     console.log('canStartProcess: ', {
-      nodeId: nodeId,
+      nodeId,
       can: !!node.data.inputFilePaths,
       inputFilePaths: node.data.inputFilePaths,
     });

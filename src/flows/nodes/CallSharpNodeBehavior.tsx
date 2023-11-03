@@ -1,10 +1,11 @@
-import useNodeStore, { getNodeSnapshot } from '../../store/store';
+import useNodeStore, {
+  getNodeSnapshot,
+  handleSourceImageDefault,
+} from '../../store/store';
 import {
   NodeBaseData,
   NodeBaseDataImageBuffer,
   NodeBehaviorInterface,
-  handleSourceImageDefault,
-  propagateValue,
 } from './data/NodeData';
 
 export const handleSources = {
@@ -38,7 +39,7 @@ export const nodeBehavior: NodeBehaviorInterface = {
     });
   },
   nodeProcess(nodeId: string, callback: () => void): void {
-    let node = getNodeSnapshot<NodeData>(nodeId);
+    const node = getNodeSnapshot<NodeData>(nodeId);
 
     if (!node.data.imageBuffer?.buffer) {
       throw new Error('no image');

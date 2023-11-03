@@ -1,16 +1,19 @@
-// import { fs } from '@tauri-apps/api'
 import path from 'path';
-import useNodeStore, { getNodeSnapshot } from '../../store/store';
+import useNodeStore, {
+  getNodeSnapshot,
+  handleSourceImageDefault,
+} from '../../store/store';
 import {
   HandleSource,
   NodeBaseData,
   NodeBaseDataImageBuffer,
   NodeBehaviorInterface,
-  handleSourceImageDefault,
-  propagateValue,
 } from './data/NodeData';
-import { Buffer } from 'buffer';
-// import path from 'path';
+
+export type NodeData = {
+  inputFilePath?: string;
+} & NodeBaseData &
+  NodeBaseDataImageBuffer;
 
 export const handleSources = {
   image: handleSourceImageDefault,
@@ -38,11 +41,6 @@ export const handleSources = {
   } as HandleSource,
 };
 
-export type NodeData = {
-  inputFilePath?: string;
-} & NodeBaseData &
-  NodeBaseDataImageBuffer;
-
 export const nodeBehavior: NodeBehaviorInterface = {
   initialize(nodeId: string): void {
     // useNodeStore.getState().updateNodeData<NodeData>(nodeId, {
@@ -55,7 +53,7 @@ export const nodeBehavior: NodeBehaviorInterface = {
     dataType: string,
     data: any,
   ): void {
-    throw new Error('node process: should not be incoming:' + nodeId);
+    throw new Error(`node process: should not be incoming: ${nodeId}`);
   },
   nodeProcess(nodeId: string, callback: () => void): void {
     const node = getNodeSnapshot<NodeData>(nodeId);
@@ -65,18 +63,6 @@ export const nodeBehavior: NodeBehaviorInterface = {
     if (!node.data.inputFilePath) {
       throw new Error('no image');
     }
-
-    fs.readBinaryFile(node.data.inputFilePath).then((buffer) => {
-      nodeStore.updateNodeData<NodeData>(nodeId, {
-        imageBuffer: {
-          buffer: Buffer.from(buffer),
-          end: true,
-        },
-        completed: true,
-      });
-      propagateValue(nodeId, handleSources);
-      callback();
-    });
   },
   canStartProcess(nodeId: string): boolean {
     const node = getNodeSnapshot<NodeData>(nodeId);

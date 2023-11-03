@@ -43,20 +43,20 @@ export function HandleSourceDirectory(props: Props) {
         }}
         disabled={props.disabled}
         onClick={async () => {
-          const selectedDir = await open({
-            multiple: false,
-            directory: true,
-            filters: [],
-          });
-          if (Array.isArray(selectedDir)) {
-            // user selectedFile multiple files
-            console.error("can't select multiple files");
-          } else if (selectedDir === null) {
-            // user cancelled the selection
-            console.error("can't select file");
-          } else {
-            props.onSelect && props.onSelect(selectedDir);
-          }
+          // const selectedDir = await open({
+          //   multiple: false,
+          //   directory: true,
+          //   filters: [],
+          // });
+          // if (Array.isArray(selectedDir)) {
+          //   // user selectedFile multiple files
+          //   console.error("can't select multiple files");
+          // } else if (selectedDir === null) {
+          //   // user cancelled the selection
+          //   console.error("can't select file");
+          // } else {
+          //   props.onSelect && props.onSelect(selectedDir);
+          // }
         }}
       >
         <FolderIcon
