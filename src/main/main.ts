@@ -19,6 +19,7 @@ import {
 } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import fs from 'fs';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
@@ -38,16 +39,26 @@ ipcMain.on('ipc-example', async (event, arg) => {
   event.reply('ipc-example', msgTemplate('pong'));
 });
 
-ipcMain.on('open-file-dialog', async (event, payload?: OpenDialogOptions) => {
-  if (!mainWindow) {
-    event.reply('open-file-dialog');
-    return;
-  }
+ipcMain.handle(
+  'dialog-select-file',
+  async (event, payload: OpenDialogOptions): Promise<string | null> => {
+    if (!mainWindow) {
+      throw new Error('"mainWindow" is not defined');
+    }
+    const result = await dialog.showOpenDialog(mainWindow, payload);
 
-  const value = await dialog.showOpenDialog(mainWindow, {
-    ...payload,
-  });
-  event.reply('open-file-dialog', value);
+    if (result.canceled || result.filePaths.length === 0) {
+      return null;
+    }
+    return result.filePaths[0];
+  },
+);
+
+ipcMain.handle('read-as-buffer', async (event, payload: string) => {
+  const buffer = fs.readFileSync(payload, null);
+  console.log('read-as-buffer', payload, buffer);
+
+  return buffer;
 });
 
 if (process.env.NODE_ENV === 'production') {

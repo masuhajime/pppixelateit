@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import { NodeProps } from 'reactflow';
-
+import { Buffer } from 'buffer';
 import ImageIcon from '@mui/icons-material/Image';
 import { Box, Button, FormControl } from '@mui/material';
 import path from 'path';
@@ -48,6 +48,47 @@ export function ImageInputNode({ id, data }: NodeProps<NodeData>) {
                 textTransform: 'none',
               }}
               onClick={async () => {
+                const selectedFile = await window.dialog.selectFile({
+                  buttonLabel: 'Select Image File',
+                  filters: [
+                    {
+                      name: 'Image',
+                      extensions: ['png', 'jpeg', 'jpg', 'gif'],
+                    },
+                  ],
+                });
+                if (selectedFile) {
+                  const buffer = await window.fs.readAsBuffer(selectedFile);
+                  nodeStore.updateNodeData<NodeData>(id, {
+                    inputFilePath: selectedFile,
+                    imageBuffer: {
+                      buffer: Buffer.from(buffer),
+                      end: true,
+                    },
+                    completed: true,
+                  });
+                }
+
+                // console.log(window.fs.readdirSync);
+                // window.electron.ipcRenderer.once('ipc-example', (arg) => {
+                //   // eslint-disable-next-line no-console
+                //   console.log(arg);
+                // });
+                // window.electron.ipcRenderer.sendMessage('ipc-example', [
+                //   'ping',
+                // ]);
+                // const buffer = await window.fs.readAsBuffer(
+                //   '/Users/masuhajime/pppjs/images/5-3-256.png',
+                // );
+                // console.log('buffer', buffer);
+
+                // window.electron.ipcRenderer.once('open-file-dialog', (arg) => {
+                //   // eslint-disable-next-line no-console
+                //   console.log(arg);
+                // });
+                // window.electron.ipcRenderer.sendMessage('open-file-dialog', [
+                //   'ping',
+                // ]);
                 // const selectedFile = await open({
                 //   multiple: false,
                 //   filters: [
