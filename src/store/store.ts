@@ -301,6 +301,12 @@ export const propagateValue = (
   hasNextIteration?: boolean,
 ) => {
   const store = useNodeStore.getState();
+  console.log('######### propagateValue', {
+    nodeId,
+    handleSources,
+    hasNextIteration,
+  });
+
   store.getOutgoingEdgesFromSourceNode(nodeId).forEach((edge) => {
     // edge = Handle source
     const targetNode = store.getNode(edge.target);

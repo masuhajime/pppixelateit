@@ -54,6 +54,48 @@ ipcMain.handle(
   },
 );
 
+// ipcMain.on('image-process', async (event, method: string, value: any) => {
+//   // const nodeStore = useNodeStore.getState();
+//   // const { nodes } = nodeStore;
+//   console.log('processImage 1', method, value);
+//   import(`./process/${method}`)
+//     .then((module) => {
+//       module
+//         .default(value)
+//         .then((buffer: Buffer) => {
+//           console.log('processImage 2', method, value, buffer);
+//           // event.reply('image-process', method, buffer);
+//         })
+//         .catch((err: any) => {
+//           console.log('processImage 3', method, value, err);
+//         });
+//     })
+//     .catch((err) => {
+//       console.log('processImage 4 not found import file', method, value, err);
+//     });
+// });
+
+ipcMain.handle(
+  'image-process',
+  async (event, method: string, payload: any): Promise<Buffer> => {
+    return import(`./process/${method}`)
+      .then((module) => {
+        return module
+          .default(payload)
+          .then((buffer: Buffer) => {
+            // event.reply('image-process', method, buffer);
+            return buffer;
+          })
+          .catch((err: any) => {
+            console.log('processImage error: ', method, payload, err);
+          });
+      })
+      .catch((err) => {
+        console.log('processImage: Not found import file', method, err);
+      });
+  },
+);
+
 ipcMain.handle('read-as-buffer', async (event, payload: string) => {
   const buffer = fs.readFileSync(payload, null);
   console.log('read-as-buffer', payload, buffer);

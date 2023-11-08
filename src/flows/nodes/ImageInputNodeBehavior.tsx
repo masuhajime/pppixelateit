@@ -1,7 +1,9 @@
 import path from 'path';
+import { Buffer } from 'buffer';
 import useNodeStore, {
   getNodeSnapshot,
   handleSourceImageDefault,
+  propagateValue,
 } from '../../store/store';
 import {
   HandleSource,
@@ -63,6 +65,29 @@ export const nodeBehavior: NodeBehaviorInterface = {
     if (!node.data.inputFilePath) {
       throw new Error('no image');
     }
+
+    console.log('nodeProcess: ImageInputNode', nodeId, node.data.inputFilePath);
+
+    window.fs
+      .readAsBuffer(node.data.inputFilePath)
+      .then((buffer) => {
+        console.log('nodeProcess: ImageInputNode 111');
+
+        nodeStore.updateNodeData<NodeData>(nodeId, {
+          imageBuffer: {
+            buffer: Buffer.from(buffer),
+            end: true,
+          },
+          completed: true,
+        });
+        console.log('nodeProcess: ImageInputNode 222');
+        propagateValue(nodeId, handleSources);
+        callback();
+        return 1;
+      })
+      .catch((err) => {
+        console.error('nodeProcess: ImageInputNode 333', err);
+      });
   },
   canStartProcess(nodeId: string): boolean {
     const node = getNodeSnapshot<NodeData>(nodeId);

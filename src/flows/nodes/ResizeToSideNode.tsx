@@ -54,18 +54,18 @@ export function ResizeToSideNode({ id, data }: NodeProps<NodeData>) {
         <Select
           label="Method"
           nodeId={id}
-          defaultValue={data.settings.method || 'nearestNeighbor'}
+          defaultValue={data.settings.method || 'nearest'}
           onSelect={(value) => {
             useNodeStore.getState().updateNodeSetting(id, {
               method: value,
             });
           }}
         >
-          <MenuItem value="nearestNeighbor">NearestNeighbor</MenuItem>
-          <MenuItem value="bilinearInterpolation">Bilinear</MenuItem>
-          <MenuItem value="bicubicInterpolation">Bicubic</MenuItem>
-          <MenuItem value="hermiteInterpolation">Hermite</MenuItem>
-          <MenuItem value="bezierInterpolation">Bezier</MenuItem>
+          <MenuItem value="nearest">nearest</MenuItem>
+          <MenuItem value="cubic">cubic</MenuItem>
+          <MenuItem value="mitchell">mitchell</MenuItem>
+          <MenuItem value="lanczos2">lanczos2</MenuItem>
+          <MenuItem value="lanczos3">lanczos3</MenuItem>
         </Select>
         <Separator />
         <HandleSourceImage

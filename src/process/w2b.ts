@@ -25,7 +25,11 @@ export const resizeBaseOn = async (
   size: number,
   method: string | ResizeMethod,
 ) => {
+  // create shape object from buffer
   return imageBuffer;
+
+  return img.toBuffer();
+
   // const img = await Jimp.read(imageBuffer);
   // if (side === 'width') {
   //   img.resize(size, Jimp.AUTO, method);

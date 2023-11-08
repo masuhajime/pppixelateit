@@ -68,47 +68,6 @@ export function ImageInputNode({ id, data }: NodeProps<NodeData>) {
                     completed: true,
                   });
                 }
-
-                // console.log(window.fs.readdirSync);
-                // window.electron.ipcRenderer.once('ipc-example', (arg) => {
-                //   // eslint-disable-next-line no-console
-                //   console.log(arg);
-                // });
-                // window.electron.ipcRenderer.sendMessage('ipc-example', [
-                //   'ping',
-                // ]);
-                // const buffer = await window.fs.readAsBuffer(
-                //   '/Users/masuhajime/pppjs/images/5-3-256.png',
-                // );
-                // console.log('buffer', buffer);
-
-                // window.electron.ipcRenderer.once('open-file-dialog', (arg) => {
-                //   // eslint-disable-next-line no-console
-                //   console.log(arg);
-                // });
-                // window.electron.ipcRenderer.sendMessage('open-file-dialog', [
-                //   'ping',
-                // ]);
-                // const selectedFile = await open({
-                //   multiple: false,
-                //   filters: [
-                //     { name: 'Image', extensions: ['png', 'jpeg', 'gif'] },
-                //   ],
-                // });
-                // const selectedFile = ipcRenderer.sendSync(
-                //   'synchronous-message',
-                //   'ping',
-                // );
-                // console.log(selectedFile);
-                // if (Array.isArray(selectedFile)) {
-                //   // user selectedFile multiple files
-                //   console.error("can't select multiple files");
-                // } else if (selectedFile === null) {
-                //   // user cancelled the selection
-                //   console.error("can't select file");
-                // } else {
-                //   console.log('selected file', selectedFile);
-                // }
               }}
             >
               <ImageIcon

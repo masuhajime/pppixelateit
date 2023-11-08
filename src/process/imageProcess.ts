@@ -72,7 +72,7 @@ class ProcessController {
     await this.progress();
   }
 
-  runNodeBehavior(nodeId: string, nodeBehavior: NodeBehaviorInterface) {
+  static runNodeBehavior(nodeId: string, nodeBehavior: NodeBehaviorInterface) {
     const nodeStore = useNodeStore.getState();
     nodeStore.nodeSetProcessing(nodeId, true);
     // start date
@@ -156,7 +156,7 @@ class ProcessController {
       if (!behavior.canStartProcess(node.id)) {
         continue;
       }
-      this.runNodeBehavior(node.id, behavior);
+      ProcessController.runNodeBehavior(node.id, behavior);
     }
   }
 

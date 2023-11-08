@@ -1,3 +1,4 @@
+import { ImageResizeParameter } from '../../main/process/dto';
 import { resizeBaseOn } from '../../process/w2b';
 import useNodeStore, {
   getNodeSnapshot,
@@ -74,23 +75,47 @@ export const nodeBehavior: NodeBehaviorInterface = {
       return;
     }
 
-    resizeBaseOn(
-      node.data.imageBuffer.buffer,
-      node.data.settings.resizeBase,
-      node.data.settings.size,
-      node.data.settings.method,
-    ).then((w2b) => {
-      store.updateNodeData<NodeData>(nodeId, {
-        completed: true,
-        imageBuffer: {
-          buffer: w2b,
-          end: true,
-        },
+    window.imageProcess
+      .imageProcess('imageResize', {
+        buffer: node.data.imageBuffer.buffer,
+        method: node.data.settings.method,
+        size: node.data.settings.size,
+        resizeBase: node.data.settings.resizeBase,
+      } as ImageResizeParameter)
+      .then((buffer) => {
+        store.updateNodeData<NodeData>(nodeId, {
+          completed: true,
+          imageBuffer: {
+            buffer,
+            end: true,
+          },
+        });
+
+        propagateValue(nodeId, handleSources);
+        callback();
+        return 0;
+      })
+      .catch((err) => {
+        console.error(err);
       });
 
-      propagateValue(nodeId, handleSources);
-      callback();
-    });
+    // resizeBaseOn(
+    //   node.data.imageBuffer.buffer,
+    //   node.data.settings.resizeBase,
+    //   node.data.settings.size,
+    //   node.data.settings.method,
+    // ).then((w2b) => {
+    //   store.updateNodeData<NodeData>(nodeId, {
+    //     completed: true,
+    //     imageBuffer: {
+    //       buffer: w2b,
+    //       end: true,
+    //     },
+    //   });
+
+    //   propagateValue(nodeId, handleSources);
+    //   callback();
+    // });
   },
   canStartProcess(nodeId: string): boolean {
     const node = getNodeSnapshot<NodeData>(nodeId);

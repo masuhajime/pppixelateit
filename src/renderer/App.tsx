@@ -16,13 +16,15 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import React, { useCallback, useRef, useState } from 'react';
 import { shallow } from 'zustand/shallow';
 import { v4 as uuidv4 } from 'uuid';
+import { Buffer } from 'buffer';
 import Sidebar from '../components/Sidebar';
 import 'reactflow/dist/style.css';
 import useNodeStore, { RFState } from '../store/store';
 import processStore from '../store/processStore';
-import processController from '../process/imageProcess';
 import { CustomEdge } from '../flows/edges/CustomEdge';
 import { getNodeTypesForReactFlow } from '../flows/nodesEnabled';
+import { ImageResizeParameter } from '../process/dto';
+import processController from '../process/imageProcess';
 
 const theme = createTheme({
   palette: {
@@ -108,7 +110,6 @@ function Main() {
       });
       const newNode = {
         id: `node-${type}-${uuidv4()}`,
-        // id: `node-${type}`,
         type,
         position,
         data: { settings: {} },

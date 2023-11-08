@@ -1,4 +1,9 @@
-import { DialogHandler, ElectronHandler, FsHandler } from '../main/preload';
+import {
+  DialogHandler,
+  ElectronHandler,
+  FsHandler,
+  ImageProcessHandler,
+} from '../main/preload';
 
 declare global {
   // eslint-disable-next-line no-unused-vars
@@ -6,6 +11,7 @@ declare global {
     electron: ElectronHandler;
     fs: FsHandler;
     dialog: DialogHandler;
+    imageProcess: ImageProcessHandler;
   }
 }
 

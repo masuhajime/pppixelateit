@@ -7,6 +7,16 @@ import {
   OpenDialogOptions,
 } from 'electron';
 
+const imageProcessHandler = {
+  imageProcess: async (method: string, value: any): Promise<Buffer> => {
+    ipcRenderer.send('image-process', method, value);
+    const buffer = await ipcRenderer.invoke('image-process', method, value);
+    return buffer;
+  },
+};
+contextBridge.exposeInMainWorld('imageProcess', imageProcessHandler);
+export type ImageProcessHandler = typeof imageProcessHandler;
+
 export type Channels = 'ipc-example';
 
 const electronHandler = {
