@@ -4,3 +4,7 @@ export type ImageResizeParameter = {
   size: number;
   method: string;
 };
+
+export type ImageBufferOnlyParameter = {
+  buffer: Buffer;
+};

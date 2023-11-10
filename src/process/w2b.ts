@@ -3,8 +3,10 @@
 import { Buffer } from 'buffer';
 // import Jimp from 'jimp';
 // import imglyRemoveBackground from '@imgly/background-removal';
+// import { removeBackground } from '@imgly/background-removal-node';
 import { RGBA, Vector2 } from '../dto/generals';
 // import { removeBackground } from "@imgly/background-removal-node"
+// const { removeBackground } = require('@imgly/background-removal-node');
 
 export const greyscale = async (imageBuffer: Buffer) => {
   // const img = await Jimp.read(imageBuffer);
@@ -247,6 +249,10 @@ const getPixelColorAround = (img: any, x: number, y: number) => {
 
 export const imglyRemoveBackgroundBuffer = async (imageBuffer: Buffer) => {
   return imageBuffer;
+  // const removed = await removeBackground(imageBuffer, {});
+  // return removed.arrayBuffer();
+  // const imageBufferA = Buffer.from(removed);
+  // return imageBufferA;
   // console.log('imglyRemoveBackgroundBuffer start');
 
   // const removed = await imglyRemoveBackground(imageBuffer, {});

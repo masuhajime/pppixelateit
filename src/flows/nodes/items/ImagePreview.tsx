@@ -1,67 +1,68 @@
-import VisibilityIcon from '@mui/icons-material/Visibility'
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
-import { Box } from '@mui/material'
-import { useEffect, useState } from 'react'
-import { arrayBufferToBase64 } from '../../../process/w2b'
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { Box } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { arrayBufferToBase64 } from '../../../process/w2b';
+import image from '../../../../assets/transparant-background.png';
 
 type Props = {
-  enabled?: boolean
-  completed?: boolean
-  imageBase64?: string | undefined
-  imageBuffer?: Buffer | undefined
-  onTogglePreview?: (enabled: boolean) => void
-}
-export const ImagePreview = ({
+  enabled?: boolean;
+  completed?: boolean;
+  imageBase64?: string | undefined;
+  imageBuffer?: Buffer | undefined;
+  onTogglePreview?: (enabled: boolean) => void;
+};
+export function ImagePreview({
   enabled = false,
   completed = false,
   imageBase64,
   imageBuffer,
   onTogglePreview,
-}: Props) => {
+}: Props) {
   const [size, setSize] = useState<
     | {
-        x: number
-        y: number
+        x: number;
+        y: number;
       }
     | undefined
-  >(undefined)
-  const [htmlImageBase64, setHtmlImageBase64] = useState<string | undefined>()
+  >(undefined);
+  const [htmlImageBase64, setHtmlImageBase64] = useState<string | undefined>();
   useEffect(() => {
     if (!imageBuffer) {
-      setHtmlImageBase64(undefined)
+      setHtmlImageBase64(undefined);
     }
     if (!enabled) {
-      return
+      return;
     }
     if (!completed) {
-      setHtmlImageBase64(undefined)
-      return
+      setHtmlImageBase64(undefined);
+      return;
     }
 
-    if (!!imageBase64) {
-      setHtmlImageBase64(imageBase64)
+    if (imageBase64) {
+      setHtmlImageBase64(imageBase64);
     }
-    if (!!imageBuffer) {
+    if (imageBuffer) {
       setHtmlImageBase64(
-        'data:image/png;base64,' + arrayBufferToBase64(imageBuffer)
-      )
+        `data:image/png;base64,${arrayBufferToBase64(imageBuffer)}`,
+      );
     }
-  }, [imageBuffer, imageBase64, enabled, completed])
+  }, [imageBuffer, imageBase64, enabled, completed]);
 
   useEffect(() => {
     if (!htmlImageBase64) {
-      setSize(undefined)
-      return
+      setSize(undefined);
+      return;
     }
-    const image = new Image()
-    image.src = htmlImageBase64
+    const image = new Image();
+    image.src = htmlImageBase64;
     image.onload = () => {
       setSize({
         x: image.width,
         y: image.height,
-      })
-    }
-  }, [htmlImageBase64])
+      });
+    };
+  }, [htmlImageBase64]);
 
   return (
     <Box
@@ -78,7 +79,7 @@ export const ImagePreview = ({
           {!!imageBase64 && (
             <div
               style={{
-                backgroundImage: `url(assets/transparant-background.png)`,
+                backgroundImage: `url(${image})`,
                 backgroundSize: 'contain',
                 backgroundRepeat: 'repeat',
                 lineHeight: 0,
@@ -98,7 +99,7 @@ export const ImagePreview = ({
           {!!imageBuffer && (
             <div
               style={{
-                backgroundImage: `url(assets/transparant-background.png)`,
+                backgroundImage: `url(${image})`,
                 backgroundSize: 'contain',
                 backgroundRepeat: 'repeat',
                 lineHeight: 0,
@@ -118,17 +119,17 @@ export const ImagePreview = ({
         </>
       )}
     </Box>
-  )
+  );
 }
 
 const togglePreview = (
   enabled: boolean,
   onTogglePreview?: (enabled: boolean) => void,
   size?: {
-    x: number
-    y: number
+    x: number;
+    y: number;
   },
-  completed?: boolean
+  completed?: boolean,
 ) => {
   return (
     <Box
@@ -147,9 +148,9 @@ const togglePreview = (
             paddingRight: '0.2em',
           }}
           onClick={() => {
-            !!onTogglePreview && onTogglePreview(!enabled)
+            !!onTogglePreview && onTogglePreview(!enabled);
           }}
-        ></VisibilityIcon>
+        />
       )}
       {!enabled && (
         <VisibilityOffIcon
@@ -160,9 +161,9 @@ const togglePreview = (
             paddingRight: '0.2em',
           }}
           onClick={() => {
-            !!onTogglePreview && onTogglePreview(!enabled)
+            !!onTogglePreview && onTogglePreview(!enabled);
           }}
-        ></VisibilityOffIcon>
+        />
       )}
       {!!size && enabled && completed && (
         <Box
@@ -176,5 +177,5 @@ const togglePreview = (
         </Box>
       )}
     </Box>
-  )
-}
+  );
+};

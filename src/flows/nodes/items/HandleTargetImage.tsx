@@ -27,9 +27,7 @@ export function HandleTargetImage(props: Props) {
 
   return (
     <Box ref={ref} className="node-item">
-      <Typography variant="h6">
-        Image ({nodeId}:{handleId})
-      </Typography>
+      <Typography variant="h6">Image</Typography>
       <Handle
         type="target"
         position={Position.Left}

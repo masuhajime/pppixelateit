@@ -28,9 +28,7 @@ export function HandleSourceImage(props: Props) {
 
   return (
     <Box ref={ref} className="node-item">
-      <Typography variant="h6">
-        {label} ({handleId})
-      </Typography>
+      <Typography variant="h6">{label}</Typography>
       <Handle
         type="source"
         position={Position.Right}

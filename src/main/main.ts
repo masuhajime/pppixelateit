@@ -98,7 +98,7 @@ ipcMain.handle(
 
 ipcMain.handle('read-as-buffer', async (event, payload: string) => {
   const buffer = fs.readFileSync(payload, null);
-  console.log('read-as-buffer', payload, buffer);
+  // console.log('read-as-buffer', payload, buffer);
 
   return buffer;
 });

@@ -12,6 +12,7 @@ import {
   NodeBaseDataImageBuffer,
   NodeBehaviorInterface,
 } from './data/NodeData';
+import { ImageBufferOnlyParameter } from '../../main/process/dto';
 
 export const handleSources: Record<string, HandleSource> = {
   image: handleSourceImageDefault,
@@ -52,18 +53,26 @@ export const nodeBehavior: NodeBehaviorInterface = {
       throw new Error('no image data');
     }
 
-    imglyRemoveBackgroundBuffer(node.data.imageBuffer?.buffer).then((w2b) => {
-      store.updateNodeData<NodeData>(nodeId, {
-        completed: true,
-        imageBuffer: {
-          buffer: Buffer.from(w2b),
-          end: true,
-        },
-      });
+    window.imageProcess
+      .imageProcess('imageRemoveBackground', {
+        buffer: node.data.imageBuffer.buffer,
+      } as ImageBufferOnlyParameter)
+      .then((buffer) => {
+        store.updateNodeData<NodeData>(nodeId, {
+          completed: true,
+          imageBuffer: {
+            buffer,
+            end: true,
+          },
+        });
 
-      propagateValue(nodeId, handleSources);
-      callback();
-    });
+        propagateValue(nodeId, handleSources);
+        callback();
+        return 0;
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   },
   canStartProcess(nodeId: string): boolean {
     const node = getNodeSnapshot<NodeData>(nodeId);
