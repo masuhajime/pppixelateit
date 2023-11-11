@@ -1,7 +1,8 @@
+/* eslint-disable import/prefer-default-export */
 import { NodeProps } from 'reactflow';
 
 import useNodeStore from '../../store/store';
-import { NodeData, handleSources, handleTargets } from './TestNodeBehavior';
+import { NodeData, handleSources, handleTargets } from './ErodeNodeBehavior';
 import { Node } from './components/Node';
 import { NodeContent } from './components/NodeContent';
 import { NodeHeader } from './components/NodeHeader';
@@ -12,36 +13,12 @@ import { ImagePreview } from './items/ImagePreview';
 import { Separator } from './items/Separator';
 import { NodeStatus } from './components/NodeStatus';
 
-export function TestNode({ id, data }: NodeProps<NodeData>) {
+export function ErodeNode({ id, data }: NodeProps<NodeData>) {
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="TestNode" />
+      <NodeHeader title="ErodeNode" />
       <NodeContent>
         <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
-        <HandleTargetNumber
-          name="number"
-          handleId="number"
-          nodeId={id}
-          defaultValue={5}
-          onChange={(value) => {
-            useNodeStore.getState().updateNodeData(id, {
-              ...data,
-              number: value,
-            });
-          }}
-        />
-        <HandleTargetNumber
-          name="number"
-          handleId="number"
-          nodeId={id}
-          defaultValue={5}
-          onChange={(value) => {
-            useNodeStore.getState().updateNodeData(id, {
-              ...data,
-              number: value,
-            });
-          }}
-        />
         <Separator />
         <HandleSourceImage
           label="Image"

@@ -1,4 +1,5 @@
 import { CallSharpNode } from './nodes/CallSharpNode';
+import { ErodeNode } from './nodes/ErodeNode';
 import { Fill00ColorToTransparentNode } from './nodes/Fill00ColorToTransparentNode';
 import { FillWithColorNode } from './nodes/FillWithColorNode';
 import { ImageInputDirectoryNode } from './nodes/ImageInputDirectoryNode';
@@ -23,6 +24,9 @@ const nodesEnabled = [
   },
   {
     element: ResizeToSideNode,
+  },
+  {
+    element: ErodeNode,
   },
   {
     element: ImageInputDirectoryNode,

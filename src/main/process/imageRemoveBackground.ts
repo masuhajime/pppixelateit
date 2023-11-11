@@ -13,15 +13,11 @@ const imageRemoveBackground = async (
   // });
   // return Buffer.from(await removed.arrayBuffer());
 
-  console.log('rembg-node 1');
   const image = sharp(buffer);
-  console.log('rembg-node 2');
   const rembg = new Rembg({
-    logging: true,
+    logging: false,
   });
-  console.log('rembg-node 3');
   const output = await rembg.remove(image);
-  // console.log('rembg-node 4', output);
 
   return output.png().toBuffer();
 };

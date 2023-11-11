@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import { NodeProps } from 'reactflow';
 
 import { MenuItem } from '@mui/material';

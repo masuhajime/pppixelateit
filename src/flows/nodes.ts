@@ -6,6 +6,9 @@ const nodeDefines: { name: string }[] = [
     name: 'ResizeToSideNode',
   },
   {
+    name: 'ErodeNode',
+  },
+  {
     name: 'ImageInputDirectoryNode',
   },
   {

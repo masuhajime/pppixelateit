@@ -37,8 +37,6 @@ const imageResize = async (param: ImageResizeParameter): Promise<Buffer> => {
     });
   }
 
-  console.log('imageResize aaaa');
-
   return image.toBuffer();
 };
 export default imageResize;

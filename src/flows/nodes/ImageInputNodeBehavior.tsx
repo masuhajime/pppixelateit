@@ -47,7 +47,7 @@ export const nodeBehavior: NodeBehaviorInterface = {
   initialize(nodeId: string): void {
     // useNodeStore.getState().updateNodeData<NodeData>(nodeId, {
     //   inputFilePath: '/Users/masuhajime/pppjs/images/4-1.png',
-    // })
+    // });
   },
   dataIncoming(
     nodeId: string,
