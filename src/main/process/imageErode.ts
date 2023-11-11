@@ -2,22 +2,7 @@ import { Buffer } from 'buffer';
 import sharp from 'sharp';
 import cv from '@techstark/opencv-js';
 import { ImageBufferOnlyParameter } from './dto';
-
-let cvReady = false;
-
-const waitUntilOpenCVReady = async () => {
-  cv.onRuntimeInitialized = () => {
-    cvReady = true;
-  };
-  await new Promise((resolve) => {
-    const timer = setInterval(() => {
-      if (cvReady) {
-        clearInterval(timer);
-        resolve(true);
-      }
-    }, 100);
-  });
-};
+import waitUntilOpenCVReady from './waitUntilOpenCvReady';
 
 const filter = async (param: ImageBufferOnlyParameter): Promise<Buffer> => {
   await waitUntilOpenCVReady();

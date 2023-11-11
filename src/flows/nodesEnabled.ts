@@ -6,6 +6,7 @@ import { ImageInputDirectoryNode } from './nodes/ImageInputDirectoryNode';
 import { ImageInputNode } from './nodes/ImageInputNode';
 import { ImagePreviewCompare } from './nodes/ImagePreviewCompare';
 import { ImagePreviewNode } from './nodes/ImagePreviewNode';
+import { KmeansNode } from './nodes/KmeansNode';
 import { OutlineNode } from './nodes/OutlineNode';
 import { PixelateNode } from './nodes/PixelateNode';
 import { PosterizeNode } from './nodes/PosterizeNode';
@@ -24,6 +25,9 @@ const nodesEnabled = [
   },
   {
     element: ResizeToSideNode,
+  },
+  {
+    element: KmeansNode,
   },
   {
     element: ErodeNode,

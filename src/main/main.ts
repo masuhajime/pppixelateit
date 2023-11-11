@@ -87,7 +87,11 @@ ipcMain.handle(
             return buffer;
           })
           .catch((err: any) => {
-            console.log('processImage error: ', method, payload, err);
+            console.log('processImage error: ', {
+              method,
+              payload,
+              err,
+            });
           });
       })
       .catch((err) => {

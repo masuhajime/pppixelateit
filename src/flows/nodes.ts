@@ -6,6 +6,9 @@ const nodeDefines: { name: string }[] = [
     name: 'ResizeToSideNode',
   },
   {
+    name: 'KmeansNode',
+  },
+  {
     name: 'ErodeNode',
   },
   {
