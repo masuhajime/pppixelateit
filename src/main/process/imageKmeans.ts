@@ -18,7 +18,7 @@ const filter = async (param: ImageBufferOnlyParameter): Promise<Buffer> => {
   // push rgb data to mat
   const mat = [];
   for (let i = 0; i < data.length; i += 4) {
-    mat.push([data[i], data[i + 1], data[i + 2]]);
+    mat.push([data[i], data[i + 1], data[i + 2], data[i + 3]]);
   }
 
   const r = kmeans(mat, 16, {});
@@ -30,7 +30,7 @@ const filter = async (param: ImageBufferOnlyParameter): Promise<Buffer> => {
       Math.round(r.centroids[cluster][0]),
       Math.round(r.centroids[cluster][1]),
       Math.round(r.centroids[cluster][2]),
-      255,
+      Math.round(r.centroids[cluster][3]),
     ]);
   }
 

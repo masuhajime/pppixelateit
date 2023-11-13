@@ -12,7 +12,10 @@ import {
   NodeBaseDataImageBuffer,
   NodeBehaviorInterface,
 } from './data/NodeData';
-import { ImageBufferOnlyParameter } from '../../main/process/dto';
+import {
+  ImageBufferOnlyParameter,
+  ImageRemoveBackgroundParameter,
+} from '../../main/process/dto';
 
 export const handleSources: Record<string, HandleSource> = {
   image: handleSourceImageDefault,
@@ -25,7 +28,13 @@ export const handleTargets: Record<string, HandleTarget> = {
   },
 };
 
-export type NodeData = {} & NodeBaseData & NodeBaseDataImageBuffer;
+export type NodeData = {
+  settings: {
+    threshold?: number;
+    algorithm?: string;
+  };
+} & NodeBaseData &
+  NodeBaseDataImageBuffer;
 
 export const nodeBehavior: NodeBehaviorInterface = {
   dataIncoming(
@@ -56,7 +65,9 @@ export const nodeBehavior: NodeBehaviorInterface = {
     window.imageProcess
       .imageProcess('imageRemoveBackground', {
         buffer: node.data.imageBuffer.buffer,
-      } as ImageBufferOnlyParameter)
+        algorithm: node.data.settings.algorithm,
+        threshold: node.data.settings.threshold,
+      } as ImageRemoveBackgroundParameter)
       .then((buffer) => {
         store.updateNodeData<NodeData>(nodeId, {
           completed: true,
