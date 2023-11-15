@@ -5,6 +5,7 @@ import {
   ipcRenderer,
   IpcRendererEvent,
   OpenDialogOptions,
+  SaveDialogOptions,
 } from 'electron';
 
 const imageProcessHandler = {
@@ -17,7 +18,7 @@ const imageProcessHandler = {
 contextBridge.exposeInMainWorld('imageProcess', imageProcessHandler);
 export type ImageProcessHandler = typeof imageProcessHandler;
 
-export type Channels = 'ipc-example';
+export type Channels = 'ipc-example' | 'file-save-as' | 'file-open';
 
 const electronHandler = {
   ipcRenderer: {
@@ -49,6 +50,12 @@ const fsHandler = {
     const buffer = await ipcRenderer.invoke('read-as-buffer', path);
     // const result = await ipcRenderer.invoke('readAsBuffer', path);
     return buffer;
+  },
+  saveAs(string: string, option: SaveDialogOptions) {
+    ipcRenderer.invoke('file-save-as-handle', string, option);
+  },
+  async open(option: OpenDialogOptions): Promise<string> {
+    return ipcRenderer.invoke('file-open-handle', option);
   },
 };
 contextBridge.exposeInMainWorld('fs', fsHandler);

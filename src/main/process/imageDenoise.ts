@@ -1,21 +1,15 @@
 import { Buffer } from 'buffer';
 import sharp from 'sharp';
+import cv from '@techstark/opencv-js';
 import { ImageBufferOnlyParameter } from './dto';
+import waitUntilOpenCVReady from './waitUntilOpenCvReady';
 
 const filter = async (param: ImageBufferOnlyParameter): Promise<Buffer> => {
+  await waitUntilOpenCVReady();
+  // do denoise by sharp
   const { buffer } = param;
   const image = sharp(buffer);
-
-  const { info } = await sharp(buffer)
-    .ensureAlpha()
-    .raw()
-    .toBuffer({ resolveWithObject: true });
-  const { width, height } = info;
-  image.clahe({
-    width,
-    height,
-    maxSlope: 3,
-  });
+  image.median(3);
   return image.png().toBuffer();
 };
 export default filter;

@@ -4,6 +4,9 @@ import {
   shell,
   BrowserWindow,
   MenuItemConstructorOptions,
+  dialog,
+  ipcMain,
+  ipcRenderer,
 } from 'electron';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
@@ -19,22 +22,228 @@ export default class MenuBuilder {
   }
 
   buildMenu(): Menu {
-    if (
-      process.env.NODE_ENV === 'development' ||
-      process.env.DEBUG_PROD === 'true'
-    ) {
-      this.setupDevelopmentEnvironment();
-    }
+    // if (
+    //   process.env.NODE_ENV === 'development' ||
+    //   process.env.DEBUG_PROD === 'true'
+    // ) {
+    //   this.setupDevelopmentEnvironment();
+    // }
 
     const template =
       process.platform === 'darwin'
-        ? this.buildDarwinTemplate()
-        : this.buildDefaultTemplate();
+        ? this.buildTemplateOSX()
+        : this.buildTemplateOther();
 
     const menu = Menu.buildFromTemplate(template);
     Menu.setApplicationMenu(menu);
 
     return menu;
+  }
+
+  buildTemplateOSX(): MenuItemConstructorOptions[] {
+    const subMenuAbout: DarwinMenuItemConstructorOptions = {
+      label: 'pppixalateit',
+      submenu: [
+        {
+          label: 'About pppixalateit',
+          selector: 'orderFrontStandardAboutPanel:',
+        },
+        { type: 'separator' },
+        { label: 'Services', submenu: [] },
+        { type: 'separator' },
+        {
+          label: 'Hide ElectronReact',
+          accelerator: 'Command+H',
+          selector: 'hide:',
+        },
+        {
+          label: 'Hide Others',
+          accelerator: 'Command+Shift+H',
+          selector: 'hideOtherApplications:',
+        },
+        { label: 'Show All', selector: 'unhideAllApplications:' },
+        { type: 'separator' },
+        {
+          label: 'Quit',
+          accelerator: 'Command+Q',
+          click: () => {
+            app.quit();
+          },
+        },
+      ],
+    };
+    const subMenuFile: DarwinMenuItemConstructorOptions = {
+      label: 'File',
+      submenu: [
+        {
+          label: 'New',
+          async click() {
+            ipcMain.emit('file-new');
+          },
+        },
+        {
+          label: 'Open',
+          async click() {
+            ipcMain.emit('file-open');
+          },
+        },
+        { type: 'separator' },
+        {
+          label: 'Save',
+          async click() {
+            ipcMain.emit('file-save');
+          },
+        },
+        {
+          label: 'Save As',
+          async click() {
+            ipcMain.emit('file-save-as');
+          },
+        },
+      ],
+    };
+    const subMenuWindow: DarwinMenuItemConstructorOptions = {
+      label: 'Window',
+      submenu: [
+        {
+          label: 'Minimize',
+          accelerator: 'Command+M',
+          selector: 'performMiniaturize:',
+        },
+        { label: 'Close', accelerator: 'Command+W', selector: 'performClose:' },
+        { type: 'separator' },
+        { label: 'Bring All to Front', selector: 'arrangeInFront:' },
+      ],
+    };
+    const subMenuHelp: MenuItemConstructorOptions = {
+      label: 'Help',
+      submenu: [
+        {
+          label: 'Learn More',
+          click() {
+            shell.openExternal('https://electronjs.org');
+          },
+        },
+        {
+          label: 'Documentation',
+          click() {
+            shell.openExternal(
+              'https://github.com/electron/electron/tree/main/docs#readme',
+            );
+          },
+        },
+        {
+          label: 'Community Discussions',
+          click() {
+            shell.openExternal('https://www.electronjs.org/community');
+          },
+        },
+        {
+          label: 'Search Issues',
+          click() {
+            shell.openExternal('https://github.com/electron/electron/issues');
+          },
+        },
+      ],
+    };
+
+    return [subMenuAbout, subMenuFile, subMenuWindow, subMenuHelp];
+  }
+
+  buildTemplateOther(): MenuItemConstructorOptions[] {
+    const templateDefault = [
+      {
+        label: '&File',
+        submenu: [
+          {
+            label: '&Open',
+            accelerator: 'Ctrl+O',
+          },
+          {
+            label: '&Close',
+            accelerator: 'Ctrl+W',
+            click: () => {
+              this.mainWindow.close();
+            },
+          },
+        ],
+      },
+      {
+        label: '&View',
+        submenu:
+          process.env.NODE_ENV === 'development' ||
+          process.env.DEBUG_PROD === 'true'
+            ? [
+                {
+                  label: '&Reload',
+                  accelerator: 'Ctrl+R',
+                  click: () => {
+                    this.mainWindow.webContents.reload();
+                  },
+                },
+                {
+                  label: 'Toggle &Full Screen',
+                  accelerator: 'F11',
+                  click: () => {
+                    this.mainWindow.setFullScreen(
+                      !this.mainWindow.isFullScreen(),
+                    );
+                  },
+                },
+                {
+                  label: 'Toggle &Developer Tools',
+                  accelerator: 'Alt+Ctrl+I',
+                  click: () => {
+                    this.mainWindow.webContents.toggleDevTools();
+                  },
+                },
+              ]
+            : [
+                {
+                  label: 'Toggle &Full Screen',
+                  accelerator: 'F11',
+                  click: () => {
+                    this.mainWindow.setFullScreen(
+                      !this.mainWindow.isFullScreen(),
+                    );
+                  },
+                },
+              ],
+      },
+      {
+        label: 'Help',
+        submenu: [
+          {
+            label: 'Learn More',
+            click() {
+              shell.openExternal('https://electronjs.org');
+            },
+          },
+          {
+            label: 'Documentation',
+            click() {
+              shell.openExternal(
+                'https://github.com/electron/electron/tree/main/docs#readme',
+              );
+            },
+          },
+          {
+            label: 'Community Discussions',
+            click() {
+              shell.openExternal('https://www.electronjs.org/community');
+            },
+          },
+          {
+            label: 'Search Issues',
+            click() {
+              shell.openExternal('https://github.com/electron/electron/issues');
+            },
+          },
+        ],
+      },
+    ];
+
+    return templateDefault;
   }
 
   setupDevelopmentEnvironment(): void {

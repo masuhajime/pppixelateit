@@ -12,6 +12,12 @@ const nodeDefines: { name: string }[] = [
     name: 'ErodeNode',
   },
   {
+    name: 'ClaheNode',
+  },
+  {
+    name: 'DenoiseNode',
+  },
+  {
     name: 'ImageInputDirectoryNode',
   },
   {

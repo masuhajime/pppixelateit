@@ -16,6 +16,7 @@ import {
   ipcMain,
   dialog,
   OpenDialogOptions,
+  SaveDialogOptions,
 } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
@@ -54,26 +55,51 @@ ipcMain.handle(
   },
 );
 
-// ipcMain.on('image-process', async (event, method: string, value: any) => {
-//   // const nodeStore = useNodeStore.getState();
-//   // const { nodes } = nodeStore;
-//   console.log('processImage 1', method, value);
-//   import(`./process/${method}`)
-//     .then((module) => {
-//       module
-//         .default(value)
-//         .then((buffer: Buffer) => {
-//           console.log('processImage 2', method, value, buffer);
-//           // event.reply('image-process', method, buffer);
-//         })
-//         .catch((err: any) => {
-//           console.log('processImage 3', method, value, err);
-//         });
-//     })
-//     .catch((err) => {
-//       console.log('processImage 4 not found import file', method, value, err);
-//     });
-// });
+ipcMain.on('file-save-as', async () => {
+  if (!mainWindow) {
+    throw new Error('"mainWindow" is not defined');
+  }
+  console.log('file-save from main');
+  mainWindow.webContents.send('file-save-as');
+});
+
+ipcMain.handle(
+  'file-save-as-handle',
+  async (event, text: string, dialogOptions: SaveDialogOptions) => {
+    if (!mainWindow) {
+      throw new Error('"mainWindow" is not defined');
+    }
+    const result = await dialog.showSaveDialog(mainWindow, dialogOptions);
+
+    if (result.canceled || !result.filePath) {
+      return null;
+    }
+    fs.writeFileSync(result.filePath, text);
+    return null;
+  },
+);
+
+ipcMain.on('file-open', async (event, payload: any) => {
+  if (!mainWindow) {
+    throw new Error('"mainWindow" is not defined');
+  }
+  console.log('file-open', payload);
+  mainWindow.webContents.send('file-open');
+});
+ipcMain.handle(
+  'file-open-handle',
+  async (event, text: string, dialogOptions: OpenDialogOptions) => {
+    if (!mainWindow) {
+      throw new Error('"mainWindow" is not defined');
+    }
+    const result = await dialog.showOpenDialog(mainWindow, dialogOptions);
+
+    if (result.canceled || result.filePaths.length === 0) {
+      return null;
+    }
+    return fs.readFileSync(result.filePaths[0], 'utf8');
+  },
+);
 
 ipcMain.handle(
   'image-process',
@@ -150,6 +176,7 @@ const createWindow = async () => {
     width: 1024,
     height: 728,
     icon: getAssetPath('icon.png'),
+    autoHideMenuBar: true,
     webPreferences: {
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')

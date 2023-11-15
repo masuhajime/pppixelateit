@@ -1,4 +1,6 @@
 import { CallSharpNode } from './nodes/CallSharpNode';
+import { ClaheNode } from './nodes/ClaheNode';
+import { DenoiseNode } from './nodes/DenoiseNode';
 import { ErodeNode } from './nodes/ErodeNode';
 import { Fill00ColorToTransparentNode } from './nodes/Fill00ColorToTransparentNode';
 import { FillWithColorNode } from './nodes/FillWithColorNode';
@@ -31,6 +33,12 @@ const nodesEnabled = [
   },
   {
     element: ErodeNode,
+  },
+  {
+    element: ClaheNode,
+  },
+  {
+    element: DenoiseNode,
   },
   {
     element: ImageInputDirectoryNode,
