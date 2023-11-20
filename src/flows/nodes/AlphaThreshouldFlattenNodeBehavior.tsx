@@ -1,5 +1,4 @@
-import { Buffer } from 'buffer';
-import { imglyRemoveBackgroundBuffer } from '../../process/w2b';
+import { ImageAlphaThresholdFlattenParameter } from '../../main/process/dto';
 import useNodeStore, {
   getNodeSnapshot,
   handleSourceImageDefault,
@@ -12,7 +11,6 @@ import {
   NodeBaseDataImageBuffer,
   NodeBehaviorInterface,
 } from './data/NodeData';
-import { ImageRemoveBackgroundParameter } from '../../main/process/dto';
 
 export const handleSources: Record<string, HandleSource> = {
   image: handleSourceImageDefault,
@@ -28,7 +26,6 @@ export const handleTargets: Record<string, HandleTarget> = {
 export type NodeData = {
   settings: {
     threshold?: number;
-    algorithm?: string;
   };
 } & NodeBaseData &
   NodeBaseDataImageBuffer;
@@ -60,10 +57,10 @@ export const nodeBehavior: NodeBehaviorInterface = {
     }
 
     window.imageProcess
-      .imageProcess('imageRemoveBackground', {
+      .imageProcess('imageAlphaThreshouldFlatten', {
         buffer: node.data.imageBuffer.buffer,
-        algorithm: node.data.settings.algorithm,
-      } as ImageRemoveBackgroundParameter)
+        threshold: node.data.settings.threshold,
+      } as ImageAlphaThresholdFlattenParameter)
       .then((buffer) => {
         store.updateNodeData<NodeData>(nodeId, {
           completed: true,

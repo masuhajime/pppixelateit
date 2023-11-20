@@ -40,24 +40,6 @@ const imageRemoveBackground = async (
     .toBuffer({ resolveWithObject: true });
   console.log('imageRemoveBackground', objOutput.info);
 
-  // get meta of output
-
-  // get width and height
-  // const { info } = await sharp(bufferTemp)
-  //   .raw()
-  //   .toBuffer({ resolveWithObject: true });
-  for (let i = 0; i < objOutput.data.length; i += 4) {
-    if (objOutput.data[i + 3] === 255) {
-    } else if (255 - objOutput.data[i + 3] > (param.threshold / 100.0) * 255) {
-      objOutput.data[i + 3] = 0;
-      // objOutput.data[i + 0] = objOutput.data[i + 3];
-      // objOutput.data[i + 1] = 0;
-      // objOutput.data[i + 2] = 0;
-      // objOutput.data[i + 3] = 255;
-    } else {
-      objOutput.data[i + 3] = 255;
-    }
-  }
   return sharp(objOutput.data, {
     raw: {
       width: objOutput.info.width,
@@ -67,7 +49,5 @@ const imageRemoveBackground = async (
   })
     .png()
     .toBuffer();
-
-  return output.png().toBuffer();
 };
 export default imageRemoveBackground;

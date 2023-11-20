@@ -1,9 +1,11 @@
+/* eslint-disable import/prefer-default-export */
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { Box } from '@mui/material';
 import { useEffect, useState } from 'react';
+import DownloadIcon from '@mui/icons-material/Download';
 import { arrayBufferToBase64 } from '../../../process/w2b';
-import image from '../../../../assets/transparant-background.png';
+import imageTransparent from '../../../../assets/transparant-background.png';
 
 type Props = {
   enabled?: boolean;
@@ -72,14 +74,29 @@ export function ImagePreview({
       //   alignItems: 'center',
       // }}
     >
-      {togglePreview(enabled, onTogglePreview, size, completed)}
+      {togglePreview(
+        enabled,
+        onTogglePreview,
+        () => {
+          if (imageBuffer) {
+            const blob = new Blob([imageBuffer], { type: 'image/png' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'image.png';
+            a.click();
+          }
+        },
+        size,
+        completed,
+      )}
       {enabled && !completed && <div>waiting</div>}
       {enabled && completed && (
         <>
           {!!imageBase64 && (
             <div
               style={{
-                backgroundImage: `url(${image})`,
+                backgroundImage: `url(${imageTransparent})`,
                 backgroundSize: 'contain',
                 backgroundRepeat: 'repeat',
                 lineHeight: 0,
@@ -99,7 +116,7 @@ export function ImagePreview({
           {!!imageBuffer && (
             <div
               style={{
-                backgroundImage: `url(${image})`,
+                backgroundImage: `url(${imageTransparent})`,
                 backgroundSize: 'contain',
                 backgroundRepeat: 'repeat',
                 lineHeight: 0,
@@ -125,6 +142,7 @@ export function ImagePreview({
 const togglePreview = (
   enabled: boolean,
   onTogglePreview?: (enabled: boolean) => void,
+  onImageSave?: () => void,
   size?: {
     x: number;
     y: number;
@@ -174,6 +192,20 @@ const togglePreview = (
           }}
         >
           {size.x}x{size.y}
+        </Box>
+      )}
+      {completed && (
+        <Box>
+          <DownloadIcon
+            sx={{
+              color: 'text.disabled',
+              cursor: 'pointer',
+              paddingLeft: '0.2em',
+            }}
+            onClick={() => {
+              !!onImageSave && onImageSave();
+            }}
+          />
         </Box>
       )}
     </Box>

@@ -7,6 +7,7 @@ import { Handle, Position, useUpdateNodeInternals } from 'reactflow';
 type Props = {
   handleId: string;
   nodeId: string;
+  label?: string;
 };
 const handleSize = 20;
 export function HandleTargetImage(props: Props) {
@@ -27,7 +28,9 @@ export function HandleTargetImage(props: Props) {
 
   return (
     <Box ref={ref} className="node-item">
-      <Typography variant="h6">Image</Typography>
+      <Typography variant="h6">
+        {props.label ? props.label : 'Image'}
+      </Typography>
       <Handle
         type="target"
         position={Position.Left}

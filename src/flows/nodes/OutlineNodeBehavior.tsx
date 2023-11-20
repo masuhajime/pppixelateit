@@ -1,4 +1,4 @@
-import { outlinePaint } from '../../process/w2b';
+import { ImageOutlineParameter } from '../../main/process/dto';
 import useNodeStore, {
   getNodeSnapshot,
   handleSourceImageDefault,
@@ -26,6 +26,11 @@ export const handleTargets: Record<string, HandleTarget> = {
 export type NodeData = {
   settings: {
     number?: number;
+    lineSide?: string;
+    r: number;
+    g: number;
+    b: number;
+    a: number;
   };
 } & NodeBaseData &
   NodeBaseDataImageBuffer;
@@ -63,18 +68,34 @@ export const nodeBehavior: NodeBehaviorInterface = {
       throw new Error('no image or number');
     }
 
-    outlinePaint(node.data.imageBuffer?.buffer).then((w2b) => {
-      store.updateNodeData<NodeData>(nodeId, {
-        completed: true,
-        imageBuffer: {
-          buffer: w2b,
-          end: true,
+    window.imageProcess
+      .imageProcess('imageOutline', {
+        buffer: node.data.imageBuffer.buffer,
+        pixelCountAround: node.data.settings.number,
+        lineSide: node.data.settings.lineSide,
+        outlineColor: {
+          r: node.data.settings.r,
+          g: node.data.settings.g,
+          b: node.data.settings.b,
+          a: node.data.settings.a,
         },
-      });
+      } as ImageOutlineParameter)
+      .then((buffer) => {
+        store.updateNodeData<NodeData>(nodeId, {
+          completed: true,
+          imageBuffer: {
+            buffer,
+            end: true,
+          },
+        });
 
-      propagateValue(nodeId, handleSources);
-      callback();
-    });
+        propagateValue(nodeId, handleSources);
+        callback();
+        return 0;
+      })
+      .catch((err) => {
+        console.error('OutlineNodeBehavior', err);
+      });
   },
   canStartProcess(nodeId: string): boolean {
     const node = getNodeSnapshot<NodeData>(nodeId);

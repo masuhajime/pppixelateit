@@ -1,5 +1,7 @@
+import { AlphaThreshouldFlattenNode } from './nodes/AlphaThreshouldFlattenNode';
 import { CallSharpNode } from './nodes/CallSharpNode';
 import { ClaheNode } from './nodes/ClaheNode';
+import { DebugNode } from './nodes/DebugNode';
 import { DenoiseNode } from './nodes/DenoiseNode';
 import { ErodeNode } from './nodes/ErodeNode';
 import { Fill00ColorToTransparentNode } from './nodes/Fill00ColorToTransparentNode';
@@ -9,6 +11,7 @@ import { ImageInputNode } from './nodes/ImageInputNode';
 import { ImagePreviewCompare } from './nodes/ImagePreviewCompare';
 import { ImagePreviewNode } from './nodes/ImagePreviewNode';
 import { KmeansNode } from './nodes/KmeansNode';
+import { MaskNode } from './nodes/MaskNode';
 import { OutlineNode } from './nodes/OutlineNode';
 import { PixelateNode } from './nodes/PixelateNode';
 import { PosterizeNode } from './nodes/PosterizeNode';
@@ -87,6 +90,15 @@ const nodesEnabled = [
   },
   {
     element: CallSharpNode,
+  },
+  {
+    element: MaskNode,
+  },
+  {
+    element: DebugNode,
+  },
+  {
+    element: AlphaThreshouldFlattenNode,
   },
 ];
 export default nodesEnabled;

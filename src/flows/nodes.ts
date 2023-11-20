@@ -65,5 +65,14 @@ const nodeDefines: { name: string }[] = [
   {
     name: 'CallSharpNode',
   },
+  {
+    name: 'MaskNode',
+  },
+  {
+    name: 'DebugNode',
+  },
+  {
+    name: 'AlphaThreshouldFlattenNode',
+  },
 ];
 export default nodeDefines;

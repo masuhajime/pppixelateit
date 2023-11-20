@@ -1,27 +1,29 @@
+/* eslint-disable import/prefer-default-export */
 // @flow
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
-import PlayCircleIcon from '@mui/icons-material/PlayCircle'
-import StopCircleIcon from '@mui/icons-material/StopCircle'
-import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined'
-import { Box } from '@mui/material'
-import { NodeBaseData } from '../data/NodeData'
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import PlayCircleIcon from '@mui/icons-material/PlayCircle';
+import StopCircleIcon from '@mui/icons-material/StopCircle';
+import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
+import { Box } from '@mui/material';
+import { NodeBaseData } from '../data/NodeData';
+
 type Props = {
-  processTime?: number
-  nodeData: NodeBaseData
-}
-export const NodeStatus = (props: Props) => {
+  nodeData: NodeBaseData;
+};
+export function NodeStatus(props: Props) {
+  const { nodeData } = props;
   return (
     <Box className="node-item">
-      <Box>completed: {props.nodeData.completed ? 'true' : 'false'}</Box>
-      <PlayCircleIcon></PlayCircleIcon>
-      <StopCircleIcon></StopCircleIcon>
+      <Box>completed: {nodeData.completed ? 'true' : 'false'}</Box>
+      <PlayCircleIcon />
+      <StopCircleIcon />
       <CheckCircleOutlineIcon
         sx={{
           color: 'lightgreen',
         }}
-      ></CheckCircleOutlineIcon>
-      <TimerOutlinedIcon></TimerOutlinedIcon>
-      {!!props.nodeData.processTime ? props.nodeData.processTime : '-'}
+      />
+      <TimerOutlinedIcon />
+      {nodeData.processTime ? nodeData.processTime : '-'}
     </Box>
-  )
+  );
 }

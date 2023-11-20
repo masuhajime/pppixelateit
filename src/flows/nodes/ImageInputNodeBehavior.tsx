@@ -46,7 +46,8 @@ export const handleSources = {
 export const nodeBehavior: NodeBehaviorInterface = {
   initialize(nodeId: string): void {
     // useNodeStore.getState().updateNodeData<NodeData>(nodeId, {
-    //   inputFilePath: '/Users/masuhajime/pppjs/images/4-1.png',
+    //   // inputFilePath: '/Users/masuhajime/pppjs/images/5-3.png',
+    //   inputFilePath: '/Users/masuhajime/pppjs/images/2-1-a.png',
     // });
   },
   dataIncoming(

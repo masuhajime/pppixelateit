@@ -1,35 +1,36 @@
-import { Buffer } from 'buffer';
-import { imglyRemoveBackgroundBuffer } from '../../process/w2b';
+import {
+  ImageBufferOnlyParameter,
+  ImageMaskParameter,
+} from '../../main/process/dto';
 import useNodeStore, {
   getNodeSnapshot,
   handleSourceImageDefault,
   propagateValue,
 } from '../../store/store';
 import {
-  HandleSource,
-  HandleTarget,
   NodeBaseData,
   NodeBaseDataImageBuffer,
   NodeBehaviorInterface,
 } from './data/NodeData';
-import { ImageRemoveBackgroundParameter } from '../../main/process/dto';
 
-export const handleSources: Record<string, HandleSource> = {
+export const handleSources = {
   image: handleSourceImageDefault,
 };
 
-export const handleTargets: Record<string, HandleTarget> = {
+export const handleTargets = {
   image: {
     id: 'image',
+    dataType: 'image',
+  },
+  mask: {
+    id: 'mask',
     dataType: 'image',
   },
 };
 
 export type NodeData = {
-  settings: {
-    threshold?: number;
-    algorithm?: string;
-  };
+  settings: {};
+  imageMaskBuffer?: ImageBufferOnlyParameter;
 } & NodeBaseData &
   NodeBaseDataImageBuffer;
 
@@ -41,10 +42,18 @@ export const nodeBehavior: NodeBehaviorInterface = {
     data: any,
   ): void {
     const store = useNodeStore.getState();
-    store.updateNodeData<NodeData>(nodeId, {
-      imageBuffer: data,
-      completed: false,
-    });
+    if (handleId === handleTargets.image.id) {
+      store.updateNodeData<NodeData>(nodeId, {
+        imageBuffer: data,
+        completed: false,
+      });
+    }
+    if (handleId === handleTargets.mask.id) {
+      store.updateNodeData<NodeData>(nodeId, {
+        imageMaskBuffer: data,
+        completed: false,
+      });
+    }
   },
   nodeProcess(nodeId: string, callback: () => void): void {
     const store = useNodeStore.getState();
@@ -53,17 +62,21 @@ export const nodeBehavior: NodeBehaviorInterface = {
     });
     const node = getNodeSnapshot<NodeData>(nodeId);
     // data.completed = true
-    console.log('node process test:', node.id, node.type);
-
-    if (!node.data.imageBuffer?.buffer) {
-      throw new Error('no image data');
+    console.log(
+      'node process resize to:',
+      // node.data.imageBase64,
+      node.id,
+      node.type,
+    );
+    if (!node.data.imageBuffer?.buffer || !node.data.imageMaskBuffer?.buffer) {
+      throw new Error('no image or number');
     }
 
     window.imageProcess
-      .imageProcess('imageRemoveBackground', {
+      .imageProcess('imageMask', {
         buffer: node.data.imageBuffer.buffer,
-        algorithm: node.data.settings.algorithm,
-      } as ImageRemoveBackgroundParameter)
+        mask: node.data.imageMaskBuffer.buffer,
+      } as ImageMaskParameter)
       .then((buffer) => {
         store.updateNodeData<NodeData>(nodeId, {
           completed: true,
@@ -78,11 +91,13 @@ export const nodeBehavior: NodeBehaviorInterface = {
         return 0;
       })
       .catch((err) => {
-        console.error(err);
+        console.error('DebugNodeBehavior', err);
       });
   },
   canStartProcess(nodeId: string): boolean {
     const node = getNodeSnapshot<NodeData>(nodeId);
-    return !!node.data.imageBuffer?.buffer;
+    return (
+      !!node.data.imageBuffer?.buffer && !!node.data.imageMaskBuffer?.buffer
+    );
   },
 };

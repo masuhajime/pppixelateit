@@ -1,48 +1,39 @@
 /* eslint-disable import/prefer-default-export */
 import { NodeProps } from 'reactflow';
 
-import { MenuItem } from '@mui/material';
-import { useMemo } from 'react';
 import useNodeStore from '../../store/store';
 import {
   NodeData,
   handleSources,
   handleTargets,
-} from './RemoveBackgroundNodeBehavior';
+} from './AlphaThreshouldFlattenNodeBehavior';
 import { Node } from './components/Node';
 import { NodeContent } from './components/NodeContent';
 import { NodeHeader } from './components/NodeHeader';
+import { NodeStatus } from './components/NodeStatus';
 import { HandleSourceImage } from './items/HandleSourceImage';
 import { HandleTargetImage } from './items/HandleTargetImage';
 import { ImagePreview } from './items/ImagePreview';
 import { Separator } from './items/Separator';
-import { NodeStatus } from './components/NodeStatus';
-import { Select } from './items/Select';
 import { SliderValue } from './items/SliderValue';
 
-export function RemoveBackgroundNode({ id, data }: NodeProps<NodeData>) {
+export function AlphaThreshouldFlattenNode({ id, data }: NodeProps<NodeData>) {
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="RemoveBackgroundNode" />
+      <NodeHeader title="AlphaThreshouldFlatten" />
       <NodeContent>
         <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
-        <Select
-          label="Algorithm"
-          nodeId={id}
-          defaultValue={data.settings.algorithm || 'rembg'}
-          onSelect={(value) => {
-            // check if value is string
-            if (typeof value !== 'string') {
-              throw new Error('value is not string');
-            }
+        <SliderValue
+          label="value"
+          onSelect={(v) => {
             useNodeStore.getState().updateNodeSetting(id, {
-              algorithm: value,
+              threshold: v,
             });
           }}
-        >
-          <MenuItem value="rembg">rembg</MenuItem>
-          <MenuItem value="background-removal">background-removal</MenuItem>
-        </Select>
+          value={data.settings.threshold}
+          min={0}
+          max={100}
+        />
         <Separator />
         <HandleSourceImage
           label="Image"

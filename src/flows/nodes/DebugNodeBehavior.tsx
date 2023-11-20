@@ -1,5 +1,8 @@
-import { Buffer } from 'buffer';
-import { imglyRemoveBackgroundBuffer } from '../../process/w2b';
+import {
+  ImageBufferOnlyParameter,
+  ImageOutlineParameter,
+} from '../../main/process/dto';
+import { outlinePaint } from '../../process/w2b';
 import useNodeStore, {
   getNodeSnapshot,
   handleSourceImageDefault,
@@ -12,7 +15,6 @@ import {
   NodeBaseDataImageBuffer,
   NodeBehaviorInterface,
 } from './data/NodeData';
-import { ImageRemoveBackgroundParameter } from '../../main/process/dto';
 
 export const handleSources: Record<string, HandleSource> = {
   image: handleSourceImageDefault,
@@ -27,8 +29,7 @@ export const handleTargets: Record<string, HandleTarget> = {
 
 export type NodeData = {
   settings: {
-    threshold?: number;
-    algorithm?: string;
+    number?: number;
   };
 } & NodeBaseData &
   NodeBaseDataImageBuffer;
@@ -53,17 +54,20 @@ export const nodeBehavior: NodeBehaviorInterface = {
     });
     const node = getNodeSnapshot<NodeData>(nodeId);
     // data.completed = true
-    console.log('node process test:', node.id, node.type);
-
-    if (!node.data.imageBuffer?.buffer) {
-      throw new Error('no image data');
+    console.log(
+      'node process resize to:',
+      // node.data.imageBase64,
+      node.id,
+      node.type,
+    );
+    if (!node.data.imageBuffer?.buffer || !node.data.settings.number) {
+      throw new Error('no image or number');
     }
 
     window.imageProcess
-      .imageProcess('imageRemoveBackground', {
+      .imageProcess('imageDebug', {
         buffer: node.data.imageBuffer.buffer,
-        algorithm: node.data.settings.algorithm,
-      } as ImageRemoveBackgroundParameter)
+      } as ImageBufferOnlyParameter)
       .then((buffer) => {
         store.updateNodeData<NodeData>(nodeId, {
           completed: true,
@@ -78,11 +82,11 @@ export const nodeBehavior: NodeBehaviorInterface = {
         return 0;
       })
       .catch((err) => {
-        console.error(err);
+        console.error('DebugNodeBehavior', err);
       });
   },
   canStartProcess(nodeId: string): boolean {
     const node = getNodeSnapshot<NodeData>(nodeId);
-    return !!node.data.imageBuffer?.buffer;
+    return !!node.data.imageBuffer?.buffer && !!node.data.settings.number;
   },
 };
