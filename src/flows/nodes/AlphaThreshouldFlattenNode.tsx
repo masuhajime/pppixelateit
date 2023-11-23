@@ -24,13 +24,17 @@ export function AlphaThreshouldFlattenNode({ id, data }: NodeProps<NodeData>) {
       <NodeContent>
         <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
         <SliderValue
-          label="value"
+          label="threshould"
           onSelect={(v) => {
             useNodeStore.getState().updateNodeSetting(id, {
               threshold: v,
             });
           }}
-          value={data.settings.threshold}
+          value={
+            Number.isInteger(data.settings.threshold)
+              ? data.settings.threshold
+              : 10
+          }
           min={0}
           max={100}
         />

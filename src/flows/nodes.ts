@@ -74,5 +74,8 @@ const nodeDefines: { name: string }[] = [
   {
     name: 'AlphaThreshouldFlattenNode',
   },
+  {
+    name: 'AlphaFlattenNode',
+  },
 ];
 export default nodeDefines;

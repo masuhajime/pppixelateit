@@ -1,3 +1,4 @@
+import { AlphaFlattenNode } from './nodes/AlphaFlattenNode';
 import { AlphaThreshouldFlattenNode } from './nodes/AlphaThreshouldFlattenNode';
 import { CallSharpNode } from './nodes/CallSharpNode';
 import { ClaheNode } from './nodes/ClaheNode';
@@ -99,6 +100,9 @@ const nodesEnabled = [
   },
   {
     element: AlphaThreshouldFlattenNode,
+  },
+  {
+    element: AlphaFlattenNode,
   },
 ];
 export default nodesEnabled;

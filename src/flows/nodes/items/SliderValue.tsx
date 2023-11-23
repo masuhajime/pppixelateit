@@ -20,8 +20,8 @@ export function SliderValue(props: Props) {
       <Typography>{label}</Typography>
       <Slider
         aria-label="Small"
-        valueLabelDisplay="auto"
-        value={value || 80}
+        valueLabelDisplay="on"
+        value={Number.isInteger(value) ? value : 50}
         min={min || 0}
         max={max || 100}
         onChange={(event: Event, newValue: number | number[]) => {

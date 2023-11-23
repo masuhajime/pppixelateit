@@ -1,10 +1,21 @@
 import { Buffer } from 'buffer';
 import sharp from 'sharp';
-import { ImageBufferOnlyParameter } from './dto';
+import { ImageFlattenParameter } from './dto';
 
-const filter = async (param: ImageBufferOnlyParameter): Promise<Buffer> => {
+const filter = async (param: ImageFlattenParameter): Promise<Buffer> => {
   const { buffer } = param;
   const image = sharp(buffer);
-  return image.png().toBuffer();
+  return image
+    .flatten({
+      background: {
+        r: param.color.r,
+        g: param.color.g,
+        b: param.color.b,
+        alpha: 255,
+      },
+    })
+    .ensureAlpha()
+    .png()
+    .toBuffer();
 };
 export default filter;

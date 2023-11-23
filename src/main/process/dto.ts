@@ -25,6 +25,11 @@ export type ImageOutlineParameter = {
   outlineColor: RGBA;
 };
 
+export type ImageFlattenParameter = {
+  buffer: Buffer;
+  color: RGBA;
+};
+
 export type ImageMaskParameter = {
   buffer: Buffer;
   mask: Buffer;
