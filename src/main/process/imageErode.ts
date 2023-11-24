@@ -22,7 +22,7 @@ const filter = async (param: ImageBufferOnlyParameter): Promise<Buffer> => {
     height,
   });
 
-  const array = new Uint8ClampedArray(buffer);
+  // const array = new Uint8ClampedArray(buffer);
 
   // const image = new ImageData(array, width, height);
   // const src = cv.matFromArray(height, width, cv.CV_8UC4, array);
