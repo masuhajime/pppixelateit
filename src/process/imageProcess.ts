@@ -211,7 +211,7 @@ class ProcessController {
       if (!!behavior.hasNextIteration && behavior.hasNextIteration(node.id)) {
         // log
         console.log('#### runIterationOnce', node.id, node.type);
-        this.runNodeBehavior(node.id, behavior);
+        ProcessController.runNodeBehavior(node.id, behavior);
         break;
       }
     }

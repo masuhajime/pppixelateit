@@ -133,6 +133,37 @@ ipcMain.handle('read-as-buffer', async (event, payload: string) => {
   return buffer;
 });
 
+ipcMain.handle(
+  'save-as-buffer',
+  async (
+    event,
+    payload: {
+      path: string;
+      buffer: Buffer;
+    },
+  ) => {
+    console.log('save-as-buffer', payload);
+
+    fs.writeFileSync(payload.path, payload.buffer);
+  },
+);
+
+ipcMain.handle('directory-read', async (event, directoryPath: string) => {
+  const files = fs.readdirSync(directoryPath);
+  return files.filter((file) => {
+    // filter only image file
+    const ext = path.extname(file).toLowerCase();
+    // check is directory
+    const isDirectory = fs
+      .statSync(path.join(directoryPath, file))
+      .isDirectory();
+    if (isDirectory) {
+      return false;
+    }
+    return ['.gif', '.png', '.jpg', '.jpeg'].includes(ext);
+  });
+});
+
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();

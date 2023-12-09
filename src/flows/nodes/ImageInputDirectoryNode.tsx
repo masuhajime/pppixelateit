@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import { NodeProps } from 'reactflow';
 
 import FolderIcon from '@mui/icons-material/Folder';
@@ -16,11 +17,11 @@ import { HandleSourceText } from './items/HandleSourceText';
 // import { fs } from '@tauri-apps/api';
 import { HandleSourceDirectory } from './items/HandleSourceDirectory';
 
-export const ImageInputDirectoryNode = ({ id, data }: NodeProps<NodeData>) => {
+export function ImageInputDirectoryNode({ id, data }: NodeProps<NodeData>) {
   const nodeStore = useNodeStore.getState();
 
-  let directoryPath = undefined;
-  if (!!data.inputDirectoryPath) {
+  let directoryPath;
+  if (data.inputDirectoryPath) {
     // get last directory name
     directoryPath = path.basename(data.inputDirectoryPath);
   }
@@ -33,7 +34,7 @@ export const ImageInputDirectoryNode = ({ id, data }: NodeProps<NodeData>) => {
           sx={{
             width: '100%',
           }}
-        ></FormControl>
+        />
 
         <Box className="node-item">
           <Button
@@ -46,20 +47,30 @@ export const ImageInputDirectoryNode = ({ id, data }: NodeProps<NodeData>) => {
               textTransform: 'none',
             }}
             onClick={async () => {
-              const selectedDir = await open({
-                multiple: false,
-                directory: true,
+              const selectedDir = await window.dialog.selectFile({
+                buttonLabel: 'Select Directory',
+                properties: ['openDirectory'],
                 filters: [],
               });
-              if (Array.isArray(selectedDir)) {
-                // user selectedFile multiple files
-                console.error("can't select multiple files");
-              } else if (selectedDir === null) {
-                // user cancelled the selection
-                console.error("can't select file");
-              } else {
-                // log
-                // console.debug('selectedDir', selectedDir);
+              if (selectedDir) {
+                console.debug('selectedDir', selectedDir);
+                window.fs
+                  .readDir(selectedDir)
+                  .then((files) => {
+                    console.log(files);
+
+                    const filePaths = files.map((file) => {
+                      return file.path;
+                    });
+                    nodeStore.updateNodeData<NodeData>(id, {
+                      inputDirectoryPath: selectedDir,
+                      inputFilePaths: filePaths,
+                    });
+                    return 1;
+                  })
+                  .catch((err) => {
+                    console.error(err);
+                  });
                 // const files = await fs.readDir(selectedDir);
                 // const filePaths = files.map((file) => {
                 //   return file.path;
@@ -69,13 +80,36 @@ export const ImageInputDirectoryNode = ({ id, data }: NodeProps<NodeData>) => {
                 //   inputFilePaths: filePaths,
                 // });
               }
+              // const selectedDir = await open({
+              //   multiple: false,
+              //   directory: true,
+              //   filters: [],
+              // });
+              // if (Array.isArray(selectedDir)) {
+              //   // user selectedFile multiple files
+              //   console.error("can't select multiple files");
+              // } else if (selectedDir === null) {
+              //   // user cancelled the selection
+              //   console.error("can't select file");
+              // } else {
+              //   // log
+              //   // console.debug('selectedDir', selectedDir);
+              //   // const files = await fs.readDir(selectedDir);
+              //   // const filePaths = files.map((file) => {
+              //   //   return file.path;
+              //   // });
+              //   // nodeStore.updateNodeData<NodeData>(id, {
+              //   //   inputDirectoryPath: selectedDir,
+              //   //   inputFilePaths: filePaths,
+              //   // });
+              // }
             }}
           >
             <FolderIcon
               sx={{
                 marginRight: '8px',
               }}
-            ></FolderIcon>
+            />
             <Box
               sx={{
                 display: 'inline-block',
@@ -85,7 +119,7 @@ export const ImageInputDirectoryNode = ({ id, data }: NodeProps<NodeData>) => {
                 whiteSpace: 'nowrap',
               }}
             >
-              {directoryPath ? directoryPath : 'Select Directory'}
+              {directoryPath || 'Select Directory'}
             </Box>
           </Button>
           {data.inputFilePaths !== undefined && (
@@ -94,25 +128,25 @@ export const ImageInputDirectoryNode = ({ id, data }: NodeProps<NodeData>) => {
             </Box>
           )}
         </Box>
-        <NodeStatus nodeData={data}></NodeStatus>
+        <NodeStatus nodeData={data} />
         <HandleSourceImage
           handleId={handleSources.image.id}
           label="Image"
           nodeId={id}
-        ></HandleSourceImage>
+        />
         <HandleSourceDirectory
           handleId={handleSources.directory.id}
           label="Directory"
           nodeId={id}
           placeholder="Directory"
           directory={directoryPath}
-          disabled={true}
-        ></HandleSourceDirectory>
+          disabled
+        />
         <HandleSourceText
           handleId={handleSources.filename.id}
           label="File Name"
           nodeId={id}
-        ></HandleSourceText>
+        />
         <ImagePreview
           enabled={!!data.settings.enablePreview}
           completed={!!data.completed}
@@ -122,8 +156,8 @@ export const ImageInputDirectoryNode = ({ id, data }: NodeProps<NodeData>) => {
               enablePreview: enabled,
             });
           }}
-        ></ImagePreview>
+        />
       </NodeContent>
     </Node>
   );
-};
+}

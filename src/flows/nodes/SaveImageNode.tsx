@@ -1,27 +1,25 @@
-import { NodeProps } from 'reactflow'
+/* eslint-disable import/prefer-default-export */
+import { NodeProps } from 'reactflow';
 
-import useNodeStore from '../../store/store'
-import { NodeData, handleTargets } from './SaveImageNodeBehavior'
-import { Node } from './components/Node'
-import { NodeContent } from './components/NodeContent'
-import { NodeHeader } from './components/NodeHeader'
-import { NodeStatus } from './components/NodeStatus'
-import { HandleTargetDirectory } from './items/HandleTargetDirectory'
-import { HandleTargetImage } from './items/HandleTargetImage'
-import { HandleTargetText } from './items/HandleTargetText'
-import { Separator } from './items/Separator'
-import path from 'path'
+import path from 'path';
+import useNodeStore from '../../store/store';
+import { NodeData, handleTargets } from './SaveImageNodeBehavior';
+import { Node } from './components/Node';
+import { NodeContent } from './components/NodeContent';
+import { NodeHeader } from './components/NodeHeader';
+import { NodeStatus } from './components/NodeStatus';
+import { HandleTargetDirectory } from './items/HandleTargetDirectory';
+import { HandleTargetImage } from './items/HandleTargetImage';
+import { HandleTargetText } from './items/HandleTargetText';
+import { Separator } from './items/Separator';
 
-export const SaveImageNode = ({ id, data }: NodeProps<NodeData>) => {
-  const dir = path.basename(data.directory || data.settings.directory || '')
+export function SaveImageNode({ id, data }: NodeProps<NodeData>) {
+  const dir = path.basename(data.directory || data.settings.directory || '');
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
       <NodeHeader title="Save Image" />
       <NodeContent>
-        <HandleTargetImage
-          handleId={handleTargets.image.id}
-          nodeId={id}
-        ></HandleTargetImage>
+        <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
         <HandleTargetDirectory
           directory={dir}
           placeholder="Select Directory"
@@ -30,10 +28,10 @@ export const SaveImageNode = ({ id, data }: NodeProps<NodeData>) => {
           onChange={(value) => {
             useNodeStore.getState().updateNodeData<NodeData>(id, {
               directory: value,
-            })
+            });
           }}
           name="directory"
-        ></HandleTargetDirectory>
+        />
         <HandleTargetText
           name="file name"
           handleId={handleTargets.filename.id}
@@ -42,12 +40,12 @@ export const SaveImageNode = ({ id, data }: NodeProps<NodeData>) => {
           onChange={(value) => {
             useNodeStore.getState().updateNodeData<NodeData>(id, {
               filename: value,
-            })
+            });
           }}
-        ></HandleTargetText>
+        />
         <Separator />
-        <NodeStatus nodeData={data}></NodeStatus>
+        <NodeStatus nodeData={data} />
       </NodeContent>
     </Node>
-  )
+  );
 }

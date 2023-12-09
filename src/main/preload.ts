@@ -51,11 +51,24 @@ const fsHandler = {
     // const result = await ipcRenderer.invoke('readAsBuffer', path);
     return buffer;
   },
+  saveAsBuffer: async (path: string, buffer: Buffer) => {
+    console.log('save-as-buffer', path);
+
+    // ipcRenderer.invoke('save-as-buffer', path, buffer);
+    await ipcRenderer.invoke('save-as-buffer', {
+      path,
+      buffer,
+    });
+  },
   saveAs(string: string, option: SaveDialogOptions) {
     ipcRenderer.invoke('file-save-as-handle', string, option);
   },
   async open(option: OpenDialogOptions): Promise<string> {
     return ipcRenderer.invoke('file-open-handle', option);
+  },
+  readDir(path: string) {
+    // get all files in the directory
+    return ipcRenderer.invoke('directory-read', path);
   },
 };
 contextBridge.exposeInMainWorld('fs', fsHandler);

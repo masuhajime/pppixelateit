@@ -72,6 +72,8 @@ export const nodeBehavior: NodeBehaviorInterface = {
           completed: true,
         });
         break;
+      default:
+        break;
     }
   },
   async nodeProcess(nodeId: string, callback: () => void): Promise<void> {
@@ -79,20 +81,42 @@ export const nodeBehavior: NodeBehaviorInterface = {
     store.updateNodeData<NodeData>(nodeId, {
       completed: false,
     });
-    let node = getNodeSnapshot<NodeData>(nodeId);
+    const node = getNodeSnapshot<NodeData>(nodeId);
 
     const filename = node.data.filename || node.data.settings.filename;
     const directory = node.data.directory || node.data.settings.directory;
 
-    if (node.data.imageBuffer?.buffer === undefined) {
-      console.error('image buffer is undefined');
+    if (
+      node.data.imageBuffer?.buffer === undefined ||
+      filename === undefined ||
+      directory === undefined
+    ) {
+      console.error('Either of image buffer, filename, directory is undefined');
       return;
     }
     // imageBuffer to jimp instance
-    const jimpImage = await Jimp.read(node.data.imageBuffer?.buffer);
+    // const jimpImage = await Jimp.read(node.data.imageBuffer?.buffer);
 
-    // jimp instance to png
-    const pngBuffer = await jimpImage.getBufferAsync(Jimp.MIME_PNG);
+    // // jimp instance to png
+    // const pngBuffer = await jimpImage.getBufferAsync(Jimp.MIME_PNG);
+
+    window.fs
+      .saveAsBuffer(`${directory}/${filename}`, node.data.imageBuffer?.buffer)
+      .then(() => {
+        console.log('saved image' + `${directory}/${filename}`);
+        store.updateNodeData<NodeData>(nodeId, {
+          completed: true,
+        });
+        callback();
+        return 1;
+      })
+      .catch((err) => {
+        console.error(err);
+        store.updateNodeData<NodeData>(nodeId, {
+          completed: true,
+        });
+        callback();
+      });
 
     // log
     console.log('saving image to ' + `${directory}/${filename}`);

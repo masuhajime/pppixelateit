@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 // @flow
 import FolderIcon from '@mui/icons-material/Folder';
 import { Box, Button } from '@mui/material';
@@ -16,6 +17,8 @@ type Props = {
 };
 const handleSize = 20;
 export function HandleTargetDirectory(props: Props) {
+  const { name, handleId, nodeId, placeholder, directory, disabled, onChange } =
+    props;
   const ref = React.useRef<HTMLDivElement>(null);
   const updateNodeInternals = useUpdateNodeInternals();
   const [handlePositionTop, setHandlePositionTop] = React.useState(0);
@@ -42,20 +45,14 @@ export function HandleTargetDirectory(props: Props) {
           textTransform: 'none',
         }}
         onClick={async () => {
-          const selectedDir = await open({
-            multiple: false,
-            directory: true,
+          const selected = await window.dialog.selectFile({
+            buttonLabel: 'Select Directory',
+            properties: ['openDirectory'],
             filters: [],
           });
-          console.log(selectedDir);
-          if (Array.isArray(selectedDir)) {
-            // user selectedFile multiple files
-            console.error("can't select multiple directories");
-          } else if (selectedDir === null) {
-            // user cancelled the selection
-            console.error("can't select directory");
-          } else {
-            props.onChange && props.onChange(selectedDir);
+          if (onChange) {
+            if (selected) onChange(selected);
+            else onChange(undefined);
           }
         }}
       >
