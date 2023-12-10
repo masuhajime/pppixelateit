@@ -4,6 +4,11 @@ import cv from '@techstark/opencv-js';
 import { ImageBufferOnlyParameter } from './dto';
 import waitUntilOpenCVReady from './waitUntilOpenCvReady';
 
+/**
+ * https://neko-note.org/react-opencv-opening-closing/868
+ * @param param
+ * @returns
+ */
 const filter = async (param: ImageBufferOnlyParameter): Promise<Buffer> => {
   await waitUntilOpenCVReady();
   console.log('imageErode a');
@@ -17,7 +22,7 @@ const filter = async (param: ImageBufferOnlyParameter): Promise<Buffer> => {
   console.log('imageErode');
 
   console.log('imageErode 2', {
-    data,
+    // data,
     width,
     height,
   });
@@ -47,6 +52,7 @@ const filter = async (param: ImageBufferOnlyParameter): Promise<Buffer> => {
   );
   console.log('imageErode 5');
   const bufferDst = Buffer.from(eroded.data);
+
   const imageDst = sharp(bufferDst, {
     raw: {
       width: eroded.cols,
@@ -54,8 +60,12 @@ const filter = async (param: ImageBufferOnlyParameter): Promise<Buffer> => {
       channels: 4,
     },
   });
+  eroded.delete();
   console.log('imageErode 6');
+  src.delete();
   console.log('imageErode 7');
+  n4.delete();
+  console.log('imageErode 8');
 
   const buf = imageDst.png().toBuffer();
   return buf;

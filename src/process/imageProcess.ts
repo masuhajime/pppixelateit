@@ -1,6 +1,5 @@
 import {
   NodeBehaviorInterface,
-  getNodeBehavior,
   getNodeBehaviorCacheByType,
   nodeBehaviorCacheAll,
 } from '../flows/nodes/data/NodeData';
@@ -18,16 +17,16 @@ class ProcessController {
 
     // initialize
     console.log('start initialize nodes', nodeStore.nodes);
-    for (let i = 0; i < nodeStore.nodes.length; i++) {
+    for (let i = 0; i < nodeStore.nodes.length; i += 1) {
       const node = nodeStore.nodes[i];
       if (node.type === undefined) {
         continue;
       }
-      const behavior = await getNodeBehavior(node.type);
+      const behavior = getNodeBehaviorCacheByType(node.type);
       if (behavior.initialize) {
         console.log('start nodes behavior initialize ', {
           hasStart: !!behavior.initialize,
-          type: behavior,
+          type: node.type,
         });
         await behavior.initialize(node.id);
       }
@@ -37,7 +36,7 @@ class ProcessController {
     const unsubscribe = processStore.subscribe((state) => {
       console.log('process status', state.count, state.processStatus);
 
-      if (state.processStatus != 'processing') {
+      if (state.processStatus !== 'processing') {
         console.log('######### process not processing', state.processStatus);
         unsubscribe();
       }
@@ -62,10 +61,10 @@ class ProcessController {
 
       // debug
       const limit = 50;
-      if (state.count > limit) {
-        console.log(`######### process count over ${limit}`);
-        this.stop();
-      }
+      // if (state.count > limit) {
+      //   console.log(`######### process count over ${limit}`);
+      //   this.stop();
+      // }
     });
 
     console.log('######### do progress one time');
@@ -118,8 +117,10 @@ class ProcessController {
   checkCompletedCurrentIteration(): boolean {
     const { nodes } = useNodeStore.getState();
 
+    console.log('#### checkCompletedCurrentIteration');
+
     // make loop of nodes
-    for (let i = 0; i < nodes.length; i++) {
+    for (let i = 0; i < nodes.length; i += 1) {
       const node = nodes[i];
       if (node.type === undefined) {
         console.log('#### node type undefined', node);

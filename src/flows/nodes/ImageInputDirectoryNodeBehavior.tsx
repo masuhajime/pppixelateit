@@ -31,7 +31,7 @@ export const handleSources = {
     propagateValue: (nodeId: string) => {
       const node = getNodeSnapshot<NodeData>(nodeId);
       if (!node.data.inputDirectoryPath) {
-        throw new Error('no directory');
+        throw new Error('no directory 1');
       }
       return node.data.inputDirectoryPath;
     },
@@ -59,7 +59,7 @@ export const nodeBehavior: NodeBehaviorInterface = createNodeBehavior({
       completed: false,
     });
     if (!node.data.inputDirectoryPath) {
-      throw new Error('no directory');
+      throw new Error('no directory 2');
     }
 
     const files = await window.fs.readDir(node.data.inputDirectoryPath);
@@ -80,20 +80,20 @@ export const nodeBehavior: NodeBehaviorInterface = createNodeBehavior({
 
     const nodeStore = useNodeStore.getState();
 
-    if (
-      !node.data.inputFilePaths ||
-      node.data.inputFilePathsPointer === undefined
-    ) {
-      throw new Error('no directory');
+    const currentPoint = node.data.inputFilePathsPointer || 0;
+    if (!node.data.inputFilePaths) {
+      console.error({
+        inputFilePaths: node.data.inputFilePaths,
+      });
+
+      throw new Error('no directory 3');
     }
 
-    const currentFile =
-      node.data.inputFilePaths[node.data.inputFilePathsPointer];
+    const currentFile = node.data.inputFilePaths[currentPoint];
     if (!currentFile) {
       throw new Error('no file');
     }
-    const isEnd =
-      !node.data.inputFilePaths[node.data.inputFilePathsPointer + 1];
+    const isEnd = !node.data.inputFilePaths[currentPoint + 1];
 
     const buffer = await window.fs.readAsBuffer(currentFile);
 
@@ -109,7 +109,7 @@ export const nodeBehavior: NodeBehaviorInterface = createNodeBehavior({
         end: isEnd,
       },
       filename: path.basename(currentFile),
-      inputFilePathsPointer: node.data.inputFilePathsPointer + 1,
+      inputFilePathsPointer: currentPoint + 1,
       completed: true,
     });
     propagateValue(nodeId, handleSources);
@@ -119,6 +119,10 @@ export const nodeBehavior: NodeBehaviorInterface = createNodeBehavior({
     const node = getNodeSnapshot<NodeData>(nodeId);
 
     if (!node.data.inputFilePaths || !node.data.inputFilePathsPointer) {
+      console.error({
+        inputFilePaths: node.data.inputFilePaths,
+        inputFilePathsPointer: node.data.inputFilePathsPointer,
+      });
       throw new Error('no directory 4');
     }
     const currentFile =

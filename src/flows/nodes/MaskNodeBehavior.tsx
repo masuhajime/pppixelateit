@@ -31,6 +31,8 @@ export const handleTargets = {
 export type NodeData = {
   settings: {};
   imageMaskBuffer?: ImageBufferOnlyParameter;
+  imageBufferUpdated?: boolean;
+  imageMaskBufferUpdated?: boolean;
 } & NodeBaseData &
   NodeBaseDataImageBuffer;
 
@@ -46,12 +48,14 @@ export const nodeBehavior: NodeBehaviorInterface = {
       store.updateNodeData<NodeData>(nodeId, {
         imageBuffer: data,
         completed: false,
+        imageBufferUpdated: true,
       });
     }
     if (handleId === handleTargets.mask.id) {
       store.updateNodeData<NodeData>(nodeId, {
         imageMaskBuffer: data,
         completed: false,
+        imageMaskBufferUpdated: true,
       });
     }
   },
@@ -80,6 +84,8 @@ export const nodeBehavior: NodeBehaviorInterface = {
       .then((buffer) => {
         store.updateNodeData<NodeData>(nodeId, {
           completed: true,
+          imageBufferUpdated: false,
+          imageMaskBufferUpdated: false,
           imageBuffer: {
             buffer,
             end: true,
@@ -97,7 +103,10 @@ export const nodeBehavior: NodeBehaviorInterface = {
   canStartProcess(nodeId: string): boolean {
     const node = getNodeSnapshot<NodeData>(nodeId);
     return (
-      !!node.data.imageBuffer?.buffer && !!node.data.imageMaskBuffer?.buffer
+      !!node.data.imageBuffer?.buffer &&
+      !!node.data.imageMaskBuffer?.buffer &&
+      !!node.data.imageBufferUpdated &&
+      !!node.data.imageMaskBufferUpdated
     );
   },
 };

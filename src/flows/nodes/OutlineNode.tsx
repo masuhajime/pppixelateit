@@ -39,6 +39,7 @@ export function OutlineNode({ id, data }: NodeProps<NodeData>) {
       <NodeContent>
         <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
         <Select
+          key="lineSide"
           label="line side"
           nodeId={id}
           defaultValue={data.settings.lineSide || 'inner'}
@@ -48,10 +49,15 @@ export function OutlineNode({ id, data }: NodeProps<NodeData>) {
             });
           }}
         >
-          <MenuItem value="inner">inner</MenuItem>
-          <MenuItem value="outer">outer</MenuItem>
+          <MenuItem value="inner" key="inner">
+            inner
+          </MenuItem>
+          <MenuItem value="outer" key="outer">
+            outer
+          </MenuItem>
         </Select>
         <Select
+          key="pixelCount"
           label="pixel count around"
           nodeId={id}
           defaultValue={(data.settings.number || '2').toString()}
@@ -62,7 +68,11 @@ export function OutlineNode({ id, data }: NodeProps<NodeData>) {
           }}
         >
           {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((value) => {
-            return <MenuItem value={value}>{value}</MenuItem>;
+            return (
+              <MenuItem value={value} key={`count_${value}`}>
+                {value}
+              </MenuItem>
+            );
           })}
         </Select>
         <HandleTargetColor
