@@ -13,18 +13,17 @@ import ReactFlow, {
 } from 'reactflow';
 import Split from 'react-split';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { shallow } from 'zustand/shallow';
 import { v4 as uuidv4 } from 'uuid';
-import { Buffer } from 'buffer';
 import Sidebar from '../components/Sidebar';
 import 'reactflow/dist/style.css';
 import useNodeStore, { RFState } from '../store/store';
 import processStore from '../store/processStore';
 import { CustomEdge } from '../flows/edges/CustomEdge';
-import { getNodeTypesForReactFlow } from '../flows/nodesEnabled';
-import { ImageResizeParameter } from '../process/dto';
 import processController from '../process/imageProcess';
+import ImageInputNode from '../flows/nodes/ImageInputNode';
+import nodesEnabled from '../flows/nodesEnabled';
 
 const theme = createTheme({
   palette: {
@@ -38,13 +37,15 @@ const theme = createTheme({
     },
   },
 });
-
-const nodeTypes = getNodeTypesForReactFlow();
 const edgeTypes: EdgeTypes = {
   custom: CustomEdge,
 };
 
 function Main() {
+  const nodeTypes = useMemo(() => {
+    return nodesEnabled;
+  }, []);
+
   const init = useCallback(() => {
     console.log('init');
     processStore.getState().reset();

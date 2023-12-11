@@ -25,92 +25,110 @@ import { TextAppendNode } from './nodes/TextAppendNode';
 import { TextFileNameNode } from './nodes/TextFileNameNode';
 import { WhiteToBlackNode } from './nodes/WhiteToBlackNode';
 
-const nodesEnabled = [
-  {
-    element: ImageInputNode,
-  },
-  {
-    element: ResizeToSideNode,
-  },
-  {
-    element: KmeansNode,
-  },
-  {
-    element: ErodeNode,
-  },
-  {
-    element: ClaheNode,
-  },
-  {
-    element: DenoiseNode,
-  },
-  {
-    element: ImageInputDirectoryNode,
-  },
-  {
-    element: TextAppendNode,
-  },
-  {
-    element: TextFileNameNode,
-  },
-  {
-    element: WhiteToBlackNode,
-  },
-  {
-    element: ImagePreviewNode,
-  },
-  {
-    element: PosterizeNode,
-  },
-  {
-    element: PixelateNode,
-  },
-  {
-    element: Fill00ColorToTransparentNode,
-  },
-  {
-    element: TestNode,
-  },
-  {
-    element: FillWithColorNode,
-  },
-  {
-    element: RemoveEdgePixelNode,
-  },
-  {
-    element: OutlineNode,
-  },
-  {
-    element: ImagePreviewCompare,
-  },
-  {
-    element: SaveImageNode,
-  },
-  {
-    element: RemoveBackgroundNode,
-  },
-  {
-    element: CallSharpNode,
-  },
-  {
-    element: MaskNode,
-  },
-  {
-    element: DebugNode,
-  },
-  {
-    element: AlphaThreshouldFlattenNode,
-  },
-  {
-    element: AlphaFlattenNode,
-  },
-];
-export default nodesEnabled;
-
-export const getNodeTypesForReactFlow = () => {
-  const nodeTypes: { [k: string]: any } = {};
-  nodesEnabled.forEach((node) => {
-    nodeTypes[node.element.name] = node.element;
-  });
-  return nodeTypes;
+const nodesEnabled = {
+  ImageInputNode,
+  ResizeToSideNode,
+  KmeansNode,
+  ErodeNode,
+  ClaheNode,
+  DenoiseNode,
+  ImageInputDirectoryNode,
+  TextAppendNode,
+  TextFileNameNode,
+  WhiteToBlackNode,
+  ImagePreviewNode,
+  PosterizeNode,
+  PixelateNode,
+  Fill00ColorToTransparentNode,
+  TestNode,
+  FillWithColorNode,
+  RemoveEdgePixelNode,
+  OutlineNode,
+  ImagePreviewCompare,
+  SaveImageNode,
+  RemoveBackgroundNode,
+  CallSharpNode,
+  MaskNode,
+  DebugNode,
+  AlphaThreshouldFlattenNode,
+  AlphaFlattenNode,
 };
+// {
+//   element: ImageInputNode,
+// },
+// {
+//   element: ResizeToSideNode,
+// },
+// {
+//   element: KmeansNode,
+// },
+// {
+//   element: ErodeNode,
+// },
+// {
+//   element: ClaheNode,
+// },
+// {
+//   element: DenoiseNode,
+// },
+// {
+//   element: ImageInputDirectoryNode,
+// },
+// {
+//   element: TextAppendNode,
+// },
+// {
+//   element: TextFileNameNode,
+// },
+// {
+//   element: WhiteToBlackNode,
+// },
+// {
+//   element: ImagePreviewNode,
+// },
+// {
+//   element: PosterizeNode,
+// },
+// {
+//   element: PixelateNode,
+// },
+// {
+//   element: Fill00ColorToTransparentNode,
+// },
+// {
+//   element: TestNode,
+// },
+// {
+//   element: FillWithColorNode,
+// },
+// {
+//   element: RemoveEdgePixelNode,
+// },
+// {
+//   element: OutlineNode,
+// },
+// {
+//   element: ImagePreviewCompare,
+// },
+// {
+//   element: SaveImageNode,
+// },
+// {
+//   element: RemoveBackgroundNode,
+// },
+// {
+//   element: CallSharpNode,
+// },
+// {
+//   element: MaskNode,
+// },
+// {
+//   element: DebugNode,
+// },
+// {
+//   element: AlphaThreshouldFlattenNode,
+// },
+// {
+//   element: AlphaFlattenNode,
+// },
+export default nodesEnabled;
