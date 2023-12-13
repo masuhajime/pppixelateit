@@ -22,7 +22,6 @@ import useNodeStore, { RFState } from '../store/store';
 import processStore from '../store/processStore';
 import { CustomEdge } from '../flows/edges/CustomEdge';
 import processController from '../process/imageProcess';
-import ImageInputNode from '../flows/nodes/ImageInputNode';
 import nodesEnabled from '../flows/nodesEnabled';
 
 const theme = createTheme({

@@ -14,5 +14,8 @@
     "postinstall": "npm run rebuild && npm run link-modules",
     "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@imgly/background-removal-node": "^1.2.1",
+    "sharp": "^0.33.0"
+  }
 }

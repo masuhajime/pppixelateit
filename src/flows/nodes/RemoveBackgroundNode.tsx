@@ -2,7 +2,6 @@
 import { NodeProps } from 'reactflow';
 
 import { MenuItem } from '@mui/material';
-import { useMemo } from 'react';
 import useNodeStore from '../../store/store';
 import {
   NodeData,
@@ -18,7 +17,6 @@ import { ImagePreview } from './items/ImagePreview';
 import { Separator } from './items/Separator';
 import { NodeStatus } from './components/NodeStatus';
 import { Select } from './items/Select';
-import { SliderValue } from './items/SliderValue';
 
 export function RemoveBackgroundNode({ id, data }: NodeProps<NodeData>) {
   return (
@@ -29,7 +27,7 @@ export function RemoveBackgroundNode({ id, data }: NodeProps<NodeData>) {
         <Select
           label="Algorithm"
           nodeId={id}
-          defaultValue={data.settings.algorithm || 'rembg'}
+          defaultValue={data.settings.algorithm || 'background-removal'}
           onSelect={(value) => {
             // check if value is string
             if (typeof value !== 'string') {
@@ -40,8 +38,8 @@ export function RemoveBackgroundNode({ id, data }: NodeProps<NodeData>) {
             });
           }}
         >
-          <MenuItem value="rembg">rembg</MenuItem>
           <MenuItem value="background-removal">background-removal</MenuItem>
+          <MenuItem value="rembg">rembg</MenuItem>
         </Select>
         <Separator />
         <HandleSourceImage
