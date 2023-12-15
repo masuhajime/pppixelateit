@@ -77,5 +77,14 @@ const nodeDefines: { name: string }[] = [
   {
     name: 'AlphaFlattenNode',
   },
+  {
+    name: 'TrimTransparentNode',
+  },
+  {
+    name: 'ExtendNode',
+  },
+  {
+    name: 'ExtendToAspectRatioNode',
+  },
 ];
 export default nodeDefines;

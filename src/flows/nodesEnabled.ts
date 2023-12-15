@@ -24,6 +24,9 @@ import { TestNode } from './nodes/TestNode';
 import { TextAppendNode } from './nodes/TextAppendNode';
 import { TextFileNameNode } from './nodes/TextFileNameNode';
 import { WhiteToBlackNode } from './nodes/WhiteToBlackNode';
+import { TrimTransparentNode } from './nodes/TrimTransparentNode';
+import { ExtendNode } from './nodes/ExtendNode';
+import { ExtendToAspectRatioNode } from './nodes/ExtendToAspectRatioNode';
 
 const nodesEnabled = {
   ImageInputNode,
@@ -52,6 +55,9 @@ const nodesEnabled = {
   DebugNode,
   AlphaThreshouldFlattenNode,
   AlphaFlattenNode,
+  TrimTransparentNode,
+  ExtendNode,
+  ExtendToAspectRatioNode,
 };
 // {
 //   element: ImageInputNode,

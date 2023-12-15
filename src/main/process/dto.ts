@@ -39,3 +39,22 @@ export type ImageAlphaThresholdFlattenParameter = {
   buffer: Buffer;
   threshold: number;
 };
+
+export type ImageTrimTransparentParameter = {
+  buffer: Buffer;
+};
+
+export type ImageExtendParameter = {
+  buffer: Buffer;
+  unit: string;
+  top: number;
+  bottom: number;
+  left: number;
+  right: number;
+};
+
+export type ImageExtendToAspectRatioParameter = {
+  buffer: Buffer;
+  width: number;
+  height: number;
+};

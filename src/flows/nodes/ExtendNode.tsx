@@ -3,73 +3,81 @@ import { NodeProps } from 'reactflow';
 
 import { MenuItem } from '@mui/material';
 import useNodeStore from '../../store/store';
-import {
-  NodeData,
-  handleSources,
-  handleTargets,
-} from './ResizeToSideNodeBehavior';
+import { NodeData, handleSources, handleTargets } from './ExtendNodeBehavior';
 import { Node } from './components/Node';
 import { NodeContent } from './components/NodeContent';
 import { NodeHeader } from './components/NodeHeader';
-import { NodeStatus } from './components/NodeStatus';
 import { HandleSourceImage } from './items/HandleSourceImage';
 import { HandleTargetImage } from './items/HandleTargetImage';
-import { HandleTargetNumber } from './items/HandleTargetNumber';
 import { ImagePreview } from './items/ImagePreview';
-import { Select } from './items/Select';
 import { Separator } from './items/Separator';
+import { NodeStatus } from './components/NodeStatus';
+import { HandleTargetNumber } from './items/HandleTargetNumber';
+import { Select } from './items/Select';
 
-export function ResizeToSideNode({ id, data }: NodeProps<NodeData>) {
-  const store = useNodeStore.getState();
-  const node = store.getNode<NodeData>(id);
-
+export function ExtendNode({ id, data }: NodeProps<NodeData>) {
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="Resize To Side" />
+      <NodeHeader title="Extend" />
       <NodeContent>
         <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
         <Select
-          label="Resize Base"
+          label="Unit"
           nodeId={id}
-          defaultValue="width"
+          defaultValue={data.settings.unit || 'pixel'}
           onSelect={(value) => {
             useNodeStore.getState().updateNodeSetting(id, {
-              resizeBase: value,
+              unit: value,
             });
           }}
         >
-          <MenuItem value="width">Width</MenuItem>
-          <MenuItem value="height">Height</MenuItem>
-          <MenuItem value="shorter">Shorter Side</MenuItem>
-          <MenuItem value="longer">Longer Side</MenuItem>
+          <MenuItem value="pixel">pixel</MenuItem>
+          <MenuItem value="percent">percent</MenuItem>
         </Select>
         <HandleTargetNumber
-          name="size"
-          handleId="size"
+          name="top"
+          handleId={handleTargets.top.id}
           nodeId={id}
-          defaultValue={node.data.settings.size || 128}
+          defaultValue={data.settings.top || 10}
           onChange={(value) => {
             useNodeStore.getState().updateNodeSetting(id, {
-              size: value,
+              top: value,
             });
           }}
         />
-        <Select
-          label="Method"
+        <HandleTargetNumber
+          name="bottom"
+          handleId={handleTargets.bottom.id}
           nodeId={id}
-          defaultValue={data.settings.method || 'nearest'}
-          onSelect={(value) => {
+          defaultValue={data.settings.bottom || 10}
+          onChange={(value) => {
             useNodeStore.getState().updateNodeSetting(id, {
-              method: value,
+              bottom: value,
             });
           }}
-        >
-          <MenuItem value="nearest">nearest</MenuItem>
-          <MenuItem value="cubic">cubic</MenuItem>
-          <MenuItem value="mitchell">mitchell</MenuItem>
-          <MenuItem value="lanczos2">lanczos2</MenuItem>
-          <MenuItem value="lanczos3">lanczos3</MenuItem>
-        </Select>
+        />
+        <HandleTargetNumber
+          name="left"
+          handleId={handleTargets.left.id}
+          nodeId={id}
+          defaultValue={data.settings.left || 10}
+          onChange={(value) => {
+            useNodeStore.getState().updateNodeSetting(id, {
+              left: value,
+            });
+          }}
+        />
+        <HandleTargetNumber
+          name="right"
+          handleId={handleTargets.right.id}
+          nodeId={id}
+          defaultValue={data.settings.right || 10}
+          onChange={(value) => {
+            useNodeStore.getState().updateNodeSetting(id, {
+              right: value,
+            });
+          }}
+        />
         <Separator />
         <HandleSourceImage
           label="Image"

@@ -1,75 +1,63 @@
 /* eslint-disable import/prefer-default-export */
 import { NodeProps } from 'reactflow';
 
-import { MenuItem } from '@mui/material';
+import { Box, MenuItem } from '@mui/material';
 import useNodeStore from '../../store/store';
 import {
   NodeData,
   handleSources,
   handleTargets,
-} from './ResizeToSideNodeBehavior';
+} from './ExtendToAspectRatioNodeBehavior';
 import { Node } from './components/Node';
 import { NodeContent } from './components/NodeContent';
 import { NodeHeader } from './components/NodeHeader';
-import { NodeStatus } from './components/NodeStatus';
 import { HandleSourceImage } from './items/HandleSourceImage';
 import { HandleTargetImage } from './items/HandleTargetImage';
-import { HandleTargetNumber } from './items/HandleTargetNumber';
 import { ImagePreview } from './items/ImagePreview';
-import { Select } from './items/Select';
 import { Separator } from './items/Separator';
+import { NodeStatus } from './components/NodeStatus';
+import { HandleTargetNumber } from './items/HandleTargetNumber';
+import { Select } from './items/Select';
 
-export function ResizeToSideNode({ id, data }: NodeProps<NodeData>) {
-  const store = useNodeStore.getState();
-  const node = store.getNode<NodeData>(id);
-
+export function ExtendToAspectRatioNode({ id, data }: NodeProps<NodeData>) {
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="Resize To Side" />
+      <NodeHeader title="ExtendToAspectRatioNode" />
       <NodeContent>
         <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
-        <Select
-          label="Resize Base"
-          nodeId={id}
-          defaultValue="width"
-          onSelect={(value) => {
-            useNodeStore.getState().updateNodeSetting(id, {
-              resizeBase: value,
-            });
-          }}
-        >
-          <MenuItem value="width">Width</MenuItem>
-          <MenuItem value="height">Height</MenuItem>
-          <MenuItem value="shorter">Shorter Side</MenuItem>
-          <MenuItem value="longer">Longer Side</MenuItem>
-        </Select>
+        <Box className="node-item">
+          Target Aspect Ratio: {data.settings.width}:{data.settings.height}
+        </Box>
         <HandleTargetNumber
-          name="size"
-          handleId="size"
+          name="width"
+          handleId={handleTargets.width.id}
           nodeId={id}
-          defaultValue={node.data.settings.size || 128}
+          defaultValue={data.settings.width || 1}
           onChange={(value) => {
+            let width = 1;
+            if (value > 0) {
+              width = value;
+            }
             useNodeStore.getState().updateNodeSetting(id, {
-              size: value,
+              width,
             });
           }}
         />
-        <Select
-          label="Method"
+        <HandleTargetNumber
+          name="height"
+          handleId={handleTargets.height.id}
           nodeId={id}
-          defaultValue={data.settings.method || 'nearest'}
-          onSelect={(value) => {
+          defaultValue={data.settings.height || 1}
+          onChange={(value) => {
+            let height = 1;
+            if (value > 0) {
+              height = value;
+            }
             useNodeStore.getState().updateNodeSetting(id, {
-              method: value,
+              height,
             });
           }}
-        >
-          <MenuItem value="nearest">nearest</MenuItem>
-          <MenuItem value="cubic">cubic</MenuItem>
-          <MenuItem value="mitchell">mitchell</MenuItem>
-          <MenuItem value="lanczos2">lanczos2</MenuItem>
-          <MenuItem value="lanczos3">lanczos3</MenuItem>
-        </Select>
+        />
         <Separator />
         <HandleSourceImage
           label="Image"
