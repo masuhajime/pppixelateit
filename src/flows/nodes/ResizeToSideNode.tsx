@@ -31,7 +31,7 @@ export function ResizeToSideNode({ id, data }: NodeProps<NodeData>) {
         <Select
           label="Resize Base"
           nodeId={id}
-          defaultValue="width"
+          defaultValue={data.settings.resizeBase || 'width'}
           onSelect={(value) => {
             useNodeStore.getState().updateNodeSetting(id, {
               resizeBase: value,

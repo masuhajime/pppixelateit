@@ -48,3 +48,12 @@ window.electron.ipcRenderer.on('file-open', (arg) => {
       console.error(err);
     });
 });
+
+window.electron.ipcRenderer.on('file-new', (arg) => {
+  const nodeStore = useNodeStore.getState();
+
+  nodeStore.setPartialState({
+    nodes: [],
+    edges: [],
+  });
+});

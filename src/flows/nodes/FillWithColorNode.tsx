@@ -1,26 +1,26 @@
-import { NodeProps } from 'reactflow'
+import { NodeProps } from 'reactflow';
 
+import { MenuItem } from '@mui/material';
 import {
   NodeData,
   NodeDataSettings,
   handleSources,
   handleTargets,
-} from './FillWithColorNodeBehavior'
-import { Node } from './components/Node'
-import { NodeContent } from './components/NodeContent'
-import { NodeHeader } from './components/NodeHeader'
-import { HandleSourceImage } from './items/HandleSourceImage'
-import { HandleTargetImage } from './items/HandleTargetImage'
-import { ImagePreview } from './items/ImagePreview'
-import { Separator } from './items/Separator'
-import useNodeStore, { updateSetting } from '../../store/store'
-import { HandleTargetNumber } from './items/HandleTargetNumber'
-import { NodeStatus } from './components/NodeStatus'
-import { HandleTargetColor } from './items/HandleTargetColor'
-import { Select } from './items/Select'
-import { MenuItem } from '@mui/material'
+} from './FillWithColorNodeBehavior';
+import { Node } from './components/Node';
+import { NodeContent } from './components/NodeContent';
+import { NodeHeader } from './components/NodeHeader';
+import { HandleSourceImage } from './items/HandleSourceImage';
+import { HandleTargetImage } from './items/HandleTargetImage';
+import { ImagePreview } from './items/ImagePreview';
+import { Separator } from './items/Separator';
+import useNodeStore, { updateSetting } from '../../store/store';
+import { HandleTargetNumber } from './items/HandleTargetNumber';
+import { NodeStatus } from './components/NodeStatus';
+import { HandleTargetColor } from './items/HandleTargetColor';
+import { Select } from './items/Select';
 
-export const FillWithColorNode = ({ id, data }: NodeProps<NodeData>) => {
+export function FillWithColorNode({ id, data }: NodeProps<NodeData>) {
   const colorTarget =
     data.settings.a && data.settings.r && data.settings.g && data.settings.b
       ? {
@@ -34,7 +34,7 @@ export const FillWithColorNode = ({ id, data }: NodeProps<NodeData>) => {
           r: 255,
           g: 255,
           b: 255,
-        }
+        };
   const colorFill =
     data.settings.a2 && data.settings.r2 && data.settings.g2 && data.settings.b2
       ? {
@@ -48,28 +48,25 @@ export const FillWithColorNode = ({ id, data }: NodeProps<NodeData>) => {
           r: 255,
           g: 255,
           b: 255,
-        }
-  const method = data.settings.method || 'top_left_pixel'
+        };
+  const method = data.settings.method || 'top_left_pixel';
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
       <NodeHeader title="FillWithColorNode" />
       <NodeContent>
-        <HandleTargetImage
-          handleId={handleTargets.image.id}
-          nodeId={id}
-        ></HandleTargetImage>
+        <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
         <Select
-          label={'Method'}
+          label="Method"
           nodeId={id}
           defaultValue={method}
           onSelect={(value) => {
             useNodeStore.getState().updateNodeSetting(id, {
               method: value,
-            })
+            });
           }}
         >
-          <MenuItem value={'top_left_pixel'}>Top Left Pixel</MenuItem>
-          <MenuItem value={'fixed_target_color'}>Fixed Target Color</MenuItem>
+          <MenuItem value="top_left_pixel">Top Left Pixel</MenuItem>
+          <MenuItem value="fixed_target_color">Fixed Target Color</MenuItem>
         </Select>
         <HandleTargetNumber
           handleId={handleTargets.tolerance.id}
@@ -77,7 +74,7 @@ export const FillWithColorNode = ({ id, data }: NodeProps<NodeData>) => {
           defaultValue={data.settings.tolerance || 16}
           name="tolerance"
           onChange={updateSetting(id, 'tolerance')}
-        ></HandleTargetNumber>
+        />
         {method === 'fixed_target_color' && (
           <HandleTargetColor
             label="Target Color"
@@ -90,7 +87,7 @@ export const FillWithColorNode = ({ id, data }: NodeProps<NodeData>) => {
                 g: color.g,
                 b: color.b,
                 a: color.a,
-              })
+              });
             }}
           />
         )}
@@ -105,16 +102,16 @@ export const FillWithColorNode = ({ id, data }: NodeProps<NodeData>) => {
               g2: color.g,
               b2: color.b,
               a2: color.a,
-            })
+            });
           }}
-        ></HandleTargetColor>
+        />
         <Separator />
         <HandleSourceImage
           label="Image"
           handleId={handleSources.image.id}
           nodeId={id}
-        ></HandleSourceImage>
-        <NodeStatus nodeData={data}></NodeStatus>
+        />
+        <NodeStatus nodeData={data} />
         <ImagePreview
           enabled={!!data.settings.enablePreview}
           completed={!!data.completed}
@@ -122,10 +119,10 @@ export const FillWithColorNode = ({ id, data }: NodeProps<NodeData>) => {
           onTogglePreview={(enabled: boolean) => {
             useNodeStore.getState().updateNodeSetting(id, {
               enablePreview: enabled,
-            })
+            });
           }}
-        ></ImagePreview>
+        />
       </NodeContent>
     </Node>
-  )
+  );
 }

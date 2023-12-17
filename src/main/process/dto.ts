@@ -1,4 +1,3 @@
-import { type } from 'os';
 import { RGBA } from '../../dto/generals';
 
 export type ImageResizeParameter = {
@@ -6,6 +5,11 @@ export type ImageResizeParameter = {
   resizeBase: string;
   size: number;
   method: string;
+};
+
+export type ImageKmeansParameter = {
+  buffer: Buffer;
+  number: number;
 };
 
 export type ImageRemoveBackgroundParameter = {

@@ -20,6 +20,9 @@ export type NodeData = {
   inputFilePaths?: string[];
   inputFilePathsPointer?: number;
   filename?: string;
+  settings?: {
+    run?: string;
+  };
 } & NodeBaseData &
   NodeBaseDataImageBuffer;
 
@@ -125,8 +128,17 @@ export const nodeBehavior: NodeBehaviorInterface = createNodeBehavior({
       });
       throw new Error('no directory 4');
     }
+
+    if (
+      node.data.settings.run === 'one' &&
+      node.data.inputFilePathsPointer > 0
+    ) {
+      return false;
+    }
+
     const currentFile =
       node.data.inputFilePaths[node.data.inputFilePathsPointer];
+
     return !!currentFile;
   },
   canStartProcess(nodeId: string): boolean {

@@ -2,7 +2,7 @@
 import { NodeProps } from 'reactflow';
 
 import FolderIcon from '@mui/icons-material/Folder';
-import { Box, Button, FormControl } from '@mui/material';
+import { Box, Button, FormControl, MenuItem } from '@mui/material';
 // import { open } from '@tauri-apps/api/dialog'
 import path from 'path';
 import useNodeStore from '../../store/store';
@@ -14,8 +14,8 @@ import { NodeStatus } from './components/NodeStatus';
 import { HandleSourceImage } from './items/HandleSourceImage';
 import { ImagePreview } from './items/ImagePreview';
 import { HandleSourceText } from './items/HandleSourceText';
-// import { fs } from '@tauri-apps/api';
 import { HandleSourceDirectory } from './items/HandleSourceDirectory';
+import { Select } from './items/Select';
 
 export function ImageInputDirectoryNode({ id, data }: NodeProps<NodeData>) {
   const nodeStore = useNodeStore.getState();
@@ -35,7 +35,6 @@ export function ImageInputDirectoryNode({ id, data }: NodeProps<NodeData>) {
             width: '100%',
           }}
         />
-
         <Box className="node-item">
           <Button
             className="nodrag"
@@ -65,6 +64,7 @@ export function ImageInputDirectoryNode({ id, data }: NodeProps<NodeData>) {
                     nodeStore.updateNodeData<NodeData>(id, {
                       inputDirectoryPath: selectedDir,
                       inputFilePaths: filePaths,
+                      inputFilePathsPointer: 0,
                     });
                     return 1;
                   })
@@ -128,6 +128,20 @@ export function ImageInputDirectoryNode({ id, data }: NodeProps<NodeData>) {
             </Box>
           )}
         </Box>
+
+        <Select
+          label="Run"
+          nodeId={id}
+          defaultValue={data.settings.run || 'all'}
+          onSelect={(value) => {
+            useNodeStore.getState().updateNodeSetting(id, {
+              run: value,
+            });
+          }}
+        >
+          <MenuItem value="all">All images</MenuItem>
+          <MenuItem value="one">One image test</MenuItem>
+        </Select>
         <NodeStatus nodeData={data} />
         <HandleSourceImage
           handleId={handleSources.image.id}

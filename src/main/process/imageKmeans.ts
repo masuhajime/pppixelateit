@@ -1,12 +1,12 @@
 import { Buffer } from 'buffer';
-import sharp from 'sharp';
 import { kmeans } from 'ml-kmeans';
-import { ImageBufferOnlyParameter } from './dto';
-import waitUntilOpenCVReady from './waitUntilOpenCvReady';
+import sharp from 'sharp';
+import { ImageKmeansParameter } from './dto';
 
-const filter = async (param: ImageBufferOnlyParameter): Promise<Buffer> => {
-  const { buffer } = param;
+const filter = async (param: ImageKmeansParameter): Promise<Buffer> => {
+  const { buffer, number } = param;
 
+  console.log('imageKmeans', param);
   // 画像のピクセルデータを取得
 
   const { data, info } = await sharp(buffer)
@@ -21,7 +21,7 @@ const filter = async (param: ImageBufferOnlyParameter): Promise<Buffer> => {
     mat.push([data[i], data[i + 1], data[i + 2], data[i + 3]]);
   }
 
-  const r = kmeans(mat, 16, {});
+  const r = kmeans(mat, number, {});
   console.log('imageKmeans 2', r);
   const map = [];
   for (let i = 0; i < r.clusters.length; i += 1) {

@@ -1,4 +1,4 @@
-import { ImageResizeParameter } from '../../main/process/dto';
+import { ImageKmeansParameter } from '../../main/process/dto';
 import useNodeStore, {
   getNodeSnapshot,
   handleSourceImageDefault,
@@ -6,7 +6,6 @@ import useNodeStore, {
 } from '../../store/store';
 import {
   HandleSource,
-  HandleTarget,
   NodeBaseData,
   NodeBaseDataImageBuffer,
   NodeBehaviorInterface,
@@ -16,14 +15,23 @@ export const handleSources: Record<string, HandleSource> = {
   image: handleSourceImageDefault,
 };
 
-export const handleTargets: Record<string, HandleTarget> = {
+export const handleTargets = {
   image: {
     id: 'image',
     dataType: 'image',
   },
+  number: {
+    id: 'number',
+    dataType: 'number',
+  },
 };
 
-export type NodeData = {} & NodeBaseData & NodeBaseDataImageBuffer;
+export type NodeData = {
+  settings?: {
+    number?: number;
+  };
+} & NodeBaseData &
+  NodeBaseDataImageBuffer;
 
 export const nodeBehavior: NodeBehaviorInterface = {
   dataIncoming(
@@ -54,7 +62,8 @@ export const nodeBehavior: NodeBehaviorInterface = {
     window.imageProcess
       .imageProcess('imageKmeans', {
         buffer: node.data.imageBuffer.buffer,
-      } as ImageResizeParameter)
+        number: node.data.settings?.number || 8,
+      } as ImageKmeansParameter)
       .then((buffer) => {
         store.updateNodeData<NodeData>(nodeId, {
           completed: true,

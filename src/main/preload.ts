@@ -18,7 +18,11 @@ const imageProcessHandler = {
 contextBridge.exposeInMainWorld('imageProcess', imageProcessHandler);
 export type ImageProcessHandler = typeof imageProcessHandler;
 
-export type Channels = 'ipc-example' | 'file-save-as' | 'file-open';
+export type Channels =
+  | 'ipc-example'
+  | 'file-save-as'
+  | 'file-open'
+  | 'file-new';
 
 const electronHandler = {
   ipcRenderer: {

@@ -57,11 +57,11 @@ const imageResize = async (param: ImageResizeParameter): Promise<Buffer> => {
       break;
     case 'shorter':
       if (width < height) {
-        image.resize(null, size, {
+        image.resize(size, null, {
           kernel,
         });
       } else {
-        image.resize(size, null, {
+        image.resize(null, size, {
           kernel,
         });
       }

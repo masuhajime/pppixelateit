@@ -11,6 +11,7 @@ import { HandleTargetImage } from './items/HandleTargetImage';
 import { ImagePreview } from './items/ImagePreview';
 import { Separator } from './items/Separator';
 import { NodeStatus } from './components/NodeStatus';
+import { HandleTargetNumber } from './items/HandleTargetNumber';
 
 export function KmeansNode({ id, data }: NodeProps<NodeData>) {
   return (
@@ -23,6 +24,19 @@ export function KmeansNode({ id, data }: NodeProps<NodeData>) {
           label="Image"
           handleId={handleSources.image.id}
           nodeId={id}
+        />
+        <HandleTargetNumber
+          name="number"
+          handleId={handleTargets.number.id}
+          nodeId={id}
+          max={128}
+          min={1}
+          defaultValue={data.settings.number || 8}
+          onChange={(value) => {
+            useNodeStore.getState().updateNodeSetting(id, {
+              number: value,
+            });
+          }}
         />
         <NodeStatus nodeData={data} />
         <ImagePreview
