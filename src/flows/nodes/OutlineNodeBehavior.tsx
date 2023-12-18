@@ -25,7 +25,7 @@ export const handleTargets: Record<string, HandleTarget> = {
 
 export type NodeData = {
   settings: {
-    number?: number;
+    number?: string;
     lineSide?: string;
     r: number;
     g: number;

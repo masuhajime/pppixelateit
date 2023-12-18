@@ -24,9 +24,14 @@ export type ImageBufferOnlyParameter = {
 
 export type ImageOutlineParameter = {
   buffer: Buffer;
-  pixelCountAround: number;
+  pixelCountAround: string;
   lineSide: string;
   outlineColor: RGBA;
+};
+
+export type ImageRemoveEdgeParameter = {
+  buffer: Buffer;
+  pixelCount: number;
 };
 
 export type ImageFlattenParameter = {

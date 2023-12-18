@@ -1,4 +1,4 @@
-import { removeEdge } from '../../process/w2b';
+import { ImageRemoveEdgeParameter } from '../../main/process/dto';
 import useNodeStore, {
   getNodeSnapshot,
   handleSourceImageDefault,
@@ -25,7 +25,7 @@ export const handleTargets: Record<string, HandleTarget> = {
 
 export type NodeData = {
   settings: {
-    threshold?: number;
+    pixelCount?: string;
   };
 } & NodeBaseData &
   NodeBaseDataImageBuffer;
@@ -52,36 +52,35 @@ export const nodeBehavior: NodeBehaviorInterface = {
       completed: false,
     });
     const node = getNodeSnapshot<NodeData>(nodeId);
-    // data.completed = true
-    console.log(
-      'node process resize to:',
-      // node.data.imageBase64,
-      node.id,
-      node.type,
-    );
 
-    if (!node.data.imageBuffer?.buffer || !node.data.settings.threshold) {
+    if (!node.data.imageBuffer?.buffer) {
       throw new Error('no image or number');
     }
 
-    removeEdge(
-      node.data.imageBuffer?.buffer,
-      node.data.settings.threshold,
-    ).then((w2b) => {
-      store.updateNodeData<NodeData>(nodeId, {
-        completed: true,
-        imageBuffer: {
-          buffer: w2b,
-          end: true,
-        },
-      });
+    window.imageProcess
+      .imageProcess('imageRemoveEdge', {
+        buffer: node.data.imageBuffer.buffer,
+        pixelCount: parseInt(node.data.settings.pixelCount || '3', 10),
+      } as ImageRemoveEdgeParameter)
+      .then((buffer) => {
+        store.updateNodeData<NodeData>(nodeId, {
+          completed: true,
+          imageBuffer: {
+            buffer,
+            end: true,
+          },
+        });
 
-      propagateValue(nodeId, handleSources);
-      callback();
-    });
+        propagateValue(nodeId, handleSources);
+        callback();
+        return 0;
+      })
+      .catch((err) => {
+        console.error('remove edge', err);
+      });
   },
   canStartProcess(nodeId: string): boolean {
     const node = getNodeSnapshot<NodeData>(nodeId);
-    return !!node.data.imageBuffer?.buffer && !!node.data.settings.threshold;
+    return !!node.data.imageBuffer?.buffer;
   },
 };

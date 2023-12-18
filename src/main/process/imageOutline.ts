@@ -41,6 +41,36 @@ const getPixelColorAround = (
   return around.filter((a) => a !== undefined) as RGBA[];
 };
 
+const getPixelColorVerticalHorizontal = (
+  buffer: Buffer,
+  width: number,
+  x: number,
+  y: number,
+): RGBA[] => {
+  const around = [
+    getPixelColorAt(buffer, width, x, y - 1),
+    getPixelColorAt(buffer, width, x - 1, y),
+    getPixelColorAt(buffer, width, x + 1, y),
+    getPixelColorAt(buffer, width, x, y + 1),
+  ];
+  return around.filter((a) => a !== undefined) as RGBA[];
+};
+
+const getPixelColorDiagonal = (
+  buffer: Buffer,
+  width: number,
+  x: number,
+  y: number,
+): RGBA[] => {
+  const around = [
+    getPixelColorAt(buffer, width, x - 1, y - 1),
+    getPixelColorAt(buffer, width, x + 1, y - 1),
+    getPixelColorAt(buffer, width, x - 1, y + 1),
+    getPixelColorAt(buffer, width, x + 1, y + 1),
+  ];
+  return around.filter((a) => a !== undefined) as RGBA[];
+};
+
 const filter = async (param: ImageOutlineParameter): Promise<Buffer> => {
   const { buffer, lineSide, pixelCountAround, outlineColor } = param;
   const image = sharp(buffer);
@@ -62,33 +92,59 @@ const filter = async (param: ImageOutlineParameter): Promise<Buffer> => {
         continue;
       }
 
-      if (lineSide === 'outer') {
-        const countColorNotTransparent = colorAround.filter(
-          (color) => color?.a > 0,
-        ).length;
-        if (
-          colorCurrent?.a === 0 &&
-          pixelCountAround <= countColorNotTransparent
-        ) {
-          bufferUpdating[offset + 0] = outlineColor.r;
-          bufferUpdating[offset + 1] = outlineColor.g;
-          bufferUpdating[offset + 2] = outlineColor.b;
-          bufferUpdating[offset + 3] = outlineColor.a;
+      if (lineSide === 'outer' && colorCurrent?.a === 0) {
+        if (pixelCountAround !== 'optimized') {
+          const countColorNotTransparent = colorAround.filter(
+            (color) => color?.a > 0,
+          ).length;
+          if (parseInt(pixelCountAround, 10) <= countColorNotTransparent) {
+            bufferUpdating[offset + 0] = outlineColor.r;
+            bufferUpdating[offset + 1] = outlineColor.g;
+            bufferUpdating[offset + 2] = outlineColor.b;
+            bufferUpdating[offset + 3] = outlineColor.a;
+          }
+        }
+        if (pixelCountAround === 'optimized') {
+          const countColorNotTransparent = getPixelColorVerticalHorizontal(
+            data,
+            width,
+            x,
+            y,
+          ).filter((color) => color?.a > 0).length;
+          if (countColorNotTransparent > 0) {
+            bufferUpdating[offset + 0] = outlineColor.r;
+            bufferUpdating[offset + 1] = outlineColor.g;
+            bufferUpdating[offset + 2] = outlineColor.b;
+            bufferUpdating[offset + 3] = outlineColor.a;
+          }
         }
       }
       // draw outline in inner side
-      if (lineSide === 'inner') {
-        const countColorTransparent = colorAround.filter(
-          (color) => color?.a === 255,
-        ).length;
-        if (
-          colorCurrent?.a !== 0 &&
-          pixelCountAround >= countColorTransparent
-        ) {
-          bufferUpdating[offset + 0] = outlineColor.r;
-          bufferUpdating[offset + 1] = outlineColor.g;
-          bufferUpdating[offset + 2] = outlineColor.b;
-          bufferUpdating[offset + 3] = outlineColor.a;
+      if (lineSide === 'inner' && colorCurrent?.a !== 0) {
+        if (pixelCountAround !== 'optimized') {
+          const countColorTransparent = colorAround.filter(
+            (color) => color?.a === 255,
+          ).length;
+          if (parseInt(pixelCountAround, 10) >= countColorTransparent) {
+            bufferUpdating[offset + 0] = outlineColor.r;
+            bufferUpdating[offset + 1] = outlineColor.g;
+            bufferUpdating[offset + 2] = outlineColor.b;
+            bufferUpdating[offset + 3] = outlineColor.a;
+          }
+        }
+        if (pixelCountAround === 'optimized') {
+          const countColorTransparent = getPixelColorVerticalHorizontal(
+            data,
+            width,
+            x,
+            y,
+          ).filter((color) => color?.a === 0).length;
+          if (countColorTransparent > 0) {
+            bufferUpdating[offset + 0] = outlineColor.r;
+            bufferUpdating[offset + 1] = outlineColor.g;
+            bufferUpdating[offset + 2] = outlineColor.b;
+            bufferUpdating[offset + 3] = outlineColor.a;
+          }
         }
       }
     }

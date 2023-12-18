@@ -28,10 +28,10 @@ export function OutlineNode({ id, data }: NodeProps<NodeData>) {
           b: data.settings.b,
         }
       : {
-          a: 0,
-          r: 0,
-          g: 0,
-          b: 0,
+          a: 255,
+          r: 128,
+          g: 128,
+          b: 128,
         };
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
@@ -60,20 +60,22 @@ export function OutlineNode({ id, data }: NodeProps<NodeData>) {
           key="pixelCount"
           label="pixel count around"
           nodeId={id}
-          defaultValue={(data.settings.number || '2').toString()}
+          defaultValue={(data.settings.number || 'optimized').toString()}
           onSelect={(value) => {
             useNodeStore.getState().updateNodeSetting(id, {
               number: value,
             });
           }}
         >
-          {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((value) => {
-            return (
-              <MenuItem value={value} key={`count_${value}`}>
-                {value}
-              </MenuItem>
-            );
-          })}
+          {['optimized', '1', '2', '3', '4', '5', '6', '7', '8', '9'].map(
+            (value) => {
+              return (
+                <MenuItem value={value} key={`count_${value}`}>
+                  {value}
+                </MenuItem>
+              );
+            },
+          )}
         </Select>
         <HandleTargetColor
           handleId="color"
