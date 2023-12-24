@@ -4,6 +4,12 @@ interface NodeDefineGroup {
   nodes: { name: string; icon?: string }[];
 }
 
+interface NodeDefine {
+  name: string;
+  color: string;
+  icon?: string;
+}
+
 // Color palette
 // https://lospec.com/palette-list/pico-8
 const nodeDefines: NodeDefineGroup[] = [
@@ -143,3 +149,18 @@ const nodeDefines: NodeDefineGroup[] = [
   // },
 ];
 export default nodeDefines;
+
+export const nodeDefineMap: { [key: string]: NodeDefine } = {};
+nodeDefines.forEach((group) => {
+  group.nodes.forEach((node) => {
+    nodeDefineMap[node.name] = {
+      name: node.name,
+      color: group.color,
+      icon: node.icon,
+    };
+  });
+});
+
+export const findNodeDefine = (name: string) => {
+  return nodeDefineMap[name];
+};

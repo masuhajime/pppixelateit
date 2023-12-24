@@ -12,6 +12,10 @@ const CardContentNoPadding = styled(CardContent)(`
   }
 `);
 
+const CardStyled = styled(Card)(`
+  transition-duration: 0ms;
+`);
+
 type Props = {};
 export default function Sidebar(props: Props) {
   const onDragStart = (event: any, nodeType: any) => {
@@ -46,7 +50,7 @@ export default function Sidebar(props: Props) {
                   }}
                   key={node.name}
                 >
-                  <Card
+                  <CardStyled
                     sx={{
                       cursor: 'grab',
                       padding: '0px',
@@ -64,13 +68,14 @@ export default function Sidebar(props: Props) {
                       <TextToIcon
                         icon={node.icon}
                         style={{
+                          transitionDuration: '0',
                           marginRight: '8px',
                           color: nodeType.color,
                         }}
                       />
                       {node.name}
                     </CardContentNoPadding>
-                  </Card>
+                  </CardStyled>
                 </Box>
               );
             })}
