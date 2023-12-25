@@ -1,4 +1,4 @@
-import nodeDefines from '../../nodes';
+import nodeDefines, { nodeDefineMap } from '../../nodes';
 
 export type PropagateDataType =
   | 'image'
@@ -84,6 +84,18 @@ export const getNodeBehavior = async (
   });
 };
 
+// return nodeDefines
+// .map((nodeGroup) => {
+//   return nodeGroup.nodes.map((node) => {
+//     return node.name;
+//   });
+// })
+// .flat()
+// .map((nodeType) => {
+//   return {
+//     name: nodeType,
+//   };
+// });
 export const getNodeTypes = () => {
   return nodeDefines.map((node) => {
     return {
@@ -94,12 +106,21 @@ export const getNodeTypes = () => {
 };
 
 export const nodeBehaviorCacheAll = async () => {
-  const nodeTypes = getNodeTypes();
-  await Promise.all(
-    nodeTypes.map(async (nodeType) => {
-      if (nodeBehaviorCache[nodeType.name] === undefined) {
-        nodeBehaviorCache[nodeType.name] = await getNodeBehavior(nodeType.name);
-      }
-    }),
-  );
+  const nodeTypes = nodeDefineMap;
+  // loop through all node types
+  for (const nodeType of Object.values(nodeTypes)) {
+    if (nodeBehaviorCache[nodeType.name] === undefined) {
+      nodeBehaviorCache[nodeType.name] = await getNodeBehavior(nodeType.name);
+    }
+  }
+
+  // await Promise.all(
+  //   // Object.keys(nodeTypes).forEach(async (nodeType) => {
+  //   // nodeTypes.map(async (nodeType) => {
+  //   //   if (nodeBehaviorCache[nodeType.name] === undefined) {
+  //   //     nodeBehaviorCache[nodeType.name] = await getNodeBehavior(nodeType.name);
+  //   //   }
+  //   // }),
+
+  // );
 };

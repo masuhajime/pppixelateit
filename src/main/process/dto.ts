@@ -12,6 +12,11 @@ export type ImageKmeansParameter = {
   number: number;
 };
 
+export type ImageColorPaletteParameter = {
+  buffer: Buffer;
+  paletteName: string;
+};
+
 export type ImageRemoveBackgroundParameter = {
   buffer: Buffer;
   algorithm: string;

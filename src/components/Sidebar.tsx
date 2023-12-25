@@ -38,6 +38,7 @@ export default function Sidebar(props: Props) {
               padding: '8px',
               marginBottom: '8px',
             }}
+            key={nodeType.name}
           >
             <Typography variant="subtitle1">{nodeType.name}</Typography>
             {nodeType.nodes.map((node) => {

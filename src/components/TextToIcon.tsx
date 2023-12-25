@@ -10,6 +10,10 @@ import PhotoSizeSelectLargeIcon from '@mui/icons-material/PhotoSizeSelectLarge';
 import PhotoSizeSelectSmallIcon from '@mui/icons-material/PhotoSizeSelectSmall';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
+import OpacityIcon from '@mui/icons-material/Opacity';
+import PaletteIcon from '@mui/icons-material/Palette';
+import LayersIcon from '@mui/icons-material/Layers';
+import BorderOuterIcon from '@mui/icons-material/BorderOuter';
 import React from 'react';
 
 type Props = {
@@ -37,6 +41,14 @@ export default function TextToIcon(props: Props) {
       return <VisibilityIcon style={style} />;
     case 'TextFieldsIcon':
       return <TextFieldsIcon style={style} />;
+    case 'PaletteIcon':
+      return <PaletteIcon style={style} />;
+    case 'BorderOuterIcon':
+      return <BorderOuterIcon style={style} />;
+    case 'OpacityIcon':
+      return <OpacityIcon style={style} />;
+    case 'LayersIcon':
+      return <LayersIcon style={style} />;
     default:
       return <CheckBoxOutlineBlankIcon style={style} />;
   }

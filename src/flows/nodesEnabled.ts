@@ -27,6 +27,7 @@ import { WhiteToBlackNode } from './nodes/WhiteToBlackNode';
 import { TrimTransparentNode } from './nodes/TrimTransparentNode';
 import { ExtendNode } from './nodes/ExtendNode';
 import { ExtendToAspectRatioNode } from './nodes/ExtendToAspectRatioNode';
+import { ColorPaletteNode } from './nodes/ColorPaletteNode';
 
 const nodesEnabled = {
   ImageInputNode,
@@ -58,6 +59,7 @@ const nodesEnabled = {
   TrimTransparentNode,
   ExtendNode,
   ExtendToAspectRatioNode,
+  ColorPaletteNode,
 };
 // {
 //   element: ImageInputNode,

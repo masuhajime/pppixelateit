@@ -37,7 +37,11 @@ const nodeDefines: NodeDefineGroup[] = [
     nodes: [
       {
         name: 'KmeansNode',
-        icon: 'AutoFixHighIcon',
+        icon: 'PaletteIcon',
+      },
+      {
+        name: 'ColorPaletteNode',
+        icon: 'PaletteIcon',
       },
       {
         name: 'ErodeNode',
@@ -57,7 +61,7 @@ const nodeDefines: NodeDefineGroup[] = [
       },
       {
         name: 'OutlineNode',
-        icon: 'AutoFixHighIcon',
+        icon: 'BorderOuterIcon',
       },
       {
         name: 'RemoveBackgroundNode',
@@ -65,15 +69,15 @@ const nodeDefines: NodeDefineGroup[] = [
       },
       {
         name: 'MaskNode',
-        icon: 'AutoFixHighIcon',
+        icon: 'LayersIcon',
       },
       {
         name: 'AlphaThreshouldFlattenNode',
-        icon: 'AutoFixHighIcon',
+        icon: 'OpacityIcon',
       },
       {
         name: 'AlphaFlattenNode',
-        icon: 'AutoFixHighIcon',
+        icon: 'OpacityIcon',
       },
       {
         name: 'FillWithColorNode',

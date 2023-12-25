@@ -12,8 +12,8 @@ const filter = async (param: ImageBufferOnlyParameter): Promise<Buffer> => {
     .toBuffer({ resolveWithObject: true });
   const { width, height } = info;
   image.clahe({
-    width,
-    height,
+    width: 3,
+    height: 3,
     maxSlope: 3,
   });
   return image.png().toBuffer();
