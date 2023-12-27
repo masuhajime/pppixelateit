@@ -64,6 +64,7 @@ export default function Sidebar(props: Props) {
                     <CardContentNoPadding
                       sx={{
                         display: 'flex',
+                        alignItems: 'center',
                       }}
                     >
                       <TextToIcon
@@ -72,6 +73,7 @@ export default function Sidebar(props: Props) {
                           transitionDuration: '0',
                           marginRight: '8px',
                           color: nodeType.color,
+                          fontSize: '1.0rem',
                         }}
                       />
                       {node.name}

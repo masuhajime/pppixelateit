@@ -3,6 +3,7 @@ import './App.css';
 import { Box, IconButton, ThemeProvider, createTheme } from '@mui/material';
 import ReactFlow, {
   Background,
+  Connection,
   Controls,
   EdgeChange,
   EdgeTypes,
@@ -152,6 +153,37 @@ function Main() {
               }}
               onEdgesChange={(changes: EdgeChange[]) => {
                 onEdgesChange(changes);
+              }}
+              isValidConnection={(connection: Connection) => {
+                // console.log('isValidConnection', connection);
+                // find nodes connected to target handle
+                // const node = getNodeSnapshot<NodeData>(nodeId);
+                if (
+                  connection.target === null ||
+                  connection.targetHandle === null
+                ) {
+                  return false;
+                }
+                const connecteds = useNodeStore
+                  .getState()
+                  .getEdgesConnectedToNodeAndHandle(
+                    connection.target,
+                    connection.targetHandle,
+                  );
+                // console.log('connecteds', connecteds);
+
+                if (connecteds.length > 0) {
+                  return false;
+                }
+                if (
+                  connection.targetHandle === null ||
+                  connection.sourceHandle === null
+                ) {
+                  return false;
+                }
+                return connection.targetHandle.includes(
+                  connection.sourceHandle,
+                );
               }}
               nodeTypes={nodeTypes}
               edgeTypes={edgeTypes}

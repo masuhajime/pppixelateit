@@ -12,6 +12,7 @@ import {
   applyNodeChanges,
   applyEdgeChanges,
   getOutgoers,
+  getIncomers,
 } from 'reactflow';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { initialEdges, initialNodes } from './initialNodesTransparent';
@@ -28,6 +29,8 @@ export type RFState = {
   nodes: Node[];
   edges: Edge[];
   getNodeTargetedFrom: (nodeId: string) => Node[];
+  getNodeTargetedTo: (nodeId: string) => Node[];
+  getEdgesConnectedToNodeAndHandle(nodeId: string, handleId: string): Edge[];
   updateNodeData: <T = NodeBaseData>(nodeId: string, data: Partial<T>) => void;
   updateNodeSetting: <T = NodeBaseDataSettings>(
     nodeId: string,
@@ -85,6 +88,19 @@ const useNodeStore = createWithEqualityFn(
           const nodeFrom = get().nodes.find((node) => node.id === nodeId);
           if (!nodeFrom) throw new Error('node not found');
           return getOutgoers(nodeFrom, get().nodes, get().edges);
+        },
+        getNodeTargetedTo(nodeId: string): Node[] {
+          const nodeTo = get().nodes.find((node) => node.id === nodeId);
+          if (!nodeTo) throw new Error('node not found');
+          return getIncomers(nodeTo, get().nodes, get().edges);
+        },
+        getEdgesConnectedToNodeAndHandle(
+          nodeId: string,
+          handleId: string,
+        ): Edge[] {
+          return get().edges.filter(
+            (edge) => edge.target === nodeId && edge.targetHandle === handleId,
+          );
         },
         updateNodeData<T = NodeBaseData>(nodeId: string, data: T) {
           set({
