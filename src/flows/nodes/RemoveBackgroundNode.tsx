@@ -39,7 +39,7 @@ export function RemoveBackgroundNode({ id, data }: NodeProps<NodeData>) {
           }}
         >
           <MenuItem value="background-removal">background-removal</MenuItem>
-          <MenuItem value="rembg">rembg</MenuItem>
+          {/* <MenuItem value="rembg">rembg</MenuItem> */}
         </Select>
         <Separator />
         <HandleSourceImage

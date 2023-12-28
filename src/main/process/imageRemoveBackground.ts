@@ -1,6 +1,6 @@
 import { removeBackground } from '@imgly/background-removal-node';
 import { Buffer } from 'buffer';
-import { Rembg } from '@xixiyahaha/rembg-node';
+// import { Rembg } from '@xixiyahaha/rembg-node';
 import sharp from 'sharp';
 import path from 'node:path';
 import { ImageRemoveBackgroundParameter } from './dto';
@@ -50,13 +50,13 @@ const imageRemoveBackground = async (
     });
     output = sharp(await removed.arrayBuffer());
   } else {
-    const image = sharp(buffer);
-    const rembg = new Rembg({
-      logging: true,
-    });
-    console.log('imageRemoveBackground start');
-    output = await rembg.remove(image);
-    console.log('imageRemoveBackground end');
+    // const image = sharp(buffer);
+    // const rembg = new Rembg({
+    //   logging: true,
+    // });
+    // console.log('imageRemoveBackground start');
+    // output = await rembg.remove(image);
+    // console.log('imageRemoveBackground end');
   }
   // return Buffer.from(await removed.arrayBuffer());
 
