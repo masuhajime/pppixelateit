@@ -1,4 +1,7 @@
-import { ImageResizeParameter } from '../../main/process/dto';
+import {
+  ImageDenoiseParameter,
+  ImageResizeParameter,
+} from '../../main/process/dto';
 import { opencv2 } from '../../process/w2b';
 import useNodeStore, {
   getNodeSnapshot,
@@ -24,7 +27,13 @@ export const handleTargets: Record<string, HandleTarget> = {
   },
 };
 
-export type NodeData = {} & NodeBaseData & NodeBaseDataImageBuffer;
+export type NodeData = {
+  settings: {
+    pattern: string;
+  };
+  completed: boolean;
+} & NodeBaseData &
+  NodeBaseDataImageBuffer;
 
 export const nodeBehavior: NodeBehaviorInterface = {
   dataIncoming(
@@ -53,7 +62,8 @@ export const nodeBehavior: NodeBehaviorInterface = {
     window.imageProcess
       .imageProcess('imageDenoise', {
         buffer: node.data.imageBuffer.buffer,
-      } as ImageResizeParameter)
+        pattern: node.data.settings.pattern,
+      } as ImageDenoiseParameter)
       .then((buffer) => {
         store.updateNodeData<NodeData>(nodeId, {
           completed: true,

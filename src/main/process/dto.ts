@@ -27,6 +27,11 @@ export type ImageBufferOnlyParameter = {
   buffer: Buffer;
 };
 
+export type ImageDenoiseParameter = {
+  buffer: Buffer;
+  pattern: string;
+};
+
 export type ImageOutlineParameter = {
   buffer: Buffer;
   pixelCountAround: string;
