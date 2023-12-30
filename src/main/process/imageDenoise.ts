@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 /* eslint-disable no-continue */
 import { Buffer } from 'buffer';
 import sharp from 'sharp';
@@ -38,6 +39,9 @@ const filter = async (param: ImageDenoiseParameter): Promise<Buffer> => {
         if (color === undefined) {
           continue;
         }
+        if (color.a === 0) {
+          continue;
+        }
         const around = getPixelColorAround(bufferUpdating, width, x, y);
         const sameColors = around.filter((a) => {
           return a.r === color.r && a.g === color.g && a.b === color.b;
@@ -45,7 +49,6 @@ const filter = async (param: ImageDenoiseParameter): Promise<Buffer> => {
         if (sameColors.length > 0) {
           continue;
         }
-        console.log('sameColors', sameColors);
 
         // get average color
         const average = around.reduce(
