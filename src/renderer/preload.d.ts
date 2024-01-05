@@ -3,6 +3,7 @@ import {
   ElectronHandler,
   FsHandler,
   ImageProcessHandler,
+  MainWindowHandler,
 } from '../main/preload';
 
 declare global {
@@ -12,6 +13,7 @@ declare global {
     fs: FsHandler;
     dialog: DialogHandler;
     imageProcess: ImageProcessHandler;
+    mainWindow: MainWindowHandler;
   }
 }
 

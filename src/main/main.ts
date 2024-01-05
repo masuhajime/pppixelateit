@@ -17,6 +17,7 @@ import {
   dialog,
   OpenDialogOptions,
   SaveDialogOptions,
+  MessageBoxSyncOptions,
 } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
@@ -54,6 +55,25 @@ ipcMain.handle(
     return result.filePaths[0];
   },
 );
+
+ipcMain.handle(
+  'dialog-show-message-box-sync',
+  async (event, payload: MessageBoxSyncOptions): Promise<number> => {
+    if (!mainWindow) {
+      throw new Error('"mainWindow" is not defined');
+    }
+    const result = await dialog.showMessageBoxSync(mainWindow, payload);
+    return result;
+  },
+);
+
+ipcMain.handle('title-set', async (event, payload: string): Promise<null> => {
+  if (!mainWindow) {
+    throw new Error('"mainWindow" is not defined');
+  }
+  mainWindow.setTitle(payload);
+  return null;
+});
 
 ipcMain.on('file-save-as', async () => {
   if (!mainWindow) {
@@ -105,7 +125,10 @@ ipcMain.handle(
     if (result.canceled || result.filePaths.length === 0) {
       return null;
     }
-    return fs.readFileSync(result.filePaths[0], 'utf8');
+    return {
+      filePath: result.filePaths[0],
+      content: fs.readFileSync(result.filePaths[0], 'utf8'),
+    };
   },
 );
 

@@ -26,8 +26,11 @@ import {
 } from '../flows/nodes/data/NodeData';
 
 export type RFState = {
+  initialized: boolean;
+  modified: boolean;
   nodes: Node[];
   edges: Edge[];
+  setInitialized: (initialized: boolean) => void;
   getNodeTargetedFrom: (nodeId: string) => Node[];
   getNodeTargetedTo: (nodeId: string) => Node[];
   getEdgesConnectedToNodeAndHandle(nodeId: string, handleId: string): Edge[];
@@ -82,8 +85,13 @@ const useNodeStore = createWithEqualityFn(
   persist(
     (set, get: () => RFState) => {
       return {
+        initialized: false,
+        modified: false,
         nodes: initialNodes,
         edges: initialEdges,
+        setInitialized: (initialized: boolean) => {
+          set({ initialized });
+        },
         getNodeTargetedFrom(nodeId: string): Node[] {
           const nodeFrom = get().nodes.find((node) => node.id === nodeId);
           if (!nodeFrom) throw new Error('node not found');
@@ -117,7 +125,14 @@ const useNodeStore = createWithEqualityFn(
           nodeId: string,
           settings: T,
         ) {
+          const { initialized } = get();
+          const modified = initialized
+            ? {
+                modified: true,
+              }
+            : {};
           set({
+            ...modified,
             nodes: get().nodes.map((node) => {
               if (node.id === nodeId) {
                 const newSettings = { ...node.data.settings, ...settings };
@@ -134,6 +149,7 @@ const useNodeStore = createWithEqualityFn(
         },
         edgeDelete: (edgeId: string) => {
           set({
+            modified: true,
             edges: get().edges.filter((edge) => edge.id !== edgeId),
           });
         },
@@ -141,22 +157,66 @@ const useNodeStore = createWithEqualityFn(
           return get().edges.filter((edge) => edge.source === sourceNodeId);
         },
         onNodesChange: (changes: NodeChange[]) => {
+          console.log('onNodesChange', changes);
+
+          const typeModify = ['remove'];
+          const hasTypeModify = changes.some((change) => {
+            const includes = typeModify.includes(change.type);
+            if (includes) {
+              return true;
+            }
+            if (change.type === 'position' && !!change.position) {
+              return true;
+            }
+            return false;
+          });
+
+          const { initialized } = get();
+          const modified =
+            initialized && hasTypeModify
+              ? {
+                  modified: true,
+                }
+              : {};
           set({
+            ...modified,
             nodes: applyNodeChanges(changes, get().nodes),
           });
         },
         onEdgesChange: (changes: EdgeChange[]) => {
+          console.log('onEdgesChange', changes);
+          const { initialized } = get();
+          const typeModify = ['remove'];
+          const hasTypeModify = changes.some((change) => {
+            return typeModify.includes(change.type);
+          });
+          const modified =
+            initialized && hasTypeModify
+              ? {
+                  modified: true,
+                }
+              : {};
           set({
+            ...modified,
             edges: applyEdgeChanges(changes, get().edges),
           });
         },
         onConnect: (connection: Connection) => {
+          console.log('connection', connection);
+          const { initialized } = get();
+          const modified = initialized
+            ? {
+                modified: true,
+              }
+            : {};
           set({
+            ...modified,
             edges: addEdge(connection, get().edges),
           });
         },
         nodeAdd: (node: Node) => {
           set({
+            modified: true,
             nodes: [...get().nodes, node],
           });
         },
@@ -218,7 +278,11 @@ const useNodeStore = createWithEqualityFn(
           return JSON.stringify(partialize(get()));
         },
         setPartialState: (partialState: Partial<RFState>) => {
-          set(partialState);
+          set({
+            initialized: false,
+            modified: false,
+            ...partialState,
+          });
         },
       };
     },
@@ -357,6 +421,7 @@ export const propagateValue = (
   });
 };
 
+// TODO: Still need this ?
 export const createNodeBehavior = (
   n: Partial<NodeBehaviorInterface>,
 ): NodeBehaviorInterface => {

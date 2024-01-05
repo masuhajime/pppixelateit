@@ -14,7 +14,13 @@ import ReactFlow, {
 } from 'reactflow';
 import Split from 'react-split';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { shallow } from 'zustand/shallow';
 import { v4 as uuidv4 } from 'uuid';
 import Sidebar from '../components/Sidebar';
@@ -24,6 +30,8 @@ import processStore from '../store/processStore';
 import { CustomEdge } from '../flows/edges/CustomEdge';
 import processController from '../process/imageProcess';
 import nodesEnabled from '../flows/nodesEnabled';
+import useFileOpening, { FileOpeningState } from '../store/storeFileOpening';
+import { useDebounceOneTime } from '../hooks/useDebounceOneTime';
 
 const theme = createTheme({
   palette: {
@@ -55,19 +63,54 @@ function Main() {
 
     console.log('backend listend: start');
   }, []);
+  const { filePath } = useFileOpening(
+    (state: FileOpeningState) => ({
+      filePath: state.filePathOpening,
+    }),
+    shallow,
+  );
+  const {
+    modified,
+    nodes,
+    edges,
+    setInitialized,
+    onNodesChange,
+    onEdgesChange,
+    onConnect,
+    nodeAdd,
+  } = useNodeStore(
+    (state: RFState) => ({
+      modified: state.modified,
+      nodes: state.nodes,
+      edges: state.edges,
+      setInitialized: state.setInitialized,
+      onNodesChange: state.onNodesChange,
+      onEdgesChange: state.onEdgesChange,
+      onConnect: state.onConnect,
+      nodeAdd: state.nodeAdd,
+    }),
+    shallow,
+  );
 
-  const { nodes, edges, onNodesChange, onEdgesChange, onConnect, nodeAdd } =
-    useNodeStore(
-      (state: RFState) => ({
-        nodes: state.nodes,
-        edges: state.edges,
-        onNodesChange: state.onNodesChange,
-        onEdgesChange: state.onEdgesChange,
-        onConnect: state.onConnect,
-        nodeAdd: state.nodeAdd,
-      }),
-      shallow,
+  const [debounceDone, debounceOneTimeTouch] = useDebounceOneTime(1000);
+  useEffect(() => {
+    if (debounceDone) {
+      console.log('debounceDone', {
+        debounceDone,
+      });
+      setInitialized(true);
+    }
+  }, [debounceDone, setInitialized]);
+
+  useEffect(() => {
+    window.mainWindow.titleSet(
+      `${modified ? '*' : ''}${filePath || 'Untitled'}`,
     );
+    console.log('App: useFileOpening.subscribe', {
+      modified,
+      filePath,
+    });
+  }, [modified, filePath]);
 
   const onConnectCustom = useCallback(
     (params: any) => {
@@ -149,9 +192,11 @@ function Main() {
               nodes={nodes}
               edges={edges}
               onNodesChange={(changes: NodeChange[]) => {
+                debounceOneTimeTouch();
                 onNodesChange(changes);
               }}
               onEdgesChange={(changes: EdgeChange[]) => {
+                debounceOneTimeTouch();
                 onEdgesChange(changes);
               }}
               isValidConnection={(connection: Connection) => {

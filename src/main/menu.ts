@@ -77,12 +77,14 @@ export default class MenuBuilder {
       submenu: [
         {
           label: 'New',
+          accelerator: process.platform === 'darwin' ? 'Cmd+N' : 'Ctrl+N',
           async click() {
             ipcMain.emit('file-new');
           },
         },
         {
           label: 'Open',
+          accelerator: process.platform === 'darwin' ? 'Cmd+O' : 'Ctrl+O',
           async click() {
             ipcMain.emit('file-open');
           },
@@ -90,12 +92,15 @@ export default class MenuBuilder {
         { type: 'separator' },
         {
           label: 'Save',
+          accelerator: process.platform === 'darwin' ? 'Cmd+S' : 'Ctrl+S',
           async click() {
             ipcMain.emit('file-save');
           },
         },
         {
           label: 'Save As',
+          accelerator:
+            process.platform === 'darwin' ? 'Shift+Cmd+S' : 'Shift+Ctrl+S',
           async click() {
             ipcMain.emit('file-save-as');
           },

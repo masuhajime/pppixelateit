@@ -4,6 +4,7 @@ import {
   contextBridge,
   ipcRenderer,
   IpcRendererEvent,
+  MessageBoxSyncOptions,
   OpenDialogOptions,
   SaveDialogOptions,
 } from 'electron';
@@ -67,7 +68,10 @@ const fsHandler = {
   saveAs(string: string, option: SaveDialogOptions) {
     ipcRenderer.invoke('file-save-as-handle', string, option);
   },
-  async open(option: OpenDialogOptions): Promise<string> {
+  async open(option: OpenDialogOptions): Promise<{
+    filePath: string;
+    content?: string;
+  }> {
     return ipcRenderer.invoke('file-open-handle', option);
   },
   readDir(path: string) {
@@ -83,6 +87,17 @@ const dialogHandler = {
     const buffer = await ipcRenderer.invoke('dialog-select-file', option);
     return buffer;
   },
+  showMessageBoxSync: (option: MessageBoxSyncOptions) => {
+    return ipcRenderer.invoke('dialog-show-message-box-sync', option);
+  },
 };
 contextBridge.exposeInMainWorld('dialog', dialogHandler);
 export type DialogHandler = typeof dialogHandler;
+
+const mainWindowHandler = {
+  titleSet: async (title: string) => {
+    ipcRenderer.invoke('title-set', title);
+  },
+};
+contextBridge.exposeInMainWorld('mainWindow', mainWindowHandler);
+export type MainWindowHandler = typeof mainWindowHandler;
