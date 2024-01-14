@@ -75,11 +75,19 @@ ipcMain.handle('title-set', async (event, payload: string): Promise<null> => {
   return null;
 });
 
-ipcMain.on('file-save-as', async () => {
+ipcMain.on('file-save', async () => {
   if (!mainWindow) {
     throw new Error('"mainWindow" is not defined');
   }
   console.log('file-save from main');
+  mainWindow.webContents.send('file-save');
+});
+
+ipcMain.on('file-save-as', async () => {
+  if (!mainWindow) {
+    throw new Error('"mainWindow" is not defined');
+  }
+  console.log('file-save-as from main');
   mainWindow.webContents.send('file-save-as');
 });
 
@@ -92,10 +100,10 @@ ipcMain.handle(
     const result = await dialog.showSaveDialog(mainWindow, dialogOptions);
 
     if (result.canceled || !result.filePath) {
-      return null;
+      return undefined;
     }
     fs.writeFileSync(result.filePath, text);
-    return null;
+    return result.filePath;
   },
 );
 

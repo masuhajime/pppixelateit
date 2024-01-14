@@ -31,6 +31,7 @@ export type RFState = {
   nodes: Node[];
   edges: Edge[];
   setInitialized: (initialized: boolean) => void;
+  setModified: (modified: boolean) => void;
   getNodeTargetedFrom: (nodeId: string) => Node[];
   getNodeTargetedTo: (nodeId: string) => Node[];
   getEdgesConnectedToNodeAndHandle(nodeId: string, handleId: string): Edge[];
@@ -91,6 +92,9 @@ const useNodeStore = createWithEqualityFn(
         edges: initialEdges,
         setInitialized: (initialized: boolean) => {
           set({ initialized });
+        },
+        setModified: (modified: boolean) => {
+          set({ modified });
         },
         getNodeTargetedFrom(nodeId: string): Node[] {
           const nodeFrom = get().nodes.find((node) => node.id === nodeId);

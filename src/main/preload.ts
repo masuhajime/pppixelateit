@@ -21,6 +21,7 @@ export type ImageProcessHandler = typeof imageProcessHandler;
 
 export type Channels =
   | 'ipc-example'
+  | 'file-save'
   | 'file-save-as'
   | 'file-open'
   | 'file-new';
@@ -65,8 +66,20 @@ const fsHandler = {
       buffer,
     });
   },
-  saveAs(string: string, option: SaveDialogOptions) {
-    ipcRenderer.invoke('file-save-as-handle', string, option);
+  saveAsText: async (path: string, buffer: Buffer) => {
+    console.log('save-as-buffer', path);
+
+    // ipcRenderer.invoke('save-as-buffer', path, buffer);
+    await ipcRenderer.invoke('save-as-buffer', {
+      path,
+      buffer,
+    });
+  },
+  async saveAs(
+    string: string,
+    option: SaveDialogOptions,
+  ): Promise<undefined | string> {
+    return ipcRenderer.invoke('file-save-as-handle', string, option);
   },
   async open(option: OpenDialogOptions): Promise<{
     filePath: string;
