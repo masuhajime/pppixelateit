@@ -5,6 +5,7 @@ import { Box } from '@mui/material';
 import { useEffect, useState } from 'react';
 import {
   ReactCompareSlider,
+  ReactCompareSliderHandle,
   ReactCompareSliderImage,
 } from 'react-compare-slider';
 import { arrayBufferToBase64 } from '../../process/w2b';
@@ -67,6 +68,23 @@ export function ImagePreviewCompare({ id, data }: NodeProps<NodeData>) {
             }}
           >
             <ReactCompareSlider
+              handle={
+                <ReactCompareSliderHandle
+                  portrait={false}
+                  buttonStyle={{
+                    backdropFilter: undefined,
+                    WebkitBackdropFilter: undefined,
+                    backgroundColor: 'white',
+                    color: '#666',
+                    boxShadow: undefined,
+                    border: 0,
+                    opacity: 0.9,
+                  }}
+                  linesStyle={{
+                    opacity: 0.5,
+                  }}
+                />
+              }
               itemOne={
                 <ReactCompareSliderImage
                   style={{

@@ -186,8 +186,8 @@
     "webpack-merge": "^5.9.0"
   },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.erb.ElectronReact",
+    "productName": "PixelAfterAll",
+    "appId": "org.erb.pixelafterall",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [
@@ -245,8 +245,8 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "electron-react-boilerplate",
-      "repo": "electron-react-boilerplate"
+      "owner": "masuhajime",
+      "repo": "pppixelateit"
     }
   },
   "collective": {

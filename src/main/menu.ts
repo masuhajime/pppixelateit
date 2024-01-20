@@ -1,12 +1,10 @@
 import {
-  app,
-  Menu,
-  shell,
   BrowserWindow,
+  Menu,
   MenuItemConstructorOptions,
-  dialog,
+  app,
   ipcMain,
-  ipcRenderer,
+  shell,
 } from 'electron';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
@@ -42,17 +40,17 @@ export default class MenuBuilder {
 
   buildTemplateOSX(): MenuItemConstructorOptions[] {
     const subMenuAbout: DarwinMenuItemConstructorOptions = {
-      label: 'pppixalateit',
+      label: 'PixelAfterAll',
       submenu: [
         {
-          label: 'About pppixalateit',
+          label: 'About PixelAfterAll',
           selector: 'orderFrontStandardAboutPanel:',
         },
         { type: 'separator' },
         { label: 'Services', submenu: [] },
         { type: 'separator' },
         {
-          label: 'Hide ElectronReact',
+          label: 'Hide PixelAfterAll',
           accelerator: 'Command+H',
           selector: 'hide:',
         },
@@ -268,17 +266,17 @@ export default class MenuBuilder {
 
   buildDarwinTemplate(): MenuItemConstructorOptions[] {
     const subMenuAbout: DarwinMenuItemConstructorOptions = {
-      label: 'Electron',
+      label: 'PixelAfterAll',
       submenu: [
         {
-          label: 'About ElectronReact',
+          label: 'About PixelAfterAll',
           selector: 'orderFrontStandardAboutPanel:',
         },
         { type: 'separator' },
         { label: 'Services', submenu: [] },
         { type: 'separator' },
         {
-          label: 'Hide ElectronReact',
+          label: 'Hide PixelAfterAll',
           accelerator: 'Command+H',
           selector: 'hide:',
         },

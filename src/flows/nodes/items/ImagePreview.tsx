@@ -110,6 +110,7 @@ export function ImagePreview({
                   height: 'auto',
                   imageRendering: 'pixelated',
                 }}
+                alt="preview"
               />
             </div>
           )}
@@ -130,6 +131,7 @@ export function ImagePreview({
                   height: 'auto',
                   imageRendering: 'pixelated',
                 }}
+                alt="preview"
               />
             </div>
           )}
@@ -195,18 +197,16 @@ const togglePreview = (
         </Box>
       )}
       {completed && (
-        <Box>
-          <DownloadIcon
-            sx={{
-              color: 'text.disabled',
-              cursor: 'pointer',
-              paddingLeft: '0.2em',
-            }}
-            onClick={() => {
-              !!onImageSave && onImageSave();
-            }}
-          />
-        </Box>
+        <DownloadIcon
+          sx={{
+            color: 'text.disabled',
+            cursor: 'pointer',
+            paddingLeft: '0.2em',
+          }}
+          onClick={() => {
+            !!onImageSave && onImageSave();
+          }}
+        />
       )}
     </Box>
   );

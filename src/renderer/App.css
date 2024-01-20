@@ -127,3 +127,8 @@ button {
 .node-item-padding {
   padding: 0.5em 1em;
 }
+
+/* For ReactCompareSlider box-shadow remove */
+button[data-rcs="handle-container"] {
+  box-shadow: none;
+}
