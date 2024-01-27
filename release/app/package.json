@@ -16,6 +16,6 @@
   },
   "dependencies": {
     "@imgly/background-removal-node": "^1.2.1",
-    "sharp": "^0.33.0"
+    "sharp": "^0.33.2"
   }
 }
