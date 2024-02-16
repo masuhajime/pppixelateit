@@ -15,10 +15,8 @@
     "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts"
   },
   "dependencies": {
-    "@masuhajime/background-removal-node": "^1.4.4",
     "install": "^0.13.0",
     "npm": "^10.4.0",
-    "onnxruntime-node": "^1.17.0",
     "sharp": "^0.33.2"
   }
 }
