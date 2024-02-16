@@ -114,3 +114,13 @@ const mainWindowHandler = {
 };
 contextBridge.exposeInMainWorld('mainWindow', mainWindowHandler);
 export type MainWindowHandler = typeof mainWindowHandler;
+
+const debugHandler = {
+  debug: async () => {
+    // TODO: debug-string
+    // https://zenn.dev/nowa0402/articles/fc75145236df9a#%E3%83%93%E3%83%AB%E3%83%89%E5%BE%8C
+    return ipcRenderer.invoke('debug-string');
+  },
+};
+contextBridge.exposeInMainWorld('debug', debugHandler);
+export type DebugHandler = typeof debugHandler;

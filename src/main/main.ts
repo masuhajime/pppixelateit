@@ -29,7 +29,7 @@ class AppUpdater {
   constructor() {
     log.transports.file.level = 'info';
     autoUpdater.logger = log;
-    autoUpdater.checkForUpdatesAndNotify();
+    // autoUpdater.checkForUpdatesAndNotify();
   }
 }
 
@@ -203,6 +203,14 @@ ipcMain.handle('directory-read', async (event, directoryPath: string) => {
   });
 });
 
+ipcMain.handle('debug-string', async () => {
+  return {
+    a: path.resolve(__dirname),
+    b: __dirname,
+    c: path.join(path.resolve(), 'assets/imgly/'),
+  };
+});
+
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();
@@ -282,7 +290,7 @@ const createWindow = async () => {
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
-  new AppUpdater();
+  // new AppUpdater();
 };
 
 /**

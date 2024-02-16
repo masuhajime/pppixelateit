@@ -1,5 +1,5 @@
-import { Buffer } from 'buffer';
-import { imglyRemoveBackgroundBuffer } from '../../process/w2b';
+// import imglyRemoveBackground from '@imgly/background-removal';
+import path from 'path';
 import useNodeStore, {
   getNodeSnapshot,
   handleSourceImageDefault,
@@ -13,6 +13,7 @@ import {
   NodeBehaviorInterface,
 } from './data/NodeData';
 import { ImageRemoveBackgroundParameter } from '../../main/process/dto';
+// import { ImageRemoveBackgroundParameter } from '../../main/process/dto';
 
 export const handleSources: Record<string, HandleSource> = {
   image: handleSourceImageDefault,
@@ -59,6 +60,34 @@ export const nodeBehavior: NodeBehaviorInterface = {
       throw new Error('no image data');
     }
 
+    const blobBuffer = new Blob([node.data.imageBuffer.buffer], {
+      type: 'image/png',
+    });
+    // imglyRemoveBackground(blobBuffer, {
+    //   model: 'medium',
+    //   debug: true,
+    //   output: {
+    //     format: 'image/png',
+    //   },
+    // })
+    //   .then(async (blob: Blob) => {
+    //     // The result is a blob encoded as PNG. It can be converted to an URL to be used as HTMLImage.src
+    //     // const url = URL.createObjectURL(blob);
+    //     const b = await blob.arrayBuffer();
+    //     store.updateNodeData<NodeData>(nodeId, {
+    //       completed: true,
+    //       imageBuffer: {
+    //         buffer: Buffer.from(b),
+    //         end: true,
+    //       },
+    //     });
+    //     propagateValue(nodeId, handleSources);
+    //     callback();
+    //     return true;
+    //   })
+    //   .catch((error: Error) => {
+    //     console.error(error);
+    //   });
     window.imageProcess
       .imageProcess('imageRemoveBackground', {
         buffer: node.data.imageBuffer.buffer,

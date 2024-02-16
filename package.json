@@ -41,6 +41,7 @@
     "postinstall": "ts-node .erb/scripts/check-native-dep.js && electron-builder install-app-deps && npm run build:dll",
     "lint": "cross-env NODE_ENV=development eslint . --ext .js,.jsx,.ts,.tsx",
     "package": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never && npm run build:dll",
+    "package:win": "ts-node ./.erb/scripts/clean.js dist && npm run build && electron-builder build --win --publish never && npm run build:dll",
     "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir release/app",
     "start": "ts-node ./.erb/scripts/check-port-in-use.js && npm run start:renderer",
     "start:main": "cross-env NODE_ENV=development electronmon -r ts-node/register/transpile-only .",
@@ -98,6 +99,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@imgly/background-removal": "^1.4.4",
     "@mui/icons-material": "^5.14.16",
     "@mui/material": "^5.14.16",
     "@techstark/opencv-js": "^4.8.0-release.10",
@@ -106,6 +108,7 @@
     "electron-log": "^4.4.8",
     "electron-updater": "^6.1.4",
     "ml-kmeans": "^6.0.0",
+    "onnxruntime-node": "^1.17.0",
     "path-browserify": "^1.0.1",
     "react": "^18.2.0",
     "react-compare-slider": "^3.0.1",
@@ -113,6 +116,7 @@
     "react-router-dom": "^6.16.0",
     "react-split": "^2.0.14",
     "reactflow": "^11.9.4",
+    "sharp": "^0.33.2",
     "uuid": "^9.0.1",
     "zustand": "^4.4.5"
   },
@@ -188,11 +192,12 @@
     "productName": "PixelAfterAll",
     "appId": "org.erb.pixelafterall",
     "asar": true,
-    "asarUnpack": "**\\*.{node,dll}",
+    "asarUnpack": "**\\*.{node,dll,json}",
     "files": [
       "dist",
       "node_modules",
-      "package.json"
+      "package.json",
+      "assets"
     ],
     "afterSign": ".erb/scripts/notarize.js",
     "mac": {

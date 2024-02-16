@@ -1,5 +1,7 @@
 // @flow
 import { Box, Card, CardContent, Typography, styled } from '@mui/material';
+import path from 'path';
+import { useState } from 'react';
 import { getNodeTypes } from '../flows/nodes/data/NodeData';
 import TextToIcon from './TextToIcon';
 
@@ -23,6 +25,8 @@ export default function Sidebar(props: Props) {
     event.dataTransfer.effectAllowed = 'move';
   };
 
+  const [debug, setDebug] = useState('');
+
   return (
     <div
       style={{
@@ -31,6 +35,18 @@ export default function Sidebar(props: Props) {
         overflowX: 'hidden',
       }}
     >
+      <button
+        type="button"
+        onClick={() => {
+          window.debug.debug().then((result: any) => {
+            console.log('debug', result);
+            setDebug(JSON.stringify(result, null, 2));
+          });
+        }}
+      >
+        debug
+      </button>
+      <p>{debug}</p>
       {nodeTypes.map((nodeType) => {
         return (
           <Box

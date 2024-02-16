@@ -2,11 +2,7 @@
 // import cv from "@techstark/opencv-js"
 import { Buffer } from 'buffer';
 // import Jimp from 'jimp';
-// import imglyRemoveBackground from '@imgly/background-removal';
-// import { removeBackground } from '@imgly/background-removal-node';
 import { RGBA, Vector2 } from '../dto/generals';
-// import { removeBackground } from "@imgly/background-removal-node"
-// const { removeBackground } = require('@imgly/background-removal-node');
 
 export const greyscale = async (imageBuffer: Buffer) => {
   // const img = await Jimp.read(imageBuffer);

@@ -1,4 +1,5 @@
 import {
+  DebugHandler,
   DialogHandler,
   ElectronHandler,
   FsHandler,
@@ -14,6 +15,7 @@ declare global {
     dialog: DialogHandler;
     imageProcess: ImageProcessHandler;
     mainWindow: MainWindowHandler;
+    debug: DebugHandler;
   }
 }
 
