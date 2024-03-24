@@ -191,12 +191,11 @@
     "productName": "PixelAfterAll",
     "appId": "org.erb.pixelafterall",
     "asar": true,
-    "asarUnpack": "**\\*.{node,dll,json}",
+    "asarUnpack": "**\\*.{node,dll}",
     "files": [
       "dist",
       "node_modules",
-      "package.json",
-      "assets"
+      "package.json"
     ],
     "afterSign": ".erb/scripts/notarize.js",
     "mac": {

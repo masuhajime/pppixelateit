@@ -15,8 +15,6 @@
     "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts"
   },
   "dependencies": {
-    "install": "^0.13.0",
-    "npm": "^10.4.0",
     "sharp": "^0.33.2"
   }
 }
