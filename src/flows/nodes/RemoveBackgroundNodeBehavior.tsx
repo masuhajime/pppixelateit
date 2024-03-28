@@ -1,5 +1,6 @@
 // import imglyRemoveBackground from '@imgly/background-removal';
 import path from 'path';
+
 import useNodeStore, {
   getNodeSnapshot,
   handleSourceImageDefault,
@@ -60,9 +61,6 @@ export const nodeBehavior: NodeBehaviorInterface = {
       throw new Error('no image data');
     }
 
-    const blobBuffer = new Blob([node.data.imageBuffer.buffer], {
-      type: 'image/png',
-    });
     // imglyRemoveBackground(blobBuffer, {
     //   model: 'medium',
     //   debug: true,
@@ -88,6 +86,7 @@ export const nodeBehavior: NodeBehaviorInterface = {
     //   .catch((error: Error) => {
     //     console.error(error);
     //   });
+    // removeBackground(node.data.imageBuffer.buffer);
     window.imageProcess
       .imageProcess('imageRemoveBackground', {
         buffer: node.data.imageBuffer.buffer,

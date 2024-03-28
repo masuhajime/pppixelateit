@@ -27,6 +27,8 @@ export default function Sidebar(props: Props) {
 
   const [debug, setDebug] = useState('');
 
+  const [str, setStr] = useState('str');
+
   return (
     <div
       style={{
@@ -35,6 +37,26 @@ export default function Sidebar(props: Props) {
         overflowX: 'hidden',
       }}
     >
+      <div>
+        <input
+          type="text"
+          placeholder="search"
+          onChange={(event) => {
+            console.log('search', event.target.value);
+            window.debug
+              .transformer(event.target.value)
+              .then((result: any) => {
+                console.log('transformer', result);
+                setStr(JSON.stringify(result, null));
+              })
+              .catch((err: any) => {
+                console.error('transformer', err);
+              });
+            setStr(event.target.value);
+          }}
+        />
+        <div>{str}</div>
+      </div>
       <button
         type="button"
         onClick={() => {

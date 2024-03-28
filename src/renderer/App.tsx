@@ -51,6 +51,20 @@ const edgeTypes: EdgeTypes = {
 
 function Main() {
   const nodeTypes = useMemo(() => {
+    // console.log('transformer', window.debug.transformer('ok'));
+    // console.log(
+    //   'transformer 1',
+    //   window.debug.transformer('great, today is sunny'),
+    // );
+    // console.log(
+    //   'transformer 2',
+    //   window.debug.transformer('This price is too high, I cannot buy it.'),
+    // );
+    // console.log(
+    //   'transformer 3',
+    //   window.debug.transformer('I hate you because you are so stupid.'),
+    // );
+
     return nodesEnabled;
   }, []);
 
