@@ -5,7 +5,7 @@ import { Box } from '@mui/material';
 import { useEffect, useState } from 'react';
 import DownloadIcon from '@mui/icons-material/Download';
 import { arrayBufferToBase64 } from '../../../process/w2b';
-import imageTransparent from '../../../../assets/transparant-background.png';
+import imageBase64TransparentBackground from '../../../assets/transparent-background';
 
 type Props = {
   enabled?: boolean;
@@ -96,7 +96,7 @@ export function ImagePreview({
           {!!imageBase64 && (
             <div
               style={{
-                backgroundImage: `url(${imageTransparent})`,
+                backgroundImage: `url(${imageBase64TransparentBackground})`,
                 backgroundSize: 'contain',
                 backgroundRepeat: 'repeat',
                 lineHeight: 0,
@@ -117,7 +117,7 @@ export function ImagePreview({
           {!!imageBuffer && (
             <div
               style={{
-                backgroundImage: `url(${imageTransparent})`,
+                backgroundImage: `url(${imageBase64TransparentBackground})`,
                 backgroundSize: 'contain',
                 backgroundRepeat: 'repeat',
                 lineHeight: 0,

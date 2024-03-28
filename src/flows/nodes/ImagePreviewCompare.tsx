@@ -16,7 +16,7 @@ import { NodeHeader } from './components/NodeHeader';
 import { NodeStatus } from './components/NodeStatus';
 import { HandleTargetImage } from './items/HandleTargetImage';
 import { Separator } from './items/Separator';
-import image from '../../../assets/transparant-background.png';
+import imageBase64TransparentBackground from '../../assets/transparent-background';
 
 export function ImagePreviewCompare({ id, data }: NodeProps<NodeData>) {
   const [htmlImageBase64A, setHtmlImageBase64A] = useState<
@@ -89,7 +89,7 @@ export function ImagePreviewCompare({ id, data }: NodeProps<NodeData>) {
                 <ReactCompareSliderImage
                   style={{
                     imageRendering: 'pixelated',
-                    backgroundImage: `url(${image})`,
+                    backgroundImage: `url(${imageBase64TransparentBackground})`,
                     backgroundSize: 'contain',
                     backgroundRepeat: 'repeat',
                   }}
@@ -101,7 +101,7 @@ export function ImagePreviewCompare({ id, data }: NodeProps<NodeData>) {
                 <ReactCompareSliderImage
                   style={{
                     imageRendering: 'pixelated',
-                    backgroundImage: `url(${image})`,
+                    backgroundImage: `url(${imageBase64TransparentBackground})`,
                     backgroundSize: 'contain',
                     backgroundRepeat: 'repeat',
                   }}
