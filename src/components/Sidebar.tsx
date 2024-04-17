@@ -1,6 +1,12 @@
 // @flow
-import { Box, Card, CardContent, Typography, styled } from '@mui/material';
-import path from 'path';
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  styled,
+  useTheme,
+} from '@mui/material';
 import { useState } from 'react';
 import { getNodeTypes } from '../flows/nodes/data/NodeData';
 import TextToIcon from './TextToIcon';
@@ -25,7 +31,7 @@ export default function Sidebar(props: Props) {
     event.dataTransfer.effectAllowed = 'move';
   };
 
-  const [debug, setDebug] = useState('');
+  // const [debug, setDebug] = useState('');
 
   return (
     <div
@@ -35,7 +41,7 @@ export default function Sidebar(props: Props) {
         overflowX: 'hidden',
       }}
     >
-      <button
+      {/* <button
         type="button"
         onClick={() => {
           window.debug.debug().then((result: any) => {
@@ -46,7 +52,7 @@ export default function Sidebar(props: Props) {
       >
         debug
       </button>
-      <p>{debug}</p>
+      <p>{debug}</p> */}
       {nodeTypes.map((nodeType) => {
         return (
           <Box
@@ -56,7 +62,9 @@ export default function Sidebar(props: Props) {
             }}
             key={nodeType.name}
           >
-            <Typography variant="subtitle1">{nodeType.name}</Typography>
+            <Typography variant="subtitle1" color="text.primary">
+              {nodeType.name}
+            </Typography>
             {nodeType.nodes.map((node) => {
               return (
                 <Box

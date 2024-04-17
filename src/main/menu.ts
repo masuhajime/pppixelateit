@@ -47,23 +47,23 @@ export default class MenuBuilder {
           selector: 'orderFrontStandardAboutPanel:',
         },
         { type: 'separator' },
-        { label: 'Services', submenu: [] },
-        { type: 'separator' },
-        {
-          label: 'Hide PixelAfterAll',
-          accelerator: 'Command+H',
-          selector: 'hide:',
-        },
-        {
-          label: 'Hide Others',
-          accelerator: 'Command+Shift+H',
-          selector: 'hideOtherApplications:',
-        },
-        { label: 'Show All', selector: 'unhideAllApplications:' },
-        { type: 'separator' },
+        // { label: 'Services', submenu: [] },
+        // { type: 'separator' },
+        // {
+        //   label: 'Hide PixelAfterAll',
+        //   accelerator: 'Command+H',
+        //   selector: 'hide:',
+        // },
+        // {
+        //   label: 'Hide Others',
+        //   accelerator: 'Command+Shift+H',
+        //   selector: 'hideOtherApplications:',
+        // },
+        // { label: 'Show All', selector: 'unhideAllApplications:' },
+        // { type: 'separator' },
         {
           label: 'Quit',
-          accelerator: 'Command+Q',
+          accelerator: process.platform === 'darwin' ? 'Cmd+Q' : 'Ctrl+Q',
           click: () => {
             app.quit();
           },
@@ -150,7 +150,12 @@ export default class MenuBuilder {
       ],
     };
 
-    return [subMenuAbout, subMenuFile, subMenuWindow, subMenuHelp];
+    return [
+      subMenuAbout,
+      subMenuFile,
+      // subMenuWindow,
+      // subMenuHelp
+    ];
   }
 
   buildTemplateOther(): MenuItemConstructorOptions[] {
@@ -159,9 +164,35 @@ export default class MenuBuilder {
         label: '&File',
         submenu: [
           {
+            label: 'New',
+            accelerator: 'Ctrl+N',
+            async click() {
+              ipcMain.emit('file-new');
+            },
+          },
+          {
             label: '&Open',
             accelerator: 'Ctrl+O',
+            click: () => {
+              ipcMain.emit('file-open');
+            },
           },
+          { type: 'separator' },
+          {
+            label: 'Save',
+            accelerator: 'Ctrl+S',
+            async click() {
+              ipcMain.emit('file-save');
+            },
+          },
+          {
+            label: 'Save As',
+            accelerator: 'Shift+Ctrl+S',
+            async click() {
+              ipcMain.emit('file-save-as');
+            },
+          },
+          { type: 'separator' },
           {
             label: '&Close',
             accelerator: 'Ctrl+W',
@@ -171,79 +202,37 @@ export default class MenuBuilder {
           },
         ],
       },
-      {
-        label: '&View',
-        submenu:
-          process.env.NODE_ENV === 'development' ||
-          process.env.DEBUG_PROD === 'true'
-            ? [
-                {
-                  label: '&Reload',
-                  accelerator: 'Ctrl+R',
-                  click: () => {
-                    this.mainWindow.webContents.reload();
-                  },
-                },
-                {
-                  label: 'Toggle &Full Screen',
-                  accelerator: 'F11',
-                  click: () => {
-                    this.mainWindow.setFullScreen(
-                      !this.mainWindow.isFullScreen(),
-                    );
-                  },
-                },
-                {
-                  label: 'Toggle &Developer Tools',
-                  accelerator: 'Alt+Ctrl+I',
-                  click: () => {
-                    this.mainWindow.webContents.toggleDevTools();
-                  },
-                },
-              ]
-            : [
-                {
-                  label: 'Toggle &Full Screen',
-                  accelerator: 'F11',
-                  click: () => {
-                    this.mainWindow.setFullScreen(
-                      !this.mainWindow.isFullScreen(),
-                    );
-                  },
-                },
-              ],
-      },
-      {
-        label: 'Help',
-        submenu: [
-          {
-            label: 'Learn More',
-            click() {
-              shell.openExternal('https://electronjs.org');
-            },
-          },
-          {
-            label: 'Documentation',
-            click() {
-              shell.openExternal(
-                'https://github.com/electron/electron/tree/main/docs#readme',
-              );
-            },
-          },
-          {
-            label: 'Community Discussions',
-            click() {
-              shell.openExternal('https://www.electronjs.org/community');
-            },
-          },
-          {
-            label: 'Search Issues',
-            click() {
-              shell.openExternal('https://github.com/electron/electron/issues');
-            },
-          },
-        ],
-      },
+      // {
+      //   label: 'Help',
+      //   submenu: [
+      //     {
+      //       label: 'Learn More',
+      //       click() {
+      //         shell.openExternal('https://electronjs.org');
+      //       },
+      //     },
+      //     {
+      //       label: 'Documentation',
+      //       click() {
+      //         shell.openExternal(
+      //           'https://github.com/electron/electron/tree/main/docs#readme',
+      //         );
+      //       },
+      //     },
+      //     {
+      //       label: 'Community Discussions',
+      //       click() {
+      //         shell.openExternal('https://www.electronjs.org/community');
+      //       },
+      //     },
+      //     {
+      //       label: 'Search Issues',
+      //       click() {
+      //         shell.openExternal('https://github.com/electron/electron/issues');
+      //       },
+      //     },
+      //   ],
+      // },
     ];
 
     return templateDefault;

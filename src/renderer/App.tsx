@@ -1,6 +1,12 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
-import { Box, IconButton, ThemeProvider, createTheme } from '@mui/material';
+import {
+  Box,
+  IconButton,
+  ThemeProvider,
+  createTheme,
+  useMediaQuery,
+} from '@mui/material';
 import ReactFlow, {
   Background,
   Connection,
@@ -32,19 +38,8 @@ import processController from '../process/imageProcess';
 import nodesEnabled from '../flows/nodesEnabled';
 import useFileOpening, { FileOpeningState } from '../store/storeFileOpening';
 import { useDebounceOneTime } from '../hooks/useDebounceOneTime';
+import ThemedBackground from '../components/ThemedBackground';
 
-const theme = createTheme({
-  palette: {
-    mode: 'dark',
-  },
-  components: {
-    MuiIconButton: {
-      defaultProps: {
-        sx: {},
-      },
-    },
-  },
-});
 const edgeTypes: EdgeTypes = {
   custom: CustomEdge,
 };
@@ -163,6 +158,27 @@ function Main() {
     [nodeAdd, reactFlowInstance],
   );
 
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+
+  const theme = React.useMemo(() => {
+    const isDarkMode = prefersDarkMode;
+    return createTheme({
+      palette: {
+        mode: isDarkMode ? 'dark' : 'light',
+        background: {
+          default: isDarkMode ? '#333333' : '#e8e8e8',
+        },
+      },
+      components: {
+        MuiIconButton: {
+          defaultProps: {
+            sx: {},
+          },
+        },
+      },
+    });
+  }, [prefersDarkMode]);
+
   return (
     <ThemeProvider theme={theme}>
       <ReactFlowProvider>
@@ -181,93 +197,99 @@ function Main() {
             flexDirection: 'row',
           }}
         >
-          <Sidebar />
-
-          <div
-            style={{ width: '100vw', height: '100vh' }}
-            className="reactflow-wrapper"
-            ref={reactFlowWrapper}
-          >
-            <ReactFlow
-              nodes={nodes}
-              edges={edges}
-              onNodesChange={(changes: NodeChange[]) => {
-                debounceOneTimeTouch();
-                onNodesChange(changes);
+          <ThemedBackground>
+            <Sidebar />
+          </ThemedBackground>
+          <ThemedBackground>
+            <div
+              style={{
+                // width: '100vw',
+                height: '100vh',
               }}
-              onEdgesChange={(changes: EdgeChange[]) => {
-                debounceOneTimeTouch();
-                onEdgesChange(changes);
-              }}
-              isValidConnection={(connection: Connection) => {
-                // console.log('isValidConnection', connection);
-                // find nodes connected to target handle
-                // const node = getNodeSnapshot<NodeData>(nodeId);
-                if (
-                  connection.target === null ||
-                  connection.targetHandle === null
-                ) {
-                  return false;
-                }
-                const connecteds = useNodeStore
-                  .getState()
-                  .getEdgesConnectedToNodeAndHandle(
-                    connection.target,
-                    connection.targetHandle,
-                  );
-                // console.log('connecteds', connecteds);
-
-                if (connecteds.length > 0) {
-                  return false;
-                }
-                if (
-                  connection.targetHandle === null ||
-                  connection.sourceHandle === null
-                ) {
-                  return false;
-                }
-                return connection.targetHandle.includes(
-                  connection.sourceHandle,
-                );
-              }}
-              nodeTypes={nodeTypes}
-              edgeTypes={edgeTypes}
-              onConnect={onConnectCustom}
-              proOptions={{
-                hideAttribution: true,
-              }}
-              onDrop={(event: React.DragEvent<HTMLDivElement>) => {
-                onDrop(event);
-              }}
-              onDragOver={onDragOver}
-              onInit={(instance: ReactFlowInstance) => {
-                console.log('flow loaded:', instance);
-                init();
-                setReactFlowInstance(instance);
-              }}
+              className="reactflow-wrapper"
+              ref={reactFlowWrapper}
             >
-              <Panel position="top-left">
-                <Box
-                  sx={{
-                    backgroundColor: 'rgba(128,128,128,0.5)',
-                    borderRadius: '50%',
-                  }}
-                >
-                  <IconButton
-                    aria-label="settings"
-                    onClick={() => {
-                      console.log('play');
-                      processController.start();
+              <ReactFlow
+                nodes={nodes}
+                edges={edges}
+                onNodesChange={(changes: NodeChange[]) => {
+                  debounceOneTimeTouch();
+                  onNodesChange(changes);
+                }}
+                onEdgesChange={(changes: EdgeChange[]) => {
+                  debounceOneTimeTouch();
+                  onEdgesChange(changes);
+                }}
+                isValidConnection={(connection: Connection) => {
+                  // console.log('isValidConnection', connection);
+                  // find nodes connected to target handle
+                  // const node = getNodeSnapshot<NodeData>(nodeId);
+                  if (
+                    connection.target === null ||
+                    connection.targetHandle === null
+                  ) {
+                    return false;
+                  }
+                  const connecteds = useNodeStore
+                    .getState()
+                    .getEdgesConnectedToNodeAndHandle(
+                      connection.target,
+                      connection.targetHandle,
+                    );
+                  // console.log('connecteds', connecteds);
+
+                  if (connecteds.length > 0) {
+                    return false;
+                  }
+                  if (
+                    connection.targetHandle === null ||
+                    connection.sourceHandle === null
+                  ) {
+                    return false;
+                  }
+                  return connection.targetHandle.includes(
+                    connection.sourceHandle,
+                  );
+                }}
+                nodeTypes={nodeTypes}
+                edgeTypes={edgeTypes}
+                onConnect={onConnectCustom}
+                proOptions={{
+                  hideAttribution: true,
+                }}
+                onDrop={(event: React.DragEvent<HTMLDivElement>) => {
+                  onDrop(event);
+                }}
+                onDragOver={onDragOver}
+                onInit={(instance: ReactFlowInstance) => {
+                  console.log('flow loaded:', instance);
+                  init();
+                  setReactFlowInstance(instance);
+                }}
+              >
+                <Panel position="top-left">
+                  <Box
+                    sx={{
+                      backgroundColor: 'rgba(128,128,128,0.5)',
+                      borderRadius: '50%',
                     }}
                   >
-                    <PlayArrowIcon />
-                  </IconButton>
-                </Box>
-              </Panel>
-              <Background />
-              <Controls />
-            </ReactFlow>
-          </div>
+                    <IconButton
+                      aria-label="settings"
+                      onClick={() => {
+                        console.log('play');
+                        processController.start();
+                      }}
+                    >
+                      <PlayArrowIcon />
+                    </IconButton>
+                  </Box>
+                </Panel>
+                <Background />
+                <Controls />
+              </ReactFlow>
+            </div>
+          </ThemedBackground>
         </Split>
       </ReactFlowProvider>
     </ThemeProvider>

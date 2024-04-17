@@ -63,10 +63,10 @@ const nodeDefines: NodeDefineGroup[] = [
         name: 'OutlineNode',
         icon: 'BorderOuterIcon',
       },
-      {
-        name: 'RemoveBackgroundNode',
-        icon: 'AutoFixHighIcon',
-      },
+      // {
+      //   name: 'RemoveBackgroundNode',
+      //   icon: 'AutoFixHighIcon',
+      // },
       {
         name: 'MaskNode',
         icon: 'LayersIcon',
