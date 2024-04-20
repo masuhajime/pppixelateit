@@ -8,6 +8,7 @@ import { ErodeNode } from './nodes/ErodeNode';
 import { Fill00ColorToTransparentNode } from './nodes/Fill00ColorToTransparentNode';
 import { FillWithColorNode } from './nodes/FillWithColorNode';
 import { ImageInputDirectoryNode } from './nodes/ImageInputDirectoryNode';
+import { ImageInputTestNode } from './nodes/ImageInputTestNode';
 import { ImageInputNode } from './nodes/ImageInputNode';
 import { ImagePreviewCompare } from './nodes/ImagePreviewCompare';
 import { ImagePreviewNode } from './nodes/ImagePreviewNode';
@@ -30,6 +31,7 @@ import { ExtendToAspectRatioNode } from './nodes/ExtendToAspectRatioNode';
 import { ColorPaletteNode } from './nodes/ColorPaletteNode';
 
 const nodesEnabled = {
+  ImageInputTestNode,
   ImageInputNode,
   ResizeToSideNode,
   KmeansNode,

@@ -18,6 +18,10 @@ const nodeDefines: NodeDefineGroup[] = [
     color: '#FF004D',
     nodes: [
       {
+        name: 'ImageInputTestNode',
+        icon: 'ImageIcon',
+      },
+      {
         name: 'ImageInputNode',
         icon: 'ImageIcon',
       },
