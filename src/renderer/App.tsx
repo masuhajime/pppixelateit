@@ -236,7 +236,10 @@ function Main() {
                       connection.target,
                       connection.targetHandle,
                     );
-                  // console.log('connecteds', connecteds);
+                  // console.log('connecteds', {
+                  //   connection,
+                  //   connecteds,
+                  // });
 
                   if (connecteds.length > 0) {
                     return false;

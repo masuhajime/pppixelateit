@@ -23,7 +23,7 @@ export const handleTargets = {
     dataType: 'image',
   },
   mask: {
-    id: 'mask',
+    id: 'image-mask',
     dataType: 'image',
   },
 };
