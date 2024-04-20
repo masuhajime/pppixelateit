@@ -16,9 +16,7 @@ import {
   NodeBehaviorInterface,
 } from './data/NodeData';
 
-export const handleSources: Record<string, HandleSource> = {
-  image: handleSourceImageDefault,
-};
+export const handleSources: Record<string, HandleSource> = {};
 
 export const handleTargets: Record<string, HandleTarget> = {
   image: {
@@ -28,9 +26,7 @@ export const handleTargets: Record<string, HandleTarget> = {
 };
 
 export type NodeData = {
-  settings: {
-    number?: number;
-  };
+  settings: {};
 } & NodeBaseData &
   NodeBaseDataImageBuffer;
 
@@ -60,7 +56,7 @@ export const nodeBehavior: NodeBehaviorInterface = {
       node.id,
       node.type,
     );
-    if (!node.data.imageBuffer?.buffer || !node.data.settings.number) {
+    if (!node.data.imageBuffer?.buffer) {
       throw new Error('no image or number');
     }
 
@@ -87,6 +83,6 @@ export const nodeBehavior: NodeBehaviorInterface = {
   },
   canStartProcess(nodeId: string): boolean {
     const node = getNodeSnapshot<NodeData>(nodeId);
-    return !!node.data.imageBuffer?.buffer && !!node.data.settings.number;
+    return !!node.data.imageBuffer?.buffer;
   },
 };
