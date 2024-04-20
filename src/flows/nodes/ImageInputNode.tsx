@@ -113,7 +113,7 @@ export function ImageInputNode({ id, data }: NodeProps<NodeData>) {
           nodeId={id}
         />
         <ImagePreview
-          enabled={!!data.settings.enablePreview}
+          enabled={data.settings.enablePreview}
           completed={!!data.completed}
           imageBuffer={data.imageBuffer?.buffer}
           onTogglePreview={(enabled: boolean) => {

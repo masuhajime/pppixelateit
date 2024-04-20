@@ -15,18 +15,15 @@ import { Separator } from './items/Separator';
 import useNodeStore from '../../store/store';
 import { NodeStatus } from './components/NodeStatus';
 
-export const Fill00ColorToTransparentNode = ({
+export function Fill00ColorToTransparentNode({
   id,
   data,
-}: NodeProps<NodeData>) => {
+}: NodeProps<NodeData>) {
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
       <NodeHeader title="Fill00ColorToTransparent" />
       <NodeContent>
-        <HandleTargetImage
-          handleId={handleTargets.image.id}
-          nodeId={id}
-        ></HandleTargetImage>
+        <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
         {/* <HandleTargetNumber
           name="number"
           handleId="number"
@@ -44,10 +41,10 @@ export const Fill00ColorToTransparentNode = ({
           label="Image"
           handleId={handleSources.image.id}
           nodeId={id}
-        ></HandleSourceImage>
-        <NodeStatus nodeData={data}></NodeStatus>
+        />
+        <NodeStatus nodeData={data} />
         <ImagePreview
-          enabled={!!data.settings.enablePreview}
+          enabled={data.settings.enablePreview}
           completed={!!data.completed}
           imageBuffer={data.imageBuffer?.buffer}
           onTogglePreview={(enabled: boolean) => {
@@ -55,8 +52,8 @@ export const Fill00ColorToTransparentNode = ({
               enablePreview: enabled,
             });
           }}
-        ></ImagePreview>
+        />
       </NodeContent>
     </Node>
   );
-};
+}

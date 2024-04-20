@@ -15,7 +15,7 @@ type Props = {
   onTogglePreview?: (enabled: boolean) => void;
 };
 export function ImagePreview({
-  enabled = false,
+  enabled = true,
   completed = false,
   imageBase64,
   imageBuffer,

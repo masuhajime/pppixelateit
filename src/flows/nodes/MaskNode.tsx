@@ -31,7 +31,7 @@ export function MaskNode({ id, data }: NodeProps<NodeData>) {
         />
         <NodeStatus nodeData={data} />
         <ImagePreview
-          enabled={!!data.settings.enablePreview}
+          enabled={data.settings.enablePreview}
           completed={!!data.completed}
           imageBuffer={data.imageBuffer?.buffer}
           onTogglePreview={(enabled: boolean) => {
