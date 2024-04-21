@@ -5,6 +5,7 @@ import { Box, Button } from '@mui/material';
 // import { open } from '@tauri-apps/api/dialog'
 import * as React from 'react';
 import { Handle, Position, useUpdateNodeInternals } from 'reactflow';
+import NodeItemConfig from './NodeItemConfig';
 
 type Props = {
   name: string;
@@ -82,13 +83,11 @@ export function HandleTargetDirectory(props: Props) {
           type="target"
           position={Position.Left}
           id={props.handleId}
-          style={{
-            background: 'Violet',
-            width: handleSize,
-            height: handleSize,
-            left: -handleSize / 2,
-            top: handlePositionTop,
-          }}
+          style={NodeItemConfig.handleStyleBordered(
+            'Violet',
+            handlePositionTop,
+            'left',
+          )}
         />
       )}
     </Box>

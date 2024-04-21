@@ -3,6 +3,7 @@ import { Box, Button } from '@mui/material';
 import * as React from 'react';
 import { Handle, Position, useUpdateNodeInternals } from 'reactflow';
 import FolderIcon from '@mui/icons-material/Folder';
+import NodeItemConfig from './NodeItemConfig';
 // import { open } from '@tauri-apps/api/dialog'
 
 type Props = {
@@ -83,13 +84,11 @@ export function HandleSourceDirectory(props: Props) {
           type="source"
           position={Position.Right}
           id={props.handleId}
-          style={{
-            background: 'Violet',
-            width: handleSize,
-            height: handleSize,
-            right: -handleSize / 2,
-            top: handlePositionTop,
-          }}
+          style={NodeItemConfig.handleStyleBordered(
+            'Violet',
+            handlePositionTop,
+            'right',
+          )}
         />
       )}
     </Box>

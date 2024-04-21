@@ -1,48 +1,52 @@
 // @flow
-import { Box, Button, Popover, Typography } from '@mui/material'
-import { Chrome, rgbaToHexa } from '@uiw/react-color'
-import * as React from 'react'
-import { Handle, Position, useUpdateNodeInternals } from 'reactflow'
-import { RGBA } from '../../../dto/generals'
-type Props = {
-  handleId: string
-  nodeId: string
-  label: string
-  //colorHexaString?: string
-  color?: RGBA
-  onChange?: (color: RGBA) => void
-}
-const handleSize = 20
-export const HandleTargetColor = (props: Props) => {
-  const ref = React.useRef<HTMLDivElement>(null)
+import { Box, Button, Popover, Typography } from '@mui/material';
+import { Chrome, rgbaToHexa } from '@uiw/react-color';
+import * as React from 'react';
+import { Handle, Position, useUpdateNodeInternals } from 'reactflow';
+import { RGBA } from '../../../dto/generals';
+import NodeItemConfig from './NodeItemConfig';
 
-  const updateNodeInternals = useUpdateNodeInternals()
-  const [handlePositionTop, setHandlePositionTop] = React.useState(0)
+type Props = {
+  handleId: string;
+  nodeId: string;
+  label: string;
+  // colorHexaString?: string
+  color?: RGBA;
+  onChange?: (color: RGBA) => void;
+};
+const handleSize = 20;
+export function HandleTargetColor(props: Props) {
+  const ref = React.useRef<HTMLDivElement>(null);
+
+  const updateNodeInternals = useUpdateNodeInternals();
+  const [handlePositionTop, setHandlePositionTop] = React.useState(0);
   React.useEffect(() => {
     if (!ref.current) {
-      return
+      return;
     }
-    setHandlePositionTop(ref.current.offsetTop + 28)
-  }, [ref.current?.offsetTop])
+    setHandlePositionTop(ref.current.offsetTop + 28);
+  }, [ref.current?.offsetTop]);
   React.useEffect(() => {
-    updateNodeInternals(props.nodeId)
-  }, [handlePositionTop])
-  let color = props.color || { r: 255, g: 255, b: 255, a: 255 }
-  color = { ...color, a: color.a / 255 }
-  const colorHexa = rgbaToHexa(color)
+    updateNodeInternals(props.nodeId);
+  }, [handlePositionTop]);
+  let color = props.color || { r: 255, g: 255, b: 255, a: 255 };
+  color = { ...color, a: color.a / 255 };
+  const colorHexa = rgbaToHexa(color);
 
-  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
+    null,
+  );
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
+    setAnchorEl(event.currentTarget);
+  };
 
   const handleClose = () => {
-    setAnchorEl(null)
-  }
+    setAnchorEl(null);
+  };
 
-  const open = Boolean(anchorEl)
-  const id = open ? 'simple-popover' : undefined
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
 
   return (
     <Box ref={ref} className="node-item">
@@ -92,7 +96,7 @@ export const HandleTargetColor = (props: Props) => {
                 g: color.rgba.g,
                 b: color.rgba.b,
                 a: (Math.round(color.rgba.a * 100) / 100) * 255,
-              })
+              });
             }
           }}
         />
@@ -102,15 +106,13 @@ export const HandleTargetColor = (props: Props) => {
           type="target"
           position={Position.Left}
           id={props.handleId}
-          style={{
-            background: 'OrangeRed',
-            width: handleSize,
-            height: handleSize,
-            left: -handleSize / 2,
-            top: handlePositionTop,
-          }}
+          style={NodeItemConfig.handleStyleBordered(
+            'Yellow',
+            handlePositionTop,
+            'left',
+          )}
         />
       )}
     </Box>
-  )
+  );
 }

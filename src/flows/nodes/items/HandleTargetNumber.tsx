@@ -3,6 +3,7 @@
 import { Box, TextField } from '@mui/material';
 import * as React from 'react';
 import { Handle, Position, useUpdateNodeInternals } from 'reactflow';
+import NodeItemConfig from './NodeItemConfig';
 
 type Props = {
   name: string;
@@ -56,13 +57,11 @@ export function HandleTargetNumber(props: Props) {
           type="target"
           position={Position.Left}
           id={props.handleId}
-          style={{
-            background: 'OrangeRed',
-            width: handleSize,
-            height: handleSize,
-            left: -handleSize / 2,
-            top: handlePositionTop,
-          }}
+          style={NodeItemConfig.handleStyleBordered(
+            'White',
+            handlePositionTop,
+            'left',
+          )}
         />
       )}
     </Box>

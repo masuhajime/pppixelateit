@@ -3,13 +3,14 @@
 import { Box, Typography } from '@mui/material';
 import * as React from 'react';
 import { Handle, Position, useUpdateNodeInternals } from 'reactflow';
+import NodeItemConfig from './NodeItemConfig';
 
 type Props = {
   handleId: string;
   nodeId: string;
   label?: string;
 };
-const handleSize = 20;
+const handleSize = 24;
 export function HandleTargetImage(props: Props) {
   const { handleId, nodeId } = props;
   const ref = React.useRef<HTMLDivElement>(null);
@@ -35,13 +36,11 @@ export function HandleTargetImage(props: Props) {
         type="target"
         position={Position.Left}
         id={handleId}
-        style={{
-          background: 'OrangeRed',
-          width: handleSize,
-          height: handleSize,
-          left: -handleSize / 2,
-          top: handlePositionTop,
-        }}
+        style={NodeItemConfig.handleStyleFilled(
+          'OrangeRed',
+          handlePositionTop,
+          'left',
+        )}
       />
     </Box>
   );
