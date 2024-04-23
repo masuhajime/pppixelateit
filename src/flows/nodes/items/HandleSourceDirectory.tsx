@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 // @flow
 import { Box, Button } from '@mui/material';
 import * as React from 'react';
@@ -15,7 +16,6 @@ type Props = {
   disabled?: boolean;
   onSelect?: (directory: string) => void; // TODO: use this
 };
-const handleSize = 20;
 export function HandleSourceDirectory(props: Props) {
   const ref = React.useRef<HTMLDivElement>(null);
 
@@ -73,6 +73,7 @@ export function HandleSourceDirectory(props: Props) {
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
             textAlign: 'left',
+            direction: 'rtl',
           }}
         >
           {props.directory ? props.directory : props.placeholder}

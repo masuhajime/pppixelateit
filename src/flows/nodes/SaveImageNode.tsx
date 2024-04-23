@@ -14,7 +14,8 @@ import { HandleTargetText } from './items/HandleTargetText';
 import { Separator } from './items/Separator';
 
 export function SaveImageNode({ id, data }: NodeProps<NodeData>) {
-  const dir = path.basename(data.directory || data.settings.directory || '');
+  const dir = data.directory || data.settings.directory || '';
+  const file = data.filename || data.settings.filename;
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
       <NodeHeader title="Save Image" />
@@ -36,7 +37,7 @@ export function SaveImageNode({ id, data }: NodeProps<NodeData>) {
           name="file name"
           handleId={handleTargets.filename.id}
           nodeId={id}
-          defaultValue={data.filename || data.settings.filename || ''}
+          defaultValue={file || ''}
           onChange={(value) => {
             useNodeStore.getState().updateNodeData<NodeData>(id, {
               filename: value,

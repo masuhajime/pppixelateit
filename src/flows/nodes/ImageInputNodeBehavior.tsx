@@ -31,7 +31,7 @@ export const handleSources = {
     },
   } as HandleSource,
   filename: {
-    id: 'filename',
+    id: 'text',
     dataType: 'text',
     propagateValue: (nodeId: string) => {
       const node = getNodeSnapshot<NodeData>(nodeId);

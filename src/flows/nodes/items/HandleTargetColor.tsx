@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 // @flow
 import { Box, Button, Popover, Typography } from '@mui/material';
 import { Chrome, rgbaToHexa } from '@uiw/react-color';
@@ -101,7 +102,7 @@ export function HandleTargetColor(props: Props) {
           }}
         />
       </Popover>
-      {handlePositionTop && (
+      {/* {handlePositionTop && (
         <Handle
           type="target"
           position={Position.Left}
@@ -112,7 +113,7 @@ export function HandleTargetColor(props: Props) {
             'left',
           )}
         />
-      )}
+      )} */}
     </Box>
   );
 }

@@ -130,8 +130,8 @@ const nodeDefines: NodeDefineGroup[] = [
     ],
   },
   {
-    name: 'Text',
-    color: '#FFEC27',
+    name: 'Values',
+    color: '#FFF',
     nodes: [
       {
         name: 'TextAppendNode',
@@ -140,6 +140,10 @@ const nodeDefines: NodeDefineGroup[] = [
       {
         name: 'TextFileNameNode',
         icon: 'TextFieldsIcon',
+      },
+      {
+        name: 'DirectorySubMoveNode',
+        icon: 'FolderIcon',
       },
     ],
   },

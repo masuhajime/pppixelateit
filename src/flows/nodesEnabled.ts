@@ -29,6 +29,7 @@ import { TrimTransparentNode } from './nodes/TrimTransparentNode';
 import { ExtendNode } from './nodes/ExtendNode';
 import { ExtendToAspectRatioNode } from './nodes/ExtendToAspectRatioNode';
 import { ColorPaletteNode } from './nodes/ColorPaletteNode';
+import { DirectorySubMoveNode } from './nodes/DirectorySubMoveNode';
 
 const nodesEnabled = {
   ImageInputTestNode,
@@ -62,6 +63,7 @@ const nodesEnabled = {
   ExtendNode,
   ExtendToAspectRatioNode,
   ColorPaletteNode,
+  DirectorySubMoveNode,
 };
 // {
 //   element: ImageInputNode,

@@ -6,6 +6,7 @@ import {
   BaseEdge,
 } from 'reactflow';
 import { shallow } from 'zustand/shallow';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import useNodeStore, { RFState } from '../../store/store';
 
 type CustomEdgeData = {
@@ -41,29 +42,42 @@ export function CustomEdge({
 
   return (
     <>
-      <BaseEdge id={id} path={edgePath} />
+      <BaseEdge
+        id={id}
+        path={edgePath}
+        style={
+          selected
+            ? {
+                stroke: '#ffcc00',
+                strokeDashoffset: '10',
+                strokeDasharray: '10',
+                strokeOpacity: 0.3,
+                strokeWidth: 3,
+              }
+            : {}
+        }
+      />
       <EdgeLabelRenderer>
-        {selected ? (
+        {selected && (
           <div
             style={{
               position: 'absolute',
               transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
-              background: '#ffcc00',
-              padding: 10,
-              borderRadius: 5,
-              fontSize: 12,
-              fontWeight: 700,
               pointerEvents: 'all',
             }}
             className="nodrag nopan"
-            onClick={() => {
-              edgeDelete(id);
-            }}
           >
-            Delete
+            <HighlightOffIcon
+              style={{
+                fontSize: 64,
+                color: '#ffcc00',
+                cursor: 'pointer',
+              }}
+              onClick={() => {
+                edgeDelete(id);
+              }}
+            />
           </div>
-        ) : (
-          <></>
         )}
       </EdgeLabelRenderer>
     </>

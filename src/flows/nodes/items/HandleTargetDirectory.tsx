@@ -4,8 +4,9 @@ import FolderIcon from '@mui/icons-material/Folder';
 import { Box, Button } from '@mui/material';
 // import { open } from '@tauri-apps/api/dialog'
 import * as React from 'react';
-import { Handle, Position, useUpdateNodeInternals } from 'reactflow';
+import { Edge, Handle, Position, useUpdateNodeInternals } from 'reactflow';
 import NodeItemConfig from './NodeItemConfig';
+import useNodeStore from '../../../store/store';
 
 type Props = {
   name: string;
@@ -15,11 +16,19 @@ type Props = {
   placeholder: string;
   disabled?: boolean;
   onChange?: (value?: string) => void;
+  required?: boolean;
 };
-const handleSize = 20;
 export function HandleTargetDirectory(props: Props) {
-  const { name, handleId, nodeId, placeholder, directory, disabled, onChange } =
-    props;
+  const {
+    name,
+    handleId,
+    nodeId,
+    placeholder,
+    directory,
+    disabled,
+    onChange,
+    required,
+  } = props;
   const ref = React.useRef<HTMLDivElement>(null);
   const updateNodeInternals = useUpdateNodeInternals();
   const [handlePositionTop, setHandlePositionTop] = React.useState(0);
@@ -33,6 +42,15 @@ export function HandleTargetDirectory(props: Props) {
   React.useEffect(() => {
     updateNodeInternals(props.nodeId);
   }, [handlePositionTop]);
+
+  const [connected, setConnected] = React.useState<Edge[]>([]);
+  useNodeStore.subscribe((state) => {
+    const c = state.getEdgesConnectedToNodeAndHandle(
+      props.nodeId,
+      props.handleId,
+    );
+    setConnected(c);
+  });
 
   return (
     <Box className="node-item" ref={ref}>
@@ -56,6 +74,7 @@ export function HandleTargetDirectory(props: Props) {
             else onChange(undefined);
           }
         }}
+        disabled={disabled || connected.length > 0}
       >
         <FolderIcon
           sx={{
@@ -71,25 +90,30 @@ export function HandleTargetDirectory(props: Props) {
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
             textAlign: 'left',
-            // direction: 'rtl',
-            // textAlign: 'left',
+            direction: 'rtl',
           }}
         >
           {props.directory ? props.directory : props.placeholder}
         </Box>
       </Button>
-      {handlePositionTop && (
-        <Handle
-          type="target"
-          position={Position.Left}
-          id={props.handleId}
-          style={NodeItemConfig.handleStyleBordered(
-            'Violet',
-            handlePositionTop,
-            'left',
-          )}
-        />
-      )}
+      <Handle
+        type="target"
+        position={Position.Left}
+        id={props.handleId}
+        style={
+          required
+            ? NodeItemConfig.handleStyleFilled(
+                'Violet',
+                handlePositionTop,
+                'left',
+              )
+            : NodeItemConfig.handleStyleBordered(
+                'Violet',
+                handlePositionTop,
+                'left',
+              )
+        }
+      />
     </Box>
   );
 }

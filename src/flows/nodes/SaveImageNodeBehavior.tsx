@@ -15,7 +15,7 @@ export const handleTargets = {
     dataType: 'image',
   },
   filename: {
-    id: 'filename',
+    id: 'text-filename',
     dataType: 'text',
   },
   directory: {
@@ -42,10 +42,11 @@ export const nodeBehavior: NodeBehaviorInterface = {
     data: any,
   ): void {
     const store = useNodeStore.getState();
-    console.log('data incoming: ', {
+    console.log('data incoming file: ', {
       nodeId,
       handleId,
       dataType,
+      filename: data,
     });
     switch (handleId) {
       case handleTargets.image.id:
@@ -55,21 +56,15 @@ export const nodeBehavior: NodeBehaviorInterface = {
         });
         break;
       case handleTargets.filename.id:
-        console.log('data incoming file: ', {
-          nodeId,
-          handleId,
-          dataType,
-          filename: data,
-        });
         store.updateNodeData<NodeData>(nodeId, {
           filename: data,
-          completed: true,
+          completed: false,
         });
         break;
       case handleTargets.directory.id:
         store.updateNodeData<NodeData>(nodeId, {
           directory: data,
-          completed: true,
+          completed: false,
         });
         break;
       default:

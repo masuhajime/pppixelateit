@@ -1,18 +1,28 @@
+/* eslint-disable import/prefer-default-export */
 // @flow
 import { Box, TextField } from '@mui/material';
 import * as React from 'react';
-import { Handle, Position, useUpdateNodeInternals } from 'reactflow';
+import { Edge, Handle, Position, useUpdateNodeInternals } from 'reactflow';
 import NodeItemConfig from './NodeItemConfig';
+import useNodeStore from '../../../store/store';
 
 type Props = {
   name: string;
   handleId: string;
   nodeId: string;
   defaultValue: string;
+  value?: string;
   onChange?: (value: string) => void;
   disableInput?: boolean;
+  required?: boolean;
 };
-const handleSize = 20;
+
+HandleTargetText.defaultProps = {
+  disableInput: false,
+  required: false,
+  value: '',
+  onChange: () => {},
+};
 export function HandleTargetText(props: Props) {
   const ref = React.useRef<HTMLDivElement>(null);
   const updateNodeInternals = useUpdateNodeInternals();
@@ -26,6 +36,21 @@ export function HandleTargetText(props: Props) {
     updateNodeInternals(props.nodeId);
   }, [handlePositionTop]);
 
+  const [text, setText] = React.useState('');
+  const [connected, setConnected] = React.useState(false);
+  useNodeStore.subscribe((state) => {
+    const c = state.getEdgesConnectedToNodeAndHandle(
+      props.nodeId,
+      props.handleId,
+    );
+    const isConnected = c.length > 0;
+    setConnected(isConnected);
+  });
+
+  React.useEffect(() => {
+    setText(props.value);
+  }, [props.value]);
+
   return (
     <Box className="node-item" ref={ref}>
       <TextField
@@ -34,26 +59,38 @@ export function HandleTargetText(props: Props) {
         InputLabelProps={{
           shrink: true,
         }}
-        defaultValue={props.defaultValue}
+        defaultValue=""
+        value={connected ? '(Connected)' : text}
         variant="outlined"
         className="nodrag"
         size="small"
         sx={{ width: '100%' }}
         onChange={(e) => {
-          props.onChange && props.onChange(e.target.value || '');
+          if (!connected) {
+            setText(e.target.value);
+            props.onChange && props.onChange(e.target.value);
+          }
         }}
-        disabled={props.disableInput}
+        disabled={props.disableInput || connected}
       />
       {handlePositionTop && (
         <Handle
           type="target"
           position={Position.Left}
           id={props.handleId}
-          style={NodeItemConfig.handleStyleBordered(
-            'Lime',
-            handlePositionTop,
-            'left',
-          )}
+          style={
+            props.required
+              ? NodeItemConfig.handleStyleFilled(
+                  'Lime',
+                  handlePositionTop,
+                  'left',
+                )
+              : NodeItemConfig.handleStyleBordered(
+                  'Lime',
+                  handlePositionTop,
+                  'left',
+                )
+          }
         />
       )}
     </Box>
