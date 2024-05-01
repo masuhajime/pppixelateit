@@ -32,7 +32,8 @@ export function ExtendToAspectRatioNode({ id, data }: NodeProps<NodeData>) {
           name="width"
           handleId={handleTargets.width.id}
           nodeId={id}
-          defaultValue={data.settings.width || 1}
+          number={data.settings.width || 1}
+          disableHandle
           onChange={(value) => {
             let width = 1;
             if (value > 0) {
@@ -47,7 +48,8 @@ export function ExtendToAspectRatioNode({ id, data }: NodeProps<NodeData>) {
           name="height"
           handleId={handleTargets.height.id}
           nodeId={id}
-          defaultValue={data.settings.height || 1}
+          number={data.settings.height || 1}
+          disableHandle
           onChange={(value) => {
             let height = 1;
             if (value > 0) {

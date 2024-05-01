@@ -14,20 +14,26 @@ export function HandleSourceImage(props: Props) {
   const { handleId, label, nodeId } = props;
   const ref = React.useRef<HTMLDivElement>(null);
 
-  const updateNodeInternals = useUpdateNodeInternals();
-  const [handlePositionTop, setHandlePositionTop] = React.useState(0);
+  const [handlePositionTop, setHandlePositionTop] = React.useState<
+    number | undefined
+  >(undefined);
   React.useEffect(() => {
     if (!ref.current) {
       return;
     }
-    setHandlePositionTop(ref.current.offsetTop + 28);
-  }, [ref.current?.offsetTop]);
-  React.useEffect(() => {
-    updateNodeInternals(nodeId);
-  }, [handlePositionTop, nodeId, updateNodeInternals]);
+    props.onChange && props.onChange(props.number || 0);
+    setHandlePositionTop(ref.current.offsetTop + ref.current.offsetHeight / 2);
+  }, [ref.current?.offsetTop, ref.current?.offsetHeight, props]);
 
   return (
-    <Box ref={ref} className="node-item">
+    <Box
+      ref={ref}
+      className="node-item"
+      sx={{
+        display: 'flex',
+        flexDirection: 'row-reverse',
+      }}
+    >
       <Typography variant="h6">{label}</Typography>
       <Handle
         type="source"

@@ -4,17 +4,21 @@ import { Box, TextField } from '@mui/material';
 import * as React from 'react';
 import { Handle, Position, useUpdateNodeInternals } from 'reactflow';
 import NodeItemConfig from './NodeItemConfig';
+import useNodeStore from '../../../store/store';
 
 type Props = {
   name: string;
   handleId: string;
   nodeId: string;
-  defaultValue: number;
+  number?: number;
   min?: number;
   max?: number;
   onChange?: (value: number) => void;
+  disableHandle?: boolean;
 };
-const handleSize = 20;
+HandleTargetNumber.defaultProps = {
+  disableHandle: false,
+};
 export function HandleTargetNumber(props: Props) {
   const ref = React.useRef<HTMLDivElement>(null);
   const updateNodeInternals = useUpdateNodeInternals();
@@ -23,46 +27,69 @@ export function HandleTargetNumber(props: Props) {
     if (!ref.current) {
       return;
     }
-    props.onChange && props.onChange(props.defaultValue);
-    setHandlePositionTop(ref.current.offsetTop + 28);
-  }, [ref.current?.offsetTop]);
+    props.onChange && props.onChange(props.number || 0);
+    setHandlePositionTop(ref.current.offsetTop + ref.current.offsetHeight / 2);
+  }, [ref.current?.offsetTop, ref.current?.offsetHeight]);
   React.useEffect(() => {
     updateNodeInternals(props.nodeId);
   }, [handlePositionTop]);
+
+  const [number, setNumber] = React.useState(props.number || 0);
+  React.useEffect(() => {
+    setNumber(props.number);
+  }, [props.number]);
+
+  const [connected, setConnected] = React.useState(false);
+  useNodeStore.subscribe((state) => {
+    const c = state.getEdgesConnectedToNodeAndHandle(
+      props.nodeId,
+      props.handleId,
+    );
+    const isConnected = c.length > 0;
+    setConnected(isConnected);
+  });
 
   return (
     <Box className="node-item" ref={ref}>
       <TextField
         label={props.name}
-        type="number"
+        type={connected ? 'text' : 'number'}
         InputLabelProps={{
           shrink: true,
         }}
-        defaultValue={props.defaultValue}
+        placeholder={connected ? '(Connected)' : undefined}
+        value={connected ? '(Connected)' : number}
         variant="outlined"
         className="nodrag"
         size="small"
         sx={{ width: '100%' }}
         onChange={(e) => {
-          props.onChange &&
-            parseInt(e.target.value) &&
-            props.onChange(parseInt(e.target.value));
+          if (!connected) {
+            const n = parseInt(e.target.value, 10);
+            setNumber(n);
+            if (props.onChange) {
+              props.onChange(n);
+            }
+          }
         }}
+        disabled={props.disableInput || connected}
         InputProps={{
           inputProps: { type: 'number', min: props.min, max: props.max },
         }}
       />
-      {handlePositionTop && (
-        <Handle
-          type="target"
-          position={Position.Left}
-          id={props.handleId}
-          style={NodeItemConfig.handleStyleBordered(
-            'White',
-            handlePositionTop,
-            'left',
-          )}
-        />
+      {!props.disableHandle && handlePositionTop > 0 && (
+        <div>
+          <Handle
+            type="target"
+            position={Position.Left}
+            id={props.handleId}
+            style={NodeItemConfig.handleStyleBordered(
+              'White',
+              handlePositionTop,
+              'left',
+            )}
+          />
+        </div>
       )}
     </Box>
   );

@@ -7,6 +7,8 @@ import {
 } from 'reactflow';
 import { shallow } from 'zustand/shallow';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import { useMemo, useRef } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import useNodeStore, { RFState } from '../../store/store';
 
 type CustomEdgeData = {
@@ -40,6 +42,10 @@ export function CustomEdge({
     shallow,
   );
 
+  const { initialized } = useNodeStore(
+    useShallow((state) => ({ initialized: state.initialized })),
+  );
+
   return (
     <>
       <BaseEdge
@@ -54,7 +60,9 @@ export function CustomEdge({
                 strokeOpacity: 0.3,
                 strokeWidth: 3,
               }
-            : {}
+            : {
+                strokeWidth: initialized ? 1 : 0,
+              }
         }
       />
       <EdgeLabelRenderer>

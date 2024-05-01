@@ -37,6 +37,9 @@ export function HandleTargetText(props: Props) {
   }, [handlePositionTop]);
 
   const [text, setText] = React.useState('');
+  React.useEffect(() => {
+    setText(props.value);
+  }, [props.value]);
   const [connected, setConnected] = React.useState(false);
   useNodeStore.subscribe((state) => {
     const c = state.getEdgesConnectedToNodeAndHandle(
@@ -46,10 +49,6 @@ export function HandleTargetText(props: Props) {
     const isConnected = c.length > 0;
     setConnected(isConnected);
   });
-
-  React.useEffect(() => {
-    setText(props.value);
-  }, [props.value]);
 
   return (
     <Box className="node-item" ref={ref}>

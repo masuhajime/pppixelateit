@@ -17,7 +17,6 @@ import ReactFlow, {
   Panel,
   ReactFlowInstance,
   ReactFlowProvider,
-  useUpdateNodeInternals,
 } from 'reactflow';
 import Split from 'react-split';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -40,6 +39,10 @@ import nodesEnabled from '../flows/nodesEnabled';
 import useFileOpening, { FileOpeningState } from '../store/storeFileOpening';
 import { useDebounceOneTime } from '../hooks/useDebounceOneTime';
 import ThemedBackground from '../components/ThemedBackground';
+import {
+  getNodeBehavior,
+  getNodeBehaviorCacheByType,
+} from '../flows/nodes/data/NodeData';
 
 const edgeTypes: EdgeTypes = {
   custom: CustomEdge,
@@ -89,7 +92,7 @@ function Flow(props) {
     shallow,
   );
 
-  const [debounceDone, debounceOneTimeTouch] = useDebounceOneTime(1000);
+  const [debounceDone, debounceOneTimeTouch] = useDebounceOneTime(50);
   useEffect(() => {
     if (debounceDone) {
       console.log('debounceDone', {
@@ -130,7 +133,7 @@ function Flow(props) {
   }, []);
 
   const onDrop = useCallback(
-    (event: React.DragEvent<HTMLDivElement>) => {
+    async (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault();
 
       console.log('onDrop', event);
@@ -151,12 +154,25 @@ function Flow(props) {
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
       });
-      const newNode = {
+      let newNode = {
         id: `node-${type}-${uuidv4()}`,
         type,
         position,
         data: { settings: {} },
       };
+      const behavior = await getNodeBehavior(type);
+      if (behavior.initializeSettingsOnNodeCreate) {
+        const settings = behavior.initializeSettingsOnNodeCreate();
+        // newNode.data.settings = settings;
+        newNode = {
+          ...newNode,
+          data: {
+            ...newNode.data,
+            settings,
+          },
+        };
+      }
+      console.log('initializeSettingsOnNodeCreate', newNode);
       nodeAdd(newNode);
     },
     [nodeAdd, reactFlowInstance],
@@ -174,6 +190,8 @@ function Flow(props) {
       <ReactFlow
         nodes={nodes}
         edges={edges}
+        minZoom={0.2}
+        defaultViewport={{ x: 0, y: 0, zoom: 0.5 }}
         onNodesChange={(changes: NodeChange[]) => {
           debounceOneTimeTouch();
           onNodesChange(changes);

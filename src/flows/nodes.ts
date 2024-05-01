@@ -145,6 +145,10 @@ const nodeDefines: NodeDefineGroup[] = [
         name: 'DirectorySubMoveNode',
         icon: 'FolderIcon',
       },
+      {
+        name: 'NumberNode',
+        icon: 'PinIcon',
+      },
     ],
   },
   // {

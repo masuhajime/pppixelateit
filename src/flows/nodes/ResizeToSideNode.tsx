@@ -45,9 +45,9 @@ export function ResizeToSideNode({ id, data }: NodeProps<NodeData>) {
         </Select>
         <HandleTargetNumber
           name="size"
-          handleId="size"
+          handleId={handleTargets.size.id}
           nodeId={id}
-          defaultValue={node.data.settings.size || 128}
+          number={node.data.settings.size || 128}
           onChange={(value) => {
             useNodeStore.getState().updateNodeSetting(id, {
               size: value,

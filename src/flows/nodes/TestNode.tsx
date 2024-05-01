@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import { NodeProps } from 'reactflow';
 
 import useNodeStore from '../../store/store';
@@ -22,23 +23,10 @@ export function TestNode({ id, data }: NodeProps<NodeData>) {
           name="number"
           handleId="number"
           nodeId={id}
-          defaultValue={5}
+          number={data.settings.value || 5}
           onChange={(value) => {
-            useNodeStore.getState().updateNodeData(id, {
-              ...data,
-              number: value,
-            });
-          }}
-        />
-        <HandleTargetNumber
-          name="number"
-          handleId="number"
-          nodeId={id}
-          defaultValue={5}
-          onChange={(value) => {
-            useNodeStore.getState().updateNodeData(id, {
-              ...data,
-              number: value,
+            useNodeStore.getState().updateNodeSetting(id, {
+              value,
             });
           }}
         />

@@ -17,7 +17,6 @@ import { ImagePreview } from './items/ImagePreview';
 import { Select } from './items/Select';
 
 export function ImageInputTestNode({ id, data }: NodeProps<NodeData>) {
-  const nodeStore = useNodeStore.getState();
   return (
     <Node>
       <NodeHeader title="Test Image" />
@@ -27,38 +26,36 @@ export function ImageInputTestNode({ id, data }: NodeProps<NodeData>) {
             width: '100%',
           }}
         >
-          <Box className="node-item">
-            <Select
-              label="Image"
-              nodeId={id}
-              defaultValue={data.settings.imageName || 'Apple'}
-              onSelect={(value) => {
-                useNodeStore.getState().updateNodeSetting(id, {
-                  imageName: value,
+          <Select
+            label="Image"
+            nodeId={id}
+            defaultValue={data.settings.imageName || 'Apple'}
+            onSelect={(value) => {
+              useNodeStore.getState().updateNodeSetting(id, {
+                imageName: value,
+              });
+              // check if value is string
+              if (typeof value === 'string') {
+                useNodeStore.getState().updateNodeData<NodeData>(id, {
+                  imageBuffer: {
+                    buffer: getImageBufferForImageInputTest(value),
+                    end: true,
+                  },
+                  completed: true,
                 });
-                // check if value is string
-                if (typeof value === 'string') {
-                  useNodeStore.getState().updateNodeData<NodeData>(id, {
-                    imageBuffer: {
-                      buffer: getImageBufferForImageInputTest(value),
-                      end: true,
-                    },
-                    completed: true,
-                  });
-                }
-              }}
-            >
-              <MenuItem value="Apple">Apple</MenuItem>
-              <MenuItem value="Sphere">Sphere</MenuItem>
-              <MenuItem value="Horse">Horse</MenuItem>
-              <MenuItem value="Tree">Tree</MenuItem>
-              <MenuItem value="Potion">Potion</MenuItem>
-              <MenuItem value="BuildingFacade">Bulding Facade</MenuItem>
-              <MenuItem value="BuildingIsometric">Bulding Isometric</MenuItem>
-              <MenuItem value="GirlA">GirlA</MenuItem>
-              <MenuItem value="GirlB">GirlB</MenuItem>
-            </Select>
-          </Box>
+              }
+            }}
+          >
+            <MenuItem value="Apple">Apple</MenuItem>
+            <MenuItem value="Sphere">Sphere</MenuItem>
+            <MenuItem value="Horse">Horse</MenuItem>
+            <MenuItem value="Tree">Tree</MenuItem>
+            <MenuItem value="Potion">Potion</MenuItem>
+            <MenuItem value="BuildingFacade">Bulding Facade</MenuItem>
+            <MenuItem value="BuildingIsometric">Bulding Isometric</MenuItem>
+            <MenuItem value="GirlA">GirlA</MenuItem>
+            <MenuItem value="GirlB">GirlB</MenuItem>
+          </Select>
         </FormControl>
         <NodeStatus nodeData={data} />
         <HandleSourceImage

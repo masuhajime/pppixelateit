@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import { NodeProps } from 'reactflow';
 
 import useNodeStore from '../../store/store';
@@ -26,7 +27,7 @@ export function PosterizeNode({ id, data }: NodeProps<NodeData>) {
           name="number"
           handleId="number"
           nodeId={id}
-          defaultValue={data.settings.number || 8}
+          value={data.settings.number || 8}
           onChange={(value) => {
             useNodeStore.getState().updateNodeSetting(id, {
               number: value,

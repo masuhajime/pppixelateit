@@ -31,7 +31,8 @@ export function KmeansNode({ id, data }: NodeProps<NodeData>) {
           nodeId={id}
           max={128}
           min={1}
-          defaultValue={data.settings.number || 8}
+          number={data.settings.number || 8}
+          disableHandle
           onChange={(value) => {
             useNodeStore.getState().updateNodeSetting(id, {
               number: value,

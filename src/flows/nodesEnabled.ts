@@ -30,6 +30,7 @@ import { ExtendNode } from './nodes/ExtendNode';
 import { ExtendToAspectRatioNode } from './nodes/ExtendToAspectRatioNode';
 import { ColorPaletteNode } from './nodes/ColorPaletteNode';
 import { DirectorySubMoveNode } from './nodes/DirectorySubMoveNode';
+import { NumberNode } from './nodes/NumberNode';
 
 const nodesEnabled = {
   ImageInputTestNode,
@@ -64,83 +65,6 @@ const nodesEnabled = {
   ExtendToAspectRatioNode,
   ColorPaletteNode,
   DirectorySubMoveNode,
+  NumberNode,
 };
-// {
-//   element: ImageInputNode,
-// },
-// {
-//   element: ResizeToSideNode,
-// },
-// {
-//   element: KmeansNode,
-// },
-// {
-//   element: ErodeNode,
-// },
-// {
-//   element: ClaheNode,
-// },
-// {
-//   element: DenoiseNode,
-// },
-// {
-//   element: ImageInputDirectoryNode,
-// },
-// {
-//   element: TextAppendNode,
-// },
-// {
-//   element: TextFileNameNode,
-// },
-// {
-//   element: WhiteToBlackNode,
-// },
-// {
-//   element: ImagePreviewNode,
-// },
-// {
-//   element: PosterizeNode,
-// },
-// {
-//   element: PixelateNode,
-// },
-// {
-//   element: Fill00ColorToTransparentNode,
-// },
-// {
-//   element: TestNode,
-// },
-// {
-//   element: FillWithColorNode,
-// },
-// {
-//   element: RemoveEdgePixelNode,
-// },
-// {
-//   element: OutlineNode,
-// },
-// {
-//   element: ImagePreviewCompare,
-// },
-// {
-//   element: SaveImageNode,
-// },
-// {
-//   element: RemoveBackgroundNode,
-// },
-// {
-//   element: CallSharpNode,
-// },
-// {
-//   element: MaskNode,
-// },
-// {
-//   element: DebugNode,
-// },
-// {
-//   element: AlphaThreshouldFlattenNode,
-// },
-// {
-//   element: AlphaFlattenNode,
-// },
 export default nodesEnabled;

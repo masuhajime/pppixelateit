@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import { NodeProps } from 'reactflow';
 
 import { MenuItem } from '@mui/material';
@@ -71,9 +72,9 @@ export function FillWithColorNode({ id, data }: NodeProps<NodeData>) {
         <HandleTargetNumber
           handleId={handleTargets.tolerance.id}
           nodeId={id}
-          defaultValue={data.settings.tolerance || 16}
           name="tolerance"
           onChange={updateSetting(id, 'tolerance')}
+          disableHandle
         />
         {method === 'fixed_target_color' && (
           <HandleTargetColor

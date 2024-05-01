@@ -14,6 +14,7 @@ import OpacityIcon from '@mui/icons-material/Opacity';
 import PaletteIcon from '@mui/icons-material/Palette';
 import LayersIcon from '@mui/icons-material/Layers';
 import BorderOuterIcon from '@mui/icons-material/BorderOuter';
+import PinIcon from '@mui/icons-material/Pin';
 import React from 'react';
 
 type Props = {
@@ -49,6 +50,8 @@ export default function TextToIcon(props: Props) {
       return <OpacityIcon style={style} />;
     case 'LayersIcon':
       return <LayersIcon style={style} />;
+    case 'PinIcon':
+      return <PinIcon style={style} />;
     default:
       return <CheckBoxOutlineBlankIcon style={style} />;
   }

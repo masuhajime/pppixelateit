@@ -38,7 +38,7 @@ export function ExtendNode({ id, data }: NodeProps<NodeData>) {
           name="top"
           handleId={handleTargets.top.id}
           nodeId={id}
-          defaultValue={data.settings.top || 10}
+          number={data.settings.top || 10}
           onChange={(value) => {
             useNodeStore.getState().updateNodeSetting(id, {
               top: value,
@@ -49,7 +49,7 @@ export function ExtendNode({ id, data }: NodeProps<NodeData>) {
           name="bottom"
           handleId={handleTargets.bottom.id}
           nodeId={id}
-          defaultValue={data.settings.bottom || 10}
+          number={data.settings.bottom || 10}
           onChange={(value) => {
             useNodeStore.getState().updateNodeSetting(id, {
               bottom: value,
@@ -60,7 +60,7 @@ export function ExtendNode({ id, data }: NodeProps<NodeData>) {
           name="left"
           handleId={handleTargets.left.id}
           nodeId={id}
-          defaultValue={data.settings.left || 10}
+          number={data.settings.left || 10}
           onChange={(value) => {
             useNodeStore.getState().updateNodeSetting(id, {
               left: value,
@@ -71,7 +71,7 @@ export function ExtendNode({ id, data }: NodeProps<NodeData>) {
           name="right"
           handleId={handleTargets.right.id}
           nodeId={id}
-          defaultValue={data.settings.right || 10}
+          number={data.settings.right || 10}
           onChange={(value) => {
             useNodeStore.getState().updateNodeSetting(id, {
               right: value,

@@ -23,7 +23,12 @@ export const handleTargets: Record<string, HandleTarget> = {
   },
 };
 
-export type NodeData = {} & NodeBaseData & NodeBaseDataImageBuffer;
+export type NodeData = {
+  settings: {
+    value?: number;
+  };
+} & NodeBaseData &
+  NodeBaseDataImageBuffer;
 
 export const nodeBehavior: NodeBehaviorInterface = {
   dataIncoming(

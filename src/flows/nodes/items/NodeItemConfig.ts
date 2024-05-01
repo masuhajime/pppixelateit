@@ -3,9 +3,9 @@ export default class NodeItemConfig {
 
   static handleStyleFilled = (
     color: string,
-    handlePositionTop: number,
+    handlePositionTop: number | undefined,
     side: 'right' | 'left',
-  ) => {
+  ): Object => {
     const sideStyle =
       side === 'right'
         ? {
@@ -21,6 +21,7 @@ export default class NodeItemConfig {
         width: this.handleSize,
         height: this.handleSize,
         top: handlePositionTop,
+        visibility: handlePositionTop === undefined ? 'hidden' : 'visible',
       },
       ...sideStyle,
     };
@@ -28,9 +29,9 @@ export default class NodeItemConfig {
 
   static handleStyleBordered = (
     color: string,
-    handlePositionTop: number,
+    handlePositionTop: number | undefined,
     side: 'right' | 'left',
-  ) => {
+  ): Object => {
     const sideStyle =
       side === 'right'
         ? {
@@ -48,6 +49,7 @@ export default class NodeItemConfig {
         width: this.handleSize - 6,
         height: this.handleSize - 6,
         top: handlePositionTop,
+        visibility: handlePositionTop === undefined ? 'hidden' : 'visible',
       },
       ...sideStyle,
     };
