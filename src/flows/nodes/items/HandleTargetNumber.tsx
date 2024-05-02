@@ -77,19 +77,17 @@ export function HandleTargetNumber(props: Props) {
           inputProps: { type: 'number', min: props.min, max: props.max },
         }}
       />
-      {!props.disableHandle && handlePositionTop > 0 && (
-        <div>
-          <Handle
-            type="target"
-            position={Position.Left}
-            id={props.handleId}
-            style={NodeItemConfig.handleStyleBordered(
-              'White',
-              handlePositionTop,
-              'left',
-            )}
-          />
-        </div>
+      {!props.disableHandle && (
+        <Handle
+          type="target"
+          position={Position.Left}
+          id={props.handleId}
+          style={NodeItemConfig.handleStyleBordered(
+            'White',
+            handlePositionTop,
+            'left',
+          )}
+        />
       )}
     </Box>
   );

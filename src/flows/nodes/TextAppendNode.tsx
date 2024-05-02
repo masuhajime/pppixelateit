@@ -1,5 +1,7 @@
+/* eslint-disable import/prefer-default-export */
 import { NodeProps } from 'reactflow';
 
+import { Box, Typography } from '@mui/material';
 import { updateSetting } from '../../store/store';
 import {
   NodeData,
@@ -23,20 +25,21 @@ export function TextAppendNode({ id, data }: NodeProps<NodeData>) {
           name="Text"
           handleId={handleTargets.text.id}
           nodeId={id}
-          defaultValue={data.settings.text || ''}
+          value={data.settings.text || ''}
           onChange={updateSetting(id, 'text')}
         />
         <HandleTargetText
           name="Append text"
           handleId={handleTargets.append.id}
           nodeId={id}
-          defaultValue={data.settings.append || ''}
+          value={data.settings.append || ''}
           onChange={updateSetting(id, 'append')}
         />
         <HandleSourceText
           handleId={handleSources.text.id}
           label="Text"
           nodeId={id}
+          propagateValue={data.result}
         />
         <Separator />
         <NodeStatus nodeData={data} />

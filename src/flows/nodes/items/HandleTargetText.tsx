@@ -10,7 +10,6 @@ type Props = {
   name: string;
   handleId: string;
   nodeId: string;
-  defaultValue: string;
   value?: string;
   onChange?: (value: string) => void;
   disableInput?: boolean;
@@ -25,12 +24,16 @@ HandleTargetText.defaultProps = {
 };
 export function HandleTargetText(props: Props) {
   const ref = React.useRef<HTMLDivElement>(null);
+
   const updateNodeInternals = useUpdateNodeInternals();
-  const [handlePositionTop, setHandlePositionTop] = React.useState(0);
+  const [handlePositionTop, setHandlePositionTop] = React.useState<
+    number | undefined
+  >(undefined);
   React.useEffect(() => {
-    const offset = !ref.current?.offsetTop ? 0 : ref.current.offsetTop;
-    props.onChange && props.onChange(props.defaultValue);
-    setHandlePositionTop(offset + 28);
+    if (!ref.current) {
+      return;
+    }
+    setHandlePositionTop(ref.current.offsetTop + ref.current.offsetHeight / 2);
   }, [ref.current?.offsetTop]);
   React.useEffect(() => {
     updateNodeInternals(props.nodeId);
@@ -58,7 +61,6 @@ export function HandleTargetText(props: Props) {
         InputLabelProps={{
           shrink: true,
         }}
-        defaultValue=""
         value={connected ? '(Connected)' : text}
         variant="outlined"
         className="nodrag"
@@ -72,26 +74,24 @@ export function HandleTargetText(props: Props) {
         }}
         disabled={props.disableInput || connected}
       />
-      {handlePositionTop && (
-        <Handle
-          type="target"
-          position={Position.Left}
-          id={props.handleId}
-          style={
-            props.required
-              ? NodeItemConfig.handleStyleFilled(
-                  'Lime',
-                  handlePositionTop,
-                  'left',
-                )
-              : NodeItemConfig.handleStyleBordered(
-                  'Lime',
-                  handlePositionTop,
-                  'left',
-                )
-          }
-        />
-      )}
+      <Handle
+        type="target"
+        position={Position.Left}
+        id={props.handleId}
+        style={
+          props.required
+            ? NodeItemConfig.handleStyleFilled(
+                'Lime',
+                handlePositionTop,
+                'left',
+              )
+            : NodeItemConfig.handleStyleBordered(
+                'Lime',
+                handlePositionTop,
+                'left',
+              )
+        }
+      />
     </Box>
   );
 }

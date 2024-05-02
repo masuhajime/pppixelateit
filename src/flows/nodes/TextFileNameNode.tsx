@@ -1,18 +1,19 @@
-import { NodeProps } from 'reactflow'
+/* eslint-disable import/prefer-default-export */
+import { NodeProps } from 'reactflow';
 
 import {
   NodeData,
   handleSources,
   handleTargets,
-} from './TextFileNameNodeBehavior'
-import { Node } from './components/Node'
-import { NodeContent } from './components/NodeContent'
-import { NodeHeader } from './components/NodeHeader'
-import { NodeStatus } from './components/NodeStatus'
-import { HandleSourceText } from './items/HandleSourceText'
-import { HandleTargetText } from './items/HandleTargetText'
+} from './TextFileNameNodeBehavior';
+import { Node } from './components/Node';
+import { NodeContent } from './components/NodeContent';
+import { NodeHeader } from './components/NodeHeader';
+import { NodeStatus } from './components/NodeStatus';
+import { HandleSourceText } from './items/HandleSourceText';
+import { HandleTargetText } from './items/HandleTargetText';
 
-export const TextFileNameNode = ({ id, data }: NodeProps<NodeData>) => {
+export function TextFileNameNode({ id, data }: NodeProps<NodeData>) {
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
       <NodeHeader title="File Name" />
@@ -21,16 +22,17 @@ export const TextFileNameNode = ({ id, data }: NodeProps<NodeData>) => {
           name="Text Input"
           handleId={handleTargets.text.id}
           nodeId={id}
-          defaultValue={''}
-          disableInput={true}
-        ></HandleTargetText>
+          value={data.settings.text || ''}
+          disableInput
+        />
         <HandleSourceText
           handleId={handleSources.text.id}
           label="Text"
           nodeId={id}
-        ></HandleSourceText>
-        <NodeStatus nodeData={data}></NodeStatus>
+          propagateValue={data.result}
+        />
+        <NodeStatus nodeData={data} />
       </NodeContent>
     </Node>
-  )
+  );
 }

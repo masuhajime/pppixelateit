@@ -31,6 +31,11 @@ export type NodeData = {
   NodeBaseDataImageBuffer;
 
 export const nodeBehavior: NodeBehaviorInterface = {
+  initializeSettingsOnNodeCreate() {
+    return {
+      threshold: 50,
+    };
+  },
   dataIncoming(
     nodeId: string,
     handleId: string,

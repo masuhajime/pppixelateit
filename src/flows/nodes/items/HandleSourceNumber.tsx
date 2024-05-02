@@ -30,18 +30,16 @@ export function HandleSourceNumber(props: Props) {
   return (
     <Box ref={ref} className="node-item">
       <Typography variant="h6">{props.label}</Typography>
-      {handlePositionTop && (
-        <Handle
-          type="source"
-          position={Position.Right}
-          id={props.handleId}
-          style={NodeItemConfig.handleStyleBordered(
-            'White',
-            handlePositionTop,
-            'right',
-          )}
-        />
-      )}
+      <Handle
+        type="source"
+        position={Position.Right}
+        id={props.handleId}
+        style={NodeItemConfig.handleStyleBordered(
+          'White',
+          handlePositionTop,
+          'right',
+        )}
+      />
     </Box>
   );
 }

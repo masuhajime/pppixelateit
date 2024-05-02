@@ -30,14 +30,16 @@ export function HandleTargetDirectory(props: Props) {
     required,
   } = props;
   const ref = React.useRef<HTMLDivElement>(null);
+
   const updateNodeInternals = useUpdateNodeInternals();
-  const [handlePositionTop, setHandlePositionTop] = React.useState(0);
+  const [handlePositionTop, setHandlePositionTop] = React.useState<
+    number | undefined
+  >(undefined);
   React.useEffect(() => {
     if (!ref.current) {
       return;
     }
-    props.onChange && props.onChange(props.directory);
-    setHandlePositionTop(ref.current.offsetTop + 28);
+    setHandlePositionTop(ref.current.offsetTop + ref.current.offsetHeight / 2);
   }, [ref.current?.offsetTop]);
   React.useEffect(() => {
     updateNodeInternals(props.nodeId);

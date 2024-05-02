@@ -34,12 +34,19 @@ export const handleTargets = {
     dataType: 'text',
   } as HandleTarget,
   append: {
-    id: 'append',
+    id: 'text-append',
     dataType: 'text',
   } as HandleTarget,
 };
 
 export const nodeBehavior: NodeBehaviorInterface = {
+  initialize(nodeId) {
+    const store = useNodeStore.getState();
+    store.updateNodeData<NodeData>(nodeId, {
+      text: undefined,
+      append: undefined,
+    });
+  },
   dataIncoming(
     nodeId: string,
     handleId: string,
@@ -48,13 +55,13 @@ export const nodeBehavior: NodeBehaviorInterface = {
   ): void {
     const store = useNodeStore.getState();
     switch (handleId) {
-      case 'text':
+      case handleTargets.text.id:
         store.updateNodeData<NodeData>(nodeId, {
           text: data,
           completed: false,
         });
         break;
-      case 'append':
+      case handleTargets.append.id:
         store.updateNodeData<NodeData>(nodeId, {
           append: data,
           completed: false,

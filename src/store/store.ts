@@ -161,7 +161,7 @@ const useNodeStore = createWithEqualityFn(
           return get().edges.filter((edge) => edge.source === sourceNodeId);
         },
         onNodesChange: (changes: NodeChange[]) => {
-          console.log('onNodesChange', changes);
+          // console.log('onNodesChange', changes);
 
           const typeModify = ['remove'];
           const hasTypeModify = changes.some((change) => {

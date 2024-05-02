@@ -2,7 +2,7 @@
 import { NodeProps } from 'reactflow';
 import { Buffer } from 'buffer';
 import ImageIcon from '@mui/icons-material/Image';
-import { Box, Button, FormControl } from '@mui/material';
+import { Box, Button, FormControl, Typography } from '@mui/material';
 import path from 'path';
 import useNodeStore from '../../store/store';
 import { NodeData, handleSources } from './ImageInputNodeBehavior';
@@ -111,6 +111,9 @@ export function ImageInputNode({ id, data }: NodeProps<NodeData>) {
           handleId={handleSources.filename.id}
           label="File Name"
           nodeId={id}
+          propagateValue={
+            data.inputFilePath ? path.basename(data.inputFilePath) : undefined
+          }
         />
         <ImagePreview
           enabled={data.settings.enablePreview}

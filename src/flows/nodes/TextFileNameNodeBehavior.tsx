@@ -40,7 +40,7 @@ export const nodeBehavior: NodeBehaviorInterface = {
   ): void {
     const store = useNodeStore.getState();
     switch (handleId) {
-      case 'text':
+      case handleTargets.text.id:
         store.updateNodeData<NodeData>(nodeId, {
           text: data,
           completed: false,
