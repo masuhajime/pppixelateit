@@ -271,8 +271,36 @@ function Flow(props) {
 }
 
 function Main() {
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  return (
+    <Split
+      sizes={[25, 75]}
+      minSize={10}
+      expandToMin={false}
+      gutterSize={8}
+      gutterAlign="center"
+      snapOffset={10}
+      dragInterval={1}
+      direction="horizontal"
+      cursor="col-resize"
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+      }}
+    >
+      <ThemedBackground>
+        <Sidebar />
+      </ThemedBackground>
+      <ThemedBackground>
+        <ReactFlowProvider>
+          <Flow />
+        </ReactFlowProvider>
+      </ThemedBackground>
+    </Split>
+  );
+}
 
+export default function App() {
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const theme = React.useMemo(() => {
     const isDarkMode = prefersDarkMode;
     return createTheme({
@@ -291,43 +319,13 @@ function Main() {
       },
     });
   }, [prefersDarkMode]);
-
   return (
     <ThemeProvider theme={theme}>
-      <Split
-        sizes={[25, 75]}
-        minSize={10}
-        expandToMin={false}
-        gutterSize={8}
-        gutterAlign="center"
-        snapOffset={10}
-        dragInterval={1}
-        direction="horizontal"
-        cursor="col-resize"
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-        }}
-      >
-        <ThemedBackground>
-          <Sidebar />
-        </ThemedBackground>
-        <ThemedBackground>
-          <ReactFlowProvider>
-            <Flow />
-          </ReactFlowProvider>
-        </ThemedBackground>
-      </Split>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Main />} />
+        </Routes>
+      </Router>
     </ThemeProvider>
-  );
-}
-
-export default function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Main />} />
-      </Routes>
-    </Router>
   );
 }
