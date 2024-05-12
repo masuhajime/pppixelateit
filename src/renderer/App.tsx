@@ -39,10 +39,8 @@ import nodesEnabled from '../flows/nodesEnabled';
 import useFileOpening, { FileOpeningState } from '../store/storeFileOpening';
 import { useDebounceOneTime } from '../hooks/useDebounceOneTime';
 import ThemedBackground from '../components/ThemedBackground';
-import {
-  getNodeBehavior,
-  getNodeBehaviorCacheByType,
-} from '../flows/nodes/data/NodeData';
+import { getNodeBehavior } from '../flows/nodes/data/NodeData';
+import { PreparedFlowsDialog } from '../components/PreparedFlowsDialog';
 
 const edgeTypes: EdgeTypes = {
   custom: CustomEdge,
@@ -321,6 +319,7 @@ export default function App() {
   }, [prefersDarkMode]);
   return (
     <ThemeProvider theme={theme}>
+      <PreparedFlowsDialog />
       <Router>
         <Routes>
           <Route path="/" element={<Main />} />

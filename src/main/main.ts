@@ -115,6 +115,13 @@ ipcMain.on('file-new', async (event) => {
   mainWindow.webContents.send('file-new');
 });
 
+ipcMain.on('file-new-template', async (event) => {
+  if (!mainWindow) {
+    throw new Error('"mainWindow" is not defined');
+  }
+  mainWindow.webContents.send('file-new-template');
+});
+
 ipcMain.on('file-open', async (event, payload: any) => {
   if (!mainWindow) {
     throw new Error('"mainWindow" is not defined');
