@@ -177,6 +177,12 @@ export default class MenuBuilder {
             },
           },
           {
+            label: 'New from template',
+            async click() {
+              ipcMain.emit('file-new-template');
+            },
+          },
+          {
             label: '&Open',
             accelerator: 'Ctrl+O',
             click: () => {

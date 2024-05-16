@@ -116,7 +116,7 @@
     "react-router-dom": "^6.16.0",
     "react-split": "^2.0.14",
     "reactflow": "^11.9.4",
-    "sharp": "^0.33.3",
+    "sharp": "^0.33.4",
     "uuid": "^9.0.1",
     "zustand": "^4.4.5"
   },
