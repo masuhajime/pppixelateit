@@ -46,6 +46,12 @@ export default class MenuBuilder {
           label: 'About PixelAfterAll',
           selector: 'orderFrontStandardAboutPanel:',
         },
+        {
+          label: 'Open Website (itch.io)',
+          click: () => {
+            shell.openExternal('https://masuone.itch.io/pixel-after-all');
+          },
+        },
         { type: 'separator' },
         // { label: 'Services', submenu: [] },
         // { type: 'separator' },
@@ -165,7 +171,26 @@ export default class MenuBuilder {
   }
 
   buildTemplateOther(): MenuItemConstructorOptions[] {
+
     const templateDefault = [
+
+      {
+        label: '&PixelAfterAll',
+        submenu: [
+          {
+            label: 'Open Website (itch.io)',
+            click: () => {
+              shell.openExternal('https://masuone.itch.io/pixel-after-all');
+            },
+          },
+          {
+            label: 'Quit',
+            click: () => {
+              app.quit();
+            },
+          },
+        ],
+      },
       {
         label: '&File',
         submenu: [
