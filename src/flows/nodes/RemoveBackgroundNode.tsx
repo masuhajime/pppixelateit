@@ -21,7 +21,7 @@ import { Select } from './items/Select';
 export function RemoveBackgroundNode({ id, data }: NodeProps<NodeData>) {
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="RemoveBackgroundNode" />
+      <NodeHeader title="RemoveBackgroundNode" nodeId={id} />
       <NodeContent>
         <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
         <Select

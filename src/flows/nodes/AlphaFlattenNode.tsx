@@ -37,7 +37,7 @@ export function AlphaFlattenNode({ id, data }: NodeProps<NodeData>) {
         };
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="AlphaFlattenNode" />
+      <NodeHeader title="AlphaFlattenNode" nodeId={id} />
       <NodeContent>
         <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
         <HandleTargetColor

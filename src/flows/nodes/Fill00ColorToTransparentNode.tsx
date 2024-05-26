@@ -21,7 +21,7 @@ export function Fill00ColorToTransparentNode({
 }: NodeProps<NodeData>) {
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="Fill00ColorToTransparent" />
+      <NodeHeader title="Fill00ColorToTransparent" nodeId={id} />
       <NodeContent>
         <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
         {/* <HandleTargetNumber

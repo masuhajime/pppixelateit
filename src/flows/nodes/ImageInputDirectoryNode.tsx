@@ -28,7 +28,7 @@ export function ImageInputDirectoryNode({ id, data }: NodeProps<NodeData>) {
 
   return (
     <Node>
-      <NodeHeader title="Image Input Directory" />
+      <NodeHeader title="Image Input Directory" nodeId={id} />
       <NodeContent>
         <FormControl
           sx={{

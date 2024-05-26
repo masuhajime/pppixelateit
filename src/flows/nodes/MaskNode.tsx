@@ -15,7 +15,7 @@ import { NodeData, handleSources, handleTargets } from './MaskNodeBehavior';
 export function MaskNode({ id, data }: NodeProps<NodeData>) {
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="MaskNode" />
+      <NodeHeader title="MaskNode" nodeId={id} />
       <NodeContent>
         <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
         <HandleTargetImage

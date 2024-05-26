@@ -14,7 +14,7 @@ import { NodeData, handleTargets } from './DebugNodeBehavior';
 export function DebugNode({ id, data }: NodeProps<NodeData>) {
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="DebugNode" />
+      <NodeHeader title="DebugNode" nodeId={id} />
       <NodeContent>
         <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
         <Separator />

@@ -18,7 +18,7 @@ import { Separator } from './items/Separator';
 export function CallSharpNode({ id, data }: NodeProps<NodeData>) {
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="CallSharp" />
+      <NodeHeader title="CallSharp" nodeId={id} />
       <NodeContent>
         <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
         <Separator />

@@ -53,7 +53,7 @@ export function FillWithColorNode({ id, data }: NodeProps<NodeData>) {
   const method = data.settings.method || 'top_left_pixel';
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="FillWithColorNode" />
+      <NodeHeader title="FillWithColorNode" nodeId={id} />
       <NodeContent>
         <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
         <Select

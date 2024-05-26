@@ -20,7 +20,7 @@ import { Separator } from './items/Separator';
 export function PosterizeNode({ id, data }: NodeProps<NodeData>) {
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="PosterizeNode" />
+      <NodeHeader title="PosterizeNode" nodeId={id} />
       <NodeContent>
         <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
         <HandleTargetNumber

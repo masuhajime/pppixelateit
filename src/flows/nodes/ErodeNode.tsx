@@ -16,7 +16,7 @@ import { NodeStatus } from './components/NodeStatus';
 export function ErodeNode({ id, data }: NodeProps<NodeData>) {
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="ErodeNode" />
+      <NodeHeader title="ErodeNode" nodeId={id} />
       <NodeContent>
         <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
         <Separator />

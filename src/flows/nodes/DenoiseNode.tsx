@@ -17,7 +17,7 @@ import { Select } from './items/Select';
 export function DenoiseNode({ id, data }: NodeProps<NodeData>) {
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="Denoise" />
+      <NodeHeader title="Denoise" nodeId={id} />
       <NodeContent>
         <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
         <Separator />

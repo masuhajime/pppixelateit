@@ -22,7 +22,7 @@ import { Select } from './items/Select';
 export function ExtendToAspectRatioNode({ id, data }: NodeProps<NodeData>) {
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="ExtendToAspectRatioNode" />
+      <NodeHeader title="ExtendToAspectRatioNode" nodeId={id} />
       <NodeContent>
         <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
         <Box className="node-item">

@@ -18,7 +18,7 @@ export function SaveImageNode({ id, data }: NodeProps<NodeData>) {
   const file = data.filename || data.settings.filename;
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="Save Image" />
+      <NodeHeader title="Save Image" nodeId={id} />
       <NodeContent>
         <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
         <HandleTargetDirectory

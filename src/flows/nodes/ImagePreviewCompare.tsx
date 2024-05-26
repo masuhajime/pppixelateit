@@ -52,7 +52,7 @@ export function ImagePreviewCompare({ id, data }: NodeProps<NodeData>) {
 
   return (
     <Node>
-      <NodeHeader title="Image Compare" />
+      <NodeHeader title="Image Compare" nodeId={id} />
       <NodeContent>
         <HandleTargetImage handleId={handleTargets.imageA.id} nodeId={id} />
         <HandleTargetImage handleId={handleTargets.imageB.id} nodeId={id} />

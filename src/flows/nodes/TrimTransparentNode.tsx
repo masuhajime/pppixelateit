@@ -19,7 +19,7 @@ import { NodeStatus } from './components/NodeStatus';
 export function TrimTransparentNode({ id, data }: NodeProps<NodeData>) {
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="TrimTransparent" />
+      <NodeHeader title="TrimTransparent" nodeId={id} />
       <NodeContent>
         <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
         <Separator />

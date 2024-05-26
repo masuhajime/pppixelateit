@@ -16,7 +16,7 @@ import { NodeStatus } from './components/NodeStatus';
 export function PixelateNode({ id, data }: NodeProps<NodeData>) {
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="PixelateNode" />
+      <NodeHeader title="PixelateNode" nodeId={id} />
       <NodeContent>
         <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
         <HandleTargetNumber

@@ -13,7 +13,7 @@ import useNodeStore from '../../store/store';
 export function NumberNode({ id, data }: NodeProps<NodeData>) {
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="Number" />
+      <NodeHeader title="Number" nodeId={id} />
       <NodeContent>
         <Box className="node-item">
           <TextField

@@ -19,7 +19,7 @@ import { Separator } from './items/Separator';
 export function TextAppendNode({ id, data }: NodeProps<NodeData>) {
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="Text Append" />
+      <NodeHeader title="Text Append" nodeId={id} />
       <NodeContent>
         <HandleTargetText
           name="Text"

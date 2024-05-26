@@ -29,7 +29,7 @@ export function ImageInputNode({ id, data }: NodeProps<NodeData>) {
 
   return (
     <Node>
-      <NodeHeader title="Image Input" />
+      <NodeHeader title="Image Input" nodeId={id} />
       <NodeContent>
         <FormControl
           sx={{

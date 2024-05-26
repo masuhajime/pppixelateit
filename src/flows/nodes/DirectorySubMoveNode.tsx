@@ -20,7 +20,7 @@ import { HandleTargetDirectory } from './items/HandleTargetDirectory';
 export function DirectorySubMoveNode({ id, data }: NodeProps<NodeData>) {
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="SubDirectory Move" />
+      <NodeHeader title="SubDirectory Move" nodeId={id} />
       <NodeContent>
         <HandleTargetDirectory
           handleId={handleTargets.directory.id}

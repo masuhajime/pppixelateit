@@ -17,7 +17,7 @@ import { NodeStatus } from './components/NodeStatus';
 export function WhiteToBlackNode({ id, data }: NodeProps<NodeData>) {
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="White To Black Node" />
+      <NodeHeader title="White To Black Node" nodeId={id} />
       <NodeContent>
         <HandleSourceImage
           label="Image"

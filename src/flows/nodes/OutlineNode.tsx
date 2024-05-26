@@ -35,7 +35,7 @@ export function OutlineNode({ id, data }: NodeProps<NodeData>) {
         };
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="Outline" />
+      <NodeHeader title="Outline" nodeId={id} />
       <NodeContent>
         <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
         <Select

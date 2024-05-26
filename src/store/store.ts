@@ -42,6 +42,7 @@ export type RFState = {
   ) => void;
   getNode<T = NodeBaseData>(nodeId: string): Node<T>;
   edgeDelete: (edgeId: string) => void;
+  nodeDelete: (nodeId: string) => void;
   getOutgoingEdgesFromSourceNode(sourceNodeId: string): Edge[];
   onNodesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;
@@ -155,6 +156,15 @@ const useNodeStore = createWithEqualityFn(
           set({
             modified: true,
             edges: get().edges.filter((edge) => edge.id !== edgeId),
+          });
+        },
+        nodeDelete: (nodeId: string) => {
+          set({
+            modified: true,
+            nodes: get().nodes.filter((node) => node.id !== nodeId),
+            edges: get().edges.filter(
+              (edge) => edge.source !== nodeId && edge.target !== nodeId,
+            ),
           });
         },
         getOutgoingEdgesFromSourceNode(sourceNodeId: string): Edge[] {

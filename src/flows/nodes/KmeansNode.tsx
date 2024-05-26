@@ -16,7 +16,7 @@ import { HandleTargetNumber } from './items/HandleTargetNumber';
 export function KmeansNode({ id, data }: NodeProps<NodeData>) {
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="KmeansNode" />
+      <NodeHeader title="KmeansNode" nodeId={id} />
       <NodeContent>
         <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
         <Separator />

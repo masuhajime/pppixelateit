@@ -25,7 +25,7 @@ export function ResizeToSideNode({ id, data }: NodeProps<NodeData>) {
 
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="Resize To Side" />
+      <NodeHeader title="Resize To Side" nodeId={id} />
       <NodeContent>
         <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
         <Select

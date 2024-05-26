@@ -16,7 +16,7 @@ import { NodeStatus } from './components/NodeStatus';
 export function TestNode({ id, data }: NodeProps<NodeData>) {
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="TestNode" />
+      <NodeHeader title="TestNode" nodeId={id} />
       <NodeContent>
         <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
         <HandleTargetNumber

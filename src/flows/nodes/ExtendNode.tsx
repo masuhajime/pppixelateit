@@ -18,7 +18,7 @@ import { Select } from './items/Select';
 export function ExtendNode({ id, data }: NodeProps<NodeData>) {
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="Extend" />
+      <NodeHeader title="Extend" nodeId={id} />
       <NodeContent>
         <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
         <Select

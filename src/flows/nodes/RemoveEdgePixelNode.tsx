@@ -21,7 +21,7 @@ import { Separator } from './items/Separator';
 export function RemoveEdgePixelNode({ id, data }: NodeProps<NodeData>) {
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="RemoveEdge" />
+      <NodeHeader title="RemoveEdge" nodeId={id} />
       <NodeContent>
         <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
         <Select
@@ -34,6 +34,7 @@ export function RemoveEdgePixelNode({ id, data }: NodeProps<NodeData>) {
             });
           }}
         >
+          <MenuItem value="1">1</MenuItem>
           <MenuItem value="2">2</MenuItem>
           <MenuItem value="3">3</MenuItem>
           <MenuItem value="4">4</MenuItem>

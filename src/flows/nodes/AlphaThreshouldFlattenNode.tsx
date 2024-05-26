@@ -20,7 +20,7 @@ import { SliderValue } from './items/SliderValue';
 export function AlphaThreshouldFlattenNode({ id, data }: NodeProps<NodeData>) {
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="AlphaThreshouldFlatten" />
+      <NodeHeader title="AlphaThreshouldFlatten" nodeId={id} />
       <NodeContent>
         <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
         <SliderValue

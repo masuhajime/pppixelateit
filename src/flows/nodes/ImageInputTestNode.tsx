@@ -19,7 +19,7 @@ import { Select } from './items/Select';
 export function ImageInputTestNode({ id, data }: NodeProps<NodeData>) {
   return (
     <Node>
-      <NodeHeader title="Test Image" />
+      <NodeHeader title="Test Image" nodeId={id} />
       <NodeContent>
         <FormControl
           sx={{

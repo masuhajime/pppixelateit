@@ -16,7 +16,7 @@ import { HandleTargetText } from './items/HandleTargetText';
 export function TextFileNameNode({ id, data }: NodeProps<NodeData>) {
   return (
     <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="File Name" />
+      <NodeHeader title="File Name" nodeId={id} />
       <NodeContent>
         <HandleTargetText
           name="Text Input"
