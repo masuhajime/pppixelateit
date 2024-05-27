@@ -1,21 +1,5 @@
 import { Edge, Node } from 'reactflow';
+import flows from '../assets/flows/SimplePixelation';
 
-export const initialNodes = [
-  {
-    id: 'node-1',
-    type: 'ImageInputNode',
-    position: { x: 0, y: 100 },
-    data: {
-      settings: {},
-    },
-  },
-  {
-    id: 'resize',
-    type: 'ResizeToSideNode',
-    position: { x: 300, y: 100 },
-    data: {
-      settings: {},
-    },
-  },
-] as Node[];
-export const initialEdges = [] as Edge[];
+export const initialNodes = flows.nodes as Node[];
+export const initialEdges = flows.edges as Edge[];

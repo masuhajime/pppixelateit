@@ -15,7 +15,7 @@ import {
   getIncomers,
 } from 'reactflow';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import { initialEdges, initialNodes } from './initialNodesTransparent';
+import { initialEdges, initialNodes } from './initialNodesDefault';
 import {
   BufferSequenceable,
   HandleSource,
