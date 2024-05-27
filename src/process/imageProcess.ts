@@ -3,7 +3,7 @@ import {
   getNodeBehaviorCacheByType,
   nodeBehaviorCacheAll,
 } from '../flows/nodes/data/NodeData';
-import processStore from '../store/processStore';
+import useProcessStore from '../store/processStore';
 import useNodeStore from '../store/store';
 
 class ProcessController {
@@ -11,7 +11,7 @@ class ProcessController {
     await nodeBehaviorCacheAll();
 
     const nodeStore = useNodeStore.getState();
-    processStore.getState().start();
+    useProcessStore.getState().start();
     nodeStore.nodeSetAllUncompleted();
     nodeStore.nodeAllCleareBuffer();
 
@@ -33,7 +33,7 @@ class ProcessController {
     }
 
     console.log('subscribe');
-    const unsubscribe = processStore.subscribe((state) => {
+    const unsubscribe = useProcessStore.subscribe((state) => {
       console.log('process status', state.count, state.processStatus);
 
       if (state.processStatus !== 'processing') {
@@ -85,7 +85,7 @@ class ProcessController {
         processTime: diff,
       });
       console.log('#### nodeProcess complete', nodeId, nodeBehavior, diff);
-      processStore.getState().progress();
+      useProcessStore.getState().progress();
     });
   }
 
@@ -220,11 +220,11 @@ class ProcessController {
 
   stop() {
     console.log('##### process stop');
-    processStore.getState().stop();
+    useProcessStore.getState().stop();
   }
 
   reset() {
-    processStore.getState().reset();
+    useProcessStore.getState().reset();
   }
 }
 const processController = new ProcessController();

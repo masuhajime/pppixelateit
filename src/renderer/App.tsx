@@ -5,6 +5,7 @@ import {
   IconButton,
   ThemeProvider,
   createTheme,
+  keyframes,
   useMediaQuery,
 } from '@mui/material';
 import ReactFlow, {
@@ -21,6 +22,9 @@ import ReactFlow, {
 } from 'reactflow';
 import Split from 'react-split';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import StopIcon from '@mui/icons-material/Stop';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import AutorenewIcon from '@mui/icons-material/Autorenew';
 import React, {
   useCallback,
   useEffect,
@@ -33,7 +37,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Sidebar from '../components/Sidebar';
 import 'reactflow/dist/style.css';
 import useNodeStore, { RFState } from '../store/store';
-import processStore from '../store/processStore';
+import useProcessStore from '../store/processStore';
 import { CustomEdge } from '../flows/edges/CustomEdge';
 import processController from '../process/imageProcess';
 import nodesEnabled from '../flows/nodesEnabled';
@@ -43,6 +47,15 @@ import ThemedBackground from '../components/ThemedBackground';
 import { getNodeBehavior } from '../flows/nodes/data/NodeData';
 import { PreparedFlowsDialog } from '../components/PreparedFlowsDialog';
 import { useShallow } from 'zustand/react/shallow';
+
+const spin = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`;
 
 const edgeTypes: EdgeTypes = {
   custom: CustomEdge,
@@ -56,7 +69,7 @@ function Flow(props) {
 
   const init = useCallback(() => {
     console.log('init');
-    processStore.getState().reset();
+    useProcessStore.getState().reset();
     // processStore.subscribe((state) => {
     //   console.log('App: processStore in subscribe', state)
     // })
@@ -198,6 +211,10 @@ function Flow(props) {
     [nodeAdd, reactFlowInstance],
   );
 
+  const { processStatus } = useProcessStore(
+    useShallow((state) => ({ processStatus: state.processStatus })),
+  );
+
   return (
     <div
       style={{
@@ -269,19 +286,82 @@ function Flow(props) {
         <Panel position="top-left">
           <Box
             sx={{
-              backgroundColor: 'rgba(128,128,128,0.5)',
-              borderRadius: '50%',
+              display: 'flex',
+              flexDirection: 'row',
             }}
           >
-            <IconButton
-              aria-label="settings"
-              onClick={() => {
-                console.log('play');
-                processController.start();
+            <Box
+              sx={{
+                backgroundColor: 'rgba(128,128,128,0.5)',
+                borderRadius: '50%',
               }}
             >
-              <PlayArrowIcon />
-            </IconButton>
+              <IconButton
+                aria-label="settings"
+                onClick={() => {
+                  console.log('play');
+                  processController.start();
+                }}
+                disabled={processStatus === 'processing'}
+              >
+                {processStatus === 'processing' && (
+                  <AutorenewIcon
+                    sx={{
+                      animation: `${spin} 2s linear infinite`,
+                      color: '#29ADFF',
+                    }}
+                  />
+                )}
+                {processStatus !== 'processing' && (
+                  <PlayArrowIcon
+                    sx={{
+                      color: '#FF004D',
+                    }}
+                  />
+                )}
+              </IconButton>
+            </Box>
+            <Box
+              sx={{
+                backgroundColor: 'rgba(128,128,128,0.5)',
+                borderRadius: '50%',
+                marginLeft: '8px',
+              }}
+            >
+              <IconButton
+                aria-label="settings"
+                onClick={() => {
+                  processController.stop();
+                }}
+                disabled={processStatus !== 'processing'}
+              >
+                <StopIcon />
+              </IconButton>
+            </Box>
+            <Box
+              sx={{
+                backgroundColor: 'rgba(128,128,128,0.5)',
+                borderRadius: '50%',
+                marginLeft: '8px',
+              }}
+            >
+              <IconButton
+                aria-label="settings"
+                onClick={() => {
+                  // change all node preview to visible
+                  if (useNodeStore.getState().nodes.length === 0) {
+                    return;
+                  }
+                  const preview =
+                    !!useNodeStore.getState().nodes[0].data?.settings
+                      .enablePreview;
+                  useNodeStore.getState().setAllNodeEnablePreview(!preview);
+                }}
+                disabled={processStatus === 'processing'}
+              >
+                <VisibilityIcon />
+              </IconButton>
+            </Box>
           </Box>
         </Panel>
         <Background />
@@ -321,7 +401,7 @@ function Main() {
 }
 
 export default function App() {
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const prefersDarkMode = !useMediaQuery('(prefers-color-scheme: dark)');
   const theme = React.useMemo(() => {
     const isDarkMode = prefersDarkMode;
     return createTheme({

@@ -3,7 +3,6 @@ import { create } from 'zustand';
 enum ProcessStatusType {
   'processing' = 'processing',
   'stop' = 'stop',
-  'pause' = 'pause',
 }
 
 interface ProcessState {
@@ -15,7 +14,7 @@ interface ProcessState {
   reset: () => void;
 }
 
-const processStore = create<ProcessState>((set) => ({
+const useProcessStore = create<ProcessState>((set) => ({
   count: 0,
   processStatus: ProcessStatusType.stop,
   start: () => {
@@ -49,4 +48,4 @@ const processStore = create<ProcessState>((set) => ({
     });
   },
 }));
-export default processStore;
+export default useProcessStore;

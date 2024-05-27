@@ -54,6 +54,7 @@ export type RFState = {
   nodeAllCleareBuffer(): void;
   nodeSetCompleted(nodeId: string, completed: boolean): void;
   nodeGetCompleted(nodeId: string): boolean;
+  setAllNodeEnablePreview: (enablePreview: boolean) => void;
   getPartialState(): Partial<RFState>;
   getPartialStateJsonString(): string;
   setPartialState: (partialState: Partial<RFState>) => void;
@@ -284,6 +285,17 @@ const useNodeStore = createWithEqualityFn(
           const node = get().nodes.find((nodeA) => nodeA.id === nodeId);
           if (!node) throw new Error('node not found');
           return node.data.completed;
+        },
+        setAllNodeEnablePreview: (enablePreview: boolean) => {
+          set({
+            nodes: get().nodes.map((node) => {
+              node.data = {
+                ...node.data,
+                settings: { ...node.data.settings, enablePreview },
+              };
+              return node;
+            }),
+          });
         },
         getPartialState: () => {
           return partialize(get());
