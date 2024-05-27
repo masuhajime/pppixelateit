@@ -81,37 +81,38 @@ const templateList = [
 const openTemplate = (name: string, handleClose: () => void) => {
   const applyTemplate = (nameOfTemplate: string) => {
     useFileOpening.getState().setFilePathOpening(undefined);
-    getTemplateNode(nameOfTemplate)
+    return getTemplateNode(nameOfTemplate)
       .then((template) => {
         const { nodes, edges } = template.default;
         useNodeStore.getState().setPartialState({
           nodes,
           edges,
-          initialized: true,
+          initialized: false,
+          modified: false,
         });
         handleClose();
         return true;
       })
       .catch((err) => {
         console.error(err);
+        return false;
       });
   };
 
   if (useNodeStore.getState().modified) {
-    askSaveCurrentFile()
+    return askSaveCurrentFile()
       .then((result) => {
         if (!result.canceled) {
-          applyTemplate(name);
-          return true;
+          return applyTemplate(name);
         }
-        return true;
+        return false;
       })
       .catch((err) => {
         console.error(err);
+        return false;
       });
-  } else {
-    applyTemplate(name);
   }
+  return applyTemplate(name);
 };
 
 export function PreparedFlowsDialog() {
@@ -134,6 +135,8 @@ export function PreparedFlowsDialog() {
       },
     ],
   });
+
+  const nodeStore = useNodeStore();
 
   return (
     <Backdrop
@@ -205,7 +208,13 @@ export function PreparedFlowsDialog() {
                     <Box key={item.templateName}>
                       <ListItemButton
                         onClick={() => {
-                          openTemplate(item.templateName, handleClose);
+                          openTemplate(item.templateName, handleClose).then(
+                            (result) => {
+                              if (result) {
+                                nodeStore.setInitialized(false);
+                              }
+                            },
+                          );
                         }}
                       >
                         <ListItemText

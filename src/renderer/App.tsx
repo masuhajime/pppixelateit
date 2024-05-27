@@ -17,6 +17,7 @@ import ReactFlow, {
   Panel,
   ReactFlowInstance,
   ReactFlowProvider,
+  useReactFlow,
 } from 'reactflow';
 import Split from 'react-split';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -41,6 +42,7 @@ import { useDebounceOneTime } from '../hooks/useDebounceOneTime';
 import ThemedBackground from '../components/ThemedBackground';
 import { getNodeBehavior } from '../flows/nodes/data/NodeData';
 import { PreparedFlowsDialog } from '../components/PreparedFlowsDialog';
+import { useShallow } from 'zustand/react/shallow';
 
 const edgeTypes: EdgeTypes = {
   custom: CustomEdge,
@@ -89,6 +91,26 @@ function Flow(props) {
     }),
     shallow,
   );
+
+  const reactFlow = useReactFlow();
+
+  const { initialized } = useNodeStore(
+    useShallow((state) => ({ initialized: state.initialized })),
+  );
+
+  useEffect(() => {
+    if (initialized) {
+      // initialize complete
+      console.log('App: initialized complete', {
+        initialized,
+      });
+      reactFlow.fitView();
+    } else {
+      console.log('App: initialized waiting', {
+        initialized,
+      });
+    }
+  }, [initialized]);
 
   const [debounceDone, debounceOneTimeTouch] = useDebounceOneTime(50);
   useEffect(() => {
@@ -242,6 +264,7 @@ function Flow(props) {
           init();
           setReactFlowInstance(instance);
         }}
+        fitView
       >
         <Panel position="top-left">
           <Box
