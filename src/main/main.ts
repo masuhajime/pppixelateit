@@ -266,6 +266,9 @@ const createWindow = async () => {
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
         : path.join(__dirname, '../../.erb/dll/preload.js'),
+      // https://github.com/electron/electron/pull/35125/files
+      // https://developer.mamezou-tech.com/blogs/2022/08/03/electron-renderer-process-sandboxed/
+      sandbox: process.platform === "linux" ? false : true,
     },
   });
 
@@ -304,6 +307,11 @@ const createWindow = async () => {
   // eslint-disable-next-line
   // new AppUpdater();
 };
+
+// https://github.com/electron-userland/electron-builder/issues/5371
+// if (process.platform === "linux") {
+//   app.commandLine.appendSwitch("no-sandbox");
+// }
 
 /**
  * Add event listeners...
