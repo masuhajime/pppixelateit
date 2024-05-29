@@ -35,6 +35,9 @@ export const NodeHeader = (props: Props) => {
             id="long-button"
             className="nodrag"
             onClick={handleClick}
+            sx={{
+              boxShadow: 'none',
+            }}
           >
             <MoreVertIcon />
           </IconButton>

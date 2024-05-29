@@ -401,7 +401,7 @@ function Main() {
 }
 
 export default function App() {
-  const prefersDarkMode = !useMediaQuery('(prefers-color-scheme: dark)');
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const theme = React.useMemo(() => {
     const isDarkMode = prefersDarkMode;
     return createTheme({
