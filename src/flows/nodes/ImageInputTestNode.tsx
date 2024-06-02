@@ -57,12 +57,12 @@ export function ImageInputTestNode({ id, data }: NodeProps<NodeData>) {
             <MenuItem value="GirlB">GirlB</MenuItem>
           </Select>
         </FormControl>
-        <NodeStatus nodeData={data} />
         <HandleSourceImage
           handleId={handleSources.image.id}
           label="Image"
           nodeId={id}
         />
+        <NodeStatus nodeData={data} />
         <ImagePreview
           enabled={data.settings.enablePreview}
           completed={!!data.completed}

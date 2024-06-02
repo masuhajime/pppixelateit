@@ -1,4 +1,5 @@
 import {
+  ClipboardHandler,
   DebugHandler,
   DialogHandler,
   ElectronHandler,
@@ -16,6 +17,7 @@ declare global {
     imageProcess: ImageProcessHandler;
     mainWindow: MainWindowHandler;
     debug: DebugHandler;
+    clipboard: ClipboardHandler;
   }
 }
 

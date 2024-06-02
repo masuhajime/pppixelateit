@@ -18,6 +18,8 @@ import {
   OpenDialogOptions,
   SaveDialogOptions,
   MessageBoxSyncOptions,
+  clipboard,
+  nativeImage,
 } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
@@ -216,6 +218,14 @@ ipcMain.handle('debug-string', async () => {
     b: __dirname,
     c: path.join(path.resolve(), 'assets/imgly/'),
   };
+});
+
+ipcMain.handle('clipboard-write-image', async (event, buffer: Buffer) => {
+  clipboard.writeImage(
+    nativeImage.createFromBuffer(buffer, {
+      scaleFactor: 1,
+    }),
+  );
 });
 
 if (process.env.NODE_ENV === 'production') {

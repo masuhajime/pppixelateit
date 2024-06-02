@@ -4,6 +4,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { Box } from '@mui/material';
 import { useEffect, useState } from 'react';
 import DownloadIcon from '@mui/icons-material/Download';
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import { arrayBufferToBase64 } from '../../../process/w2b';
 import imageBase64TransparentBackground from '../../../assets/transparent-background';
 
@@ -33,9 +34,10 @@ export function ImagePreview({
     if (!imageBuffer) {
       setHtmlImageBase64(undefined);
     }
-    if (!enabled) {
-      return;
-    }
+    // return した方が処理が減るが, 画像のsizeが計算できなくなる
+    // if (!enabled) {
+    //   return;
+    // }
     if (!completed) {
       setHtmlImageBase64(undefined);
       return;
@@ -66,6 +68,8 @@ export function ImagePreview({
     };
   }, [htmlImageBase64]);
 
+  // clipboard.writeImage(nativeImage.createFromDataURL(htmlImageBase64 || ''));
+
   return (
     <Box
       className="node-item"
@@ -85,6 +89,12 @@ export function ImagePreview({
             a.href = url;
             a.download = 'image.png';
             a.click();
+          }
+        },
+        () => {
+          if (imageBuffer) {
+            console.log('copying image to clipboard');
+            window.clipboard.writeImage(imageBuffer);
           }
         },
         size,
@@ -145,6 +155,7 @@ const togglePreview = (
   enabled: boolean,
   onTogglePreview?: (enabled: boolean) => void,
   onImageSave?: () => void,
+  onImageClipboard?: () => void,
   size?: {
     x: number;
     y: number;
@@ -163,6 +174,7 @@ const togglePreview = (
         <VisibilityIcon
           className="nodrag"
           sx={{
+            fontSize: '1.2em',
             color: 'primary.main',
             cursor: 'pointer',
             paddingRight: '0.2em',
@@ -176,16 +188,20 @@ const togglePreview = (
         <VisibilityOffIcon
           className="nodrag"
           sx={{
+            fontSize: '1.2em',
             color: 'text.disabled',
             cursor: 'pointer',
             paddingRight: '0.2em',
+            '&:hover': {
+              color: 'primary.main',
+            },
           }}
           onClick={() => {
             !!onTogglePreview && onTogglePreview(!enabled);
           }}
         />
       )}
-      {!!size && enabled && completed && (
+      {!!size && (
         <Box
           sx={{
             display: 'inline-block',
@@ -197,16 +213,38 @@ const togglePreview = (
         </Box>
       )}
       {completed && (
-        <DownloadIcon
-          sx={{
-            color: 'text.disabled',
-            cursor: 'pointer',
-            paddingLeft: '0.2em',
-          }}
-          onClick={() => {
-            !!onImageSave && onImageSave();
-          }}
-        />
+        <>
+          <DownloadIcon
+            className="nodrag"
+            sx={{
+              fontSize: '1.2em',
+              color: 'text.disabled',
+              cursor: 'pointer',
+              paddingLeft: '0.2em',
+              '&:hover': {
+                color: 'primary.main',
+              },
+            }}
+            onClick={() => {
+              !!onImageSave && onImageSave();
+            }}
+          />
+          <ContentPasteIcon
+            className="nodrag"
+            sx={{
+              fontSize: '1.2em',
+              color: 'text.disabled',
+              cursor: 'pointer',
+              paddingLeft: '0.2em',
+              '&:hover': {
+                color: 'primary.main',
+              },
+            }}
+            onClick={() => {
+              !!onImageClipboard && onImageClipboard();
+            }}
+          />
+        </>
       )}
     </Box>
   );

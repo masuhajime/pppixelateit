@@ -125,3 +125,14 @@ const debugHandler = {
 };
 contextBridge.exposeInMainWorld('debug', debugHandler);
 export type DebugHandler = typeof debugHandler;
+
+
+
+
+const clipboardHandler = {
+  writeImage: async (buffer: Buffer) => {
+    ipcRenderer.invoke('clipboard-write-image', buffer);
+  },
+};
+contextBridge.exposeInMainWorld('clipboard', clipboardHandler);
+export type ClipboardHandler = typeof clipboardHandler;
