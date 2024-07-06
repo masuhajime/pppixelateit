@@ -8,9 +8,10 @@ import useNodeStore from '../../../store/store';
 type Props = {
   title?: string;
   nodeId?: string;
+  color?: [number, number, number];
 };
 export const NodeHeader = (props: Props) => {
-  const { title, nodeId } = props;
+  const { title, nodeId, color } = props;
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -23,11 +24,17 @@ export const NodeHeader = (props: Props) => {
   return (
     <CardHeader
       title={title}
-      style={
-        {
-          //backgroundColor: '#f5f5f5',
-        }
-      }
+      titleTypographyProps={{ variant: 'h6' }}
+      style={{
+        padding: '8px 16px',
+        backgroundColor: color
+          ? `rgb(${color[0]}, ${color[1]}, ${color[2]}, 0.1)`
+          : undefined,
+        // gradient background
+        backgroundImage: color
+          ? `linear-gradient(135deg, rgb(${color[0]}, ${color[1]}, ${color[2]}, 0.3), rgb(${color[0]}, ${color[1]}, ${color[2]}, 0.1))`
+          : undefined,
+      }}
       action={
         <>
           <IconButton

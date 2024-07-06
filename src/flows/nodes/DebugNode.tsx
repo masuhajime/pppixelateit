@@ -2,34 +2,34 @@
 import { NodeProps } from 'reactflow';
 
 import useNodeStore from '../../store/store';
-import { HandleTargetImage } from './items/HandleTargetImage';
-import { Separator } from './items/Separator';
-import { ImagePreview } from './items/ImagePreview';
-import { Node } from './components/Node';
-import { NodeHeader } from './components/NodeHeader';
-import { NodeContent } from './components/NodeContent';
-import { NodeStatus } from './components/NodeStatus';
 import { NodeData, handleTargets } from './DebugNodeBehavior';
+import { NodeBasic } from './components/NodeBasic';
+import { NodeStatus } from './components/NodeStatus';
+import { HandleTargetImage } from './items/HandleTargetImage';
+import { ImagePreview } from './items/ImagePreview';
+import { Separator } from './items/Separator';
 
-export function DebugNode({ id, data }: NodeProps<NodeData>) {
+export function DebugNode({ id, data, selected }: NodeProps<NodeData>) {
   return (
-    <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="DebugNode" nodeId={id} />
-      <NodeContent>
-        <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
-        <Separator />
-        <NodeStatus nodeData={data} />
-        <ImagePreview
-          enabled={data.settings.enablePreview}
-          completed={!!data.completed}
-          imageBuffer={data.imageBuffer?.buffer}
-          onTogglePreview={(enabled: boolean) => {
-            useNodeStore.getState().updateNodeSetting(id, {
-              enablePreview: enabled,
-            });
-          }}
-        />
-      </NodeContent>
-    </Node>
+    <NodeBasic
+      id={id}
+      nodeName="DebugNode"
+      status={data.isProcessing ? 'processing' : undefined}
+      displayBorder={selected}
+    >
+      <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
+      <Separator />
+      <NodeStatus nodeData={data} />
+      <ImagePreview
+        enabled={data.settings.enablePreview}
+        completed={!!data.completed}
+        imageBuffer={data.imageBuffer?.buffer}
+        onTogglePreview={(enabled: boolean) => {
+          useNodeStore.getState().updateNodeSetting(id, {
+            enablePreview: enabled,
+          });
+        }}
+      />
+    </NodeBasic>
   );
 }

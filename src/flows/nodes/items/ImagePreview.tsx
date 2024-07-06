@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import DownloadIcon from '@mui/icons-material/Download';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
@@ -100,7 +100,11 @@ export function ImagePreview({
         size,
         completed,
       )}
-      {enabled && !completed && <div>waiting</div>}
+      {enabled && !completed && (
+        <Typography variant="caption" color="text.disabled">
+          waiting
+        </Typography>
+      )}
       {enabled && completed && (
         <>
           {!!imageBase64 && (

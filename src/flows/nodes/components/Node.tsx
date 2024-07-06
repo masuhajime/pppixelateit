@@ -8,6 +8,8 @@ import * as React from 'react';
 type Props = {
   children: React.ReactNode;
   status?: 'processing' | 'waiting' | 'editing';
+  colorBorder?: [number, number, number];
+  displayBorder?: boolean;
 };
 export function Node(props: Props) {
   const editable = props.status === undefined || props.status === 'editing';
@@ -16,6 +18,14 @@ export function Node(props: Props) {
       sx={{
         maxWidth: 256,
         opacity: editable ? 1 : 0.5,
+        // border: `1px solid ${props.colorBorder || 'black'}`,
+        borderColor:
+          !!props.colorBorder && !!props.displayBorder
+            ? `rgba(${props.colorBorder[0]}, ${props.colorBorder[1]}, ${props.colorBorder[2]}, 0.5)`
+            : `rgba(0, 0, 0, 0)`,
+        borderWidth: !!props.colorBorder && !!props.displayBorder ? 1 : 0,
+        borderStyle: 'solid',
+        margin: !!props.colorBorder && !!props.displayBorder ? '-1px' : 0,
       }}
     >
       {!editable && (

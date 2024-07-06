@@ -6,33 +6,33 @@ import {
   handleSources,
   handleTargets,
 } from './TextFileNameNodeBehavior';
-import { Node } from './components/Node';
-import { NodeContent } from './components/NodeContent';
-import { NodeHeader } from './components/NodeHeader';
+import { NodeBasic } from './components/NodeBasic';
 import { NodeStatus } from './components/NodeStatus';
 import { HandleSourceText } from './items/HandleSourceText';
 import { HandleTargetText } from './items/HandleTargetText';
 
-export function TextFileNameNode({ id, data }: NodeProps<NodeData>) {
+export function TextFileNameNode({ id, data, selected }: NodeProps<NodeData>) {
   return (
-    <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="File Name" nodeId={id} />
-      <NodeContent>
-        <HandleTargetText
-          name="Text Input"
-          handleId={handleTargets.text.id}
-          nodeId={id}
-          value={data.settings.text || ''}
-          disableInput
-        />
-        <HandleSourceText
-          handleId={handleSources.text.id}
-          label="Text"
-          nodeId={id}
-          propagateValue={data.result}
-        />
-        <NodeStatus nodeData={data} />
-      </NodeContent>
-    </Node>
+    <NodeBasic
+      id={id}
+      nodeName="TextFileNameNode"
+      status={data.isProcessing ? 'processing' : undefined}
+      displayBorder={selected}
+    >
+      <HandleTargetText
+        name="Text Input"
+        handleId={handleTargets.text.id}
+        nodeId={id}
+        value={data.settings.text || ''}
+        disableInput
+      />
+      <HandleSourceText
+        handleId={handleSources.text.id}
+        label="Text"
+        nodeId={id}
+        propagateValue={data.result}
+      />
+      <NodeStatus nodeData={data} />
+    </NodeBasic>
   );
 }

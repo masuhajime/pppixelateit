@@ -8,17 +8,19 @@ import {
   ReactCompareSliderHandle,
   ReactCompareSliderImage,
 } from 'react-compare-slider';
+import imageBase64TransparentBackground from '../../assets/transparent-background';
 import { arrayBufferToBase64 } from '../../process/w2b';
 import { NodeData, handleTargets } from './ImagePreviewCompareBehavior';
-import { Node } from './components/Node';
-import { NodeContent } from './components/NodeContent';
-import { NodeHeader } from './components/NodeHeader';
+import { NodeBasic } from './components/NodeBasic';
 import { NodeStatus } from './components/NodeStatus';
 import { HandleTargetImage } from './items/HandleTargetImage';
 import { Separator } from './items/Separator';
-import imageBase64TransparentBackground from '../../assets/transparent-background';
 
-export function ImagePreviewCompare({ id, data }: NodeProps<NodeData>) {
+export function ImagePreviewCompare({
+  id,
+  data,
+  selected,
+}: NodeProps<NodeData>) {
   const [htmlImageBase64A, setHtmlImageBase64A] = useState<
     string | undefined
   >();
@@ -51,68 +53,70 @@ export function ImagePreviewCompare({ id, data }: NodeProps<NodeData>) {
   }, [data.imageBufferB]);
 
   return (
-    <Node>
-      <NodeHeader title="Image Compare" nodeId={id} />
-      <NodeContent>
-        <HandleTargetImage handleId={handleTargets.imageA.id} nodeId={id} />
-        <HandleTargetImage handleId={handleTargets.imageB.id} nodeId={id} />
-        <Separator />
-        <NodeStatus nodeData={data} />
-        {/* </NodeContent> */}
+    <NodeBasic
+      id={id}
+      nodeName="ImagePreviewCompare"
+      status={data.isProcessing ? 'processing' : undefined}
+      displayBorder={selected}
+    >
+      <HandleTargetImage handleId={handleTargets.imageA.id} nodeId={id} />
+      <HandleTargetImage handleId={handleTargets.imageB.id} nodeId={id} />
+      <Separator />
+      <NodeStatus nodeData={data} />
+      {/* </NodeContent> */}
 
-        {!!htmlImageBase64A && !!htmlImageBase64B && (
-          <Box
-            className="nodrag"
-            sx={{
-              backgroundColor: 'white',
-            }}
-          >
-            <ReactCompareSlider
-              handle={
-                <ReactCompareSliderHandle
-                  portrait={false}
-                  buttonStyle={{
-                    backdropFilter: undefined,
-                    WebkitBackdropFilter: undefined,
-                    backgroundColor: 'white',
-                    color: '#666',
-                    boxShadow: undefined,
-                    border: 0,
-                    opacity: 0.9,
-                  }}
-                  linesStyle={{
-                    opacity: 0.5,
-                  }}
-                />
-              }
-              itemOne={
-                <ReactCompareSliderImage
-                  style={{
-                    imageRendering: 'pixelated',
-                    backgroundImage: `url(${imageBase64TransparentBackground})`,
-                    backgroundSize: 'contain',
-                    backgroundRepeat: 'repeat',
-                  }}
-                  src={htmlImageBase64A}
-                  alt="Image one"
-                />
-              }
-              itemTwo={
-                <ReactCompareSliderImage
-                  style={{
-                    imageRendering: 'pixelated',
-                    backgroundImage: `url(${imageBase64TransparentBackground})`,
-                    backgroundSize: 'contain',
-                    backgroundRepeat: 'repeat',
-                  }}
-                  src={htmlImageBase64B}
-                  alt="Image two"
-                />
-              }
-            />
-          </Box>
-        )}
-      </NodeContent>
-    </Node>
+      {!!htmlImageBase64A && !!htmlImageBase64B && (
+        <Box
+          className="nodrag"
+          sx={{
+            backgroundColor: 'white',
+          }}
+        >
+          <ReactCompareSlider
+            handle={
+              <ReactCompareSliderHandle
+                portrait={false}
+                buttonStyle={{
+                  backdropFilter: undefined,
+                  WebkitBackdropFilter: undefined,
+                  backgroundColor: 'white',
+                  color: '#666',
+                  boxShadow: undefined,
+                  border: 0,
+                  opacity: 0.9,
+                }}
+                linesStyle={{
+                  opacity: 0.5,
+                }}
+              />
+            }
+            itemOne={
+              <ReactCompareSliderImage
+                style={{
+                  imageRendering: 'pixelated',
+                  backgroundImage: `url(${imageBase64TransparentBackground})`,
+                  backgroundSize: 'contain',
+                  backgroundRepeat: 'repeat',
+                }}
+                src={htmlImageBase64A}
+                alt="Image one"
+              />
+            }
+            itemTwo={
+              <ReactCompareSliderImage
+                style={{
+                  imageRendering: 'pixelated',
+                  backgroundImage: `url(${imageBase64TransparentBackground})`,
+                  backgroundSize: 'contain',
+                  backgroundRepeat: 'repeat',
+                }}
+                src={htmlImageBase64B}
+                alt="Image two"
+              />
+            }
+          />
+        </Box>
+      )}
+    </NodeBasic>
   );
 }

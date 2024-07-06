@@ -1,17 +1,26 @@
 // @flow
-import { CardContent } from '@mui/material'
-import * as React from 'react'
+import { CardContent, styled } from '@mui/material';
+import * as React from 'react';
+
+const CardContentStyled = styled(CardContent)`
+  &:last-child {
+    padding-bottom: 8px;
+  }
+`;
+
 type Props = {
-  children?: React.ReactNode
-}
+  children?: React.ReactNode;
+};
+
 export const NodeContent = (props: Props) => {
   return (
-    <CardContent
-      style={{
+    <CardContentStyled
+      sx={{
         padding: '0',
+        paddingY: '8px',
       }}
     >
       {props.children}
-    </CardContent>
-  )
-}
+    </CardContentStyled>
+  );
+};

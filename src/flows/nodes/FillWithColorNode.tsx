@@ -2,26 +2,24 @@
 import { NodeProps } from 'reactflow';
 
 import { MenuItem } from '@mui/material';
+import useNodeStore, { updateSetting } from '../../store/store';
 import {
   NodeData,
   NodeDataSettings,
   handleSources,
   handleTargets,
 } from './FillWithColorNodeBehavior';
-import { Node } from './components/Node';
-import { NodeContent } from './components/NodeContent';
-import { NodeHeader } from './components/NodeHeader';
-import { HandleSourceImage } from './items/HandleSourceImage';
-import { HandleTargetImage } from './items/HandleTargetImage';
-import { ImagePreview } from './items/ImagePreview';
-import { Separator } from './items/Separator';
-import useNodeStore, { updateSetting } from '../../store/store';
-import { HandleTargetNumber } from './items/HandleTargetNumber';
+import { NodeBasic } from './components/NodeBasic';
 import { NodeStatus } from './components/NodeStatus';
+import { HandleSourceImage } from './items/HandleSourceImage';
 import { HandleTargetColor } from './items/HandleTargetColor';
+import { HandleTargetImage } from './items/HandleTargetImage';
+import { HandleTargetNumber } from './items/HandleTargetNumber';
+import { ImagePreview } from './items/ImagePreview';
 import { Select } from './items/Select';
+import { Separator } from './items/Separator';
 
-export function FillWithColorNode({ id, data }: NodeProps<NodeData>) {
+export function FillWithColorNode({ id, data, selected }: NodeProps<NodeData>) {
   const colorTarget =
     data.settings.a && data.settings.r && data.settings.g && data.settings.b
       ? {
@@ -52,78 +50,80 @@ export function FillWithColorNode({ id, data }: NodeProps<NodeData>) {
         };
   const method = data.settings.method || 'top_left_pixel';
   return (
-    <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="FillWithColorNode" nodeId={id} />
-      <NodeContent>
-        <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
-        <Select
-          label="Method"
-          nodeId={id}
-          defaultValue={method}
-          onSelect={(value) => {
-            useNodeStore.getState().updateNodeSetting(id, {
-              method: value,
-            });
-          }}
-        >
-          <MenuItem value="top_left_pixel">Top Left Pixel</MenuItem>
-          <MenuItem value="fixed_target_color">Fixed Target Color</MenuItem>
-        </Select>
-        <HandleTargetNumber
-          handleId={handleTargets.tolerance.id}
-          nodeId={id}
-          name="tolerance"
-          onChange={updateSetting(id, 'tolerance')}
-          disableHandle
-        />
-        {method === 'fixed_target_color' && (
-          <HandleTargetColor
-            label="Target Color"
-            handleId={handleTargets.colorTarget.id}
-            nodeId={id}
-            color={colorTarget}
-            onChange={(color) => {
-              useNodeStore.getState().updateNodeSetting<NodeDataSettings>(id, {
-                r: color.r,
-                g: color.g,
-                b: color.b,
-                a: color.a,
-              });
-            }}
-          />
-        )}
+    <NodeBasic
+      id={id}
+      nodeName="FillWithColorNode"
+      status={data.isProcessing ? 'processing' : undefined}
+      displayBorder={selected}
+    >
+      <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
+      <Select
+        label="Method"
+        nodeId={id}
+        defaultValue={method}
+        onSelect={(value) => {
+          useNodeStore.getState().updateNodeSetting(id, {
+            method: value,
+          });
+        }}
+      >
+        <MenuItem value="top_left_pixel">Top Left Pixel</MenuItem>
+        <MenuItem value="fixed_target_color">Fixed Target Color</MenuItem>
+      </Select>
+      <HandleTargetNumber
+        handleId={handleTargets.tolerance.id}
+        nodeId={id}
+        name="tolerance"
+        onChange={updateSetting(id, 'tolerance')}
+        disableHandle
+      />
+      {method === 'fixed_target_color' && (
         <HandleTargetColor
-          label="Fill Color"
-          handleId={handleTargets.colorFill.id}
+          label="Target Color"
+          handleId={handleTargets.colorTarget.id}
           nodeId={id}
-          color={colorFill}
+          color={colorTarget}
           onChange={(color) => {
             useNodeStore.getState().updateNodeSetting<NodeDataSettings>(id, {
-              r2: color.r,
-              g2: color.g,
-              b2: color.b,
-              a2: color.a,
+              r: color.r,
+              g: color.g,
+              b: color.b,
+              a: color.a,
             });
           }}
         />
-        <Separator />
-        <HandleSourceImage
-          label="Image"
-          handleId={handleSources.image.id}
-          nodeId={id}
-        />
-        <NodeStatus nodeData={data} />
-        <ImagePreview
-          enabled={data.settings.enablePreview}
-          completed={!!data.completed}
-          imageBuffer={data.imageBuffer?.buffer}
-          onTogglePreview={(enabled: boolean) => {
-            useNodeStore.getState().updateNodeSetting(id, {
-              enablePreview: enabled,
-            });
-          }}
-        />
-      </NodeContent>
-    </Node>
+      )}
+      <HandleTargetColor
+        label="Fill Color"
+        handleId={handleTargets.colorFill.id}
+        nodeId={id}
+        color={colorFill}
+        onChange={(color) => {
+          useNodeStore.getState().updateNodeSetting<NodeDataSettings>(id, {
+            r2: color.r,
+            g2: color.g,
+            b2: color.b,
+            a2: color.a,
+          });
+        }}
+      />
+      <Separator />
+      <HandleSourceImage
+        label="Image"
+        handleId={handleSources.image.id}
+        nodeId={id}
+      />
+      <NodeStatus nodeData={data} />
+      <ImagePreview
+        enabled={data.settings.enablePreview}
+        completed={!!data.completed}
+        imageBuffer={data.imageBuffer?.buffer}
+        onTogglePreview={(enabled: boolean) => {
+          useNodeStore.getState().updateNodeSetting(id, {
+            enablePreview: enabled,
+          });
+        }}
+      />
+    </NodeBasic>
   );
 }

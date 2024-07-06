@@ -2,22 +2,20 @@
 import { NodeProps } from 'reactflow';
 
 import useNodeStore from '../../store/store';
-import { HandleSourceImage } from './items/HandleSourceImage';
-import { HandleTargetImage } from './items/HandleTargetImage';
-import { Separator } from './items/Separator';
-import { ImagePreview } from './items/ImagePreview';
-import { Node } from './components/Node';
-import { NodeHeader } from './components/NodeHeader';
-import { NodeContent } from './components/NodeContent';
-import { NodeStatus } from './components/NodeStatus';
 import {
   NodeData,
   handleSources,
   handleTargets,
 } from './AlphaFlattenNodeBehavior';
+import { NodeBasic } from './components/NodeBasic';
+import { NodeStatus } from './components/NodeStatus';
+import { HandleSourceImage } from './items/HandleSourceImage';
 import { HandleTargetColor } from './items/HandleTargetColor';
+import { HandleTargetImage } from './items/HandleTargetImage';
+import { ImagePreview } from './items/ImagePreview';
+import { Separator } from './items/Separator';
 
-export function AlphaFlattenNode({ id, data }: NodeProps<NodeData>) {
+export function AlphaFlattenNode({ id, data, selected }: NodeProps<NodeData>) {
   const colorOutline =
     Number.isInteger(data.settings.a) &&
     Number.isInteger(data.settings.r) &&
@@ -36,42 +34,44 @@ export function AlphaFlattenNode({ id, data }: NodeProps<NodeData>) {
           a: 255,
         };
   return (
-    <Node status={data.isProcessing ? 'processing' : undefined}>
-      <NodeHeader title="AlphaFlattenNode" nodeId={id} />
-      <NodeContent>
-        <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
-        <HandleTargetColor
-          handleId="color"
-          label="Outline Color"
-          nodeId={id}
-          color={colorOutline}
-          onChange={(color) => {
-            useNodeStore.getState().updateNodeSetting(id, {
-              r: Math.round(color.r),
-              g: Math.round(color.g),
-              b: Math.round(color.b),
-              a: Math.round(color.a),
-            });
-          }}
-        />
-        <Separator />
-        <HandleSourceImage
-          label="Image"
-          handleId={handleSources.image.id}
-          nodeId={id}
-        />
-        <NodeStatus nodeData={data} />
-        <ImagePreview
-          enabled={data.settings.enablePreview}
-          completed={!!data.completed}
-          imageBuffer={data.imageBuffer?.buffer}
-          onTogglePreview={(enabled: boolean) => {
-            useNodeStore.getState().updateNodeSetting(id, {
-              enablePreview: enabled,
-            });
-          }}
-        />
-      </NodeContent>
-    </Node>
+    <NodeBasic
+      id={id}
+      nodeName="AlphaFlattenNode"
+      status={data.isProcessing ? 'processing' : undefined}
+      displayBorder={selected}
+    >
+      <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
+      <HandleTargetColor
+        handleId="color"
+        label="Outline Color"
+        nodeId={id}
+        color={colorOutline}
+        onChange={(color) => {
+          useNodeStore.getState().updateNodeSetting(id, {
+            r: Math.round(color.r),
+            g: Math.round(color.g),
+            b: Math.round(color.b),
+            a: Math.round(color.a),
+          });
+        }}
+      />
+      <Separator />
+      <HandleSourceImage
+        label="Image"
+        handleId={handleSources.image.id}
+        nodeId={id}
+      />
+      <NodeStatus nodeData={data} />
+      <ImagePreview
+        enabled={data.settings.enablePreview}
+        completed={!!data.completed}
+        imageBuffer={data.imageBuffer?.buffer}
+        onTogglePreview={(enabled: boolean) => {
+          useNodeStore.getState().updateNodeSetting(id, {
+            enablePreview: enabled,
+          });
+        }}
+      />
+    </NodeBasic>
   );
 }

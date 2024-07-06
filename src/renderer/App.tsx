@@ -362,6 +362,7 @@ function Flow(props) {
                 <VisibilityIcon />
               </IconButton>
             </Box>
+            {/* <div>TODO: version</div> */}
           </Box>
         </Panel>
         <Background />
@@ -403,7 +404,7 @@ function Main() {
 export default function App() {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const theme = React.useMemo(() => {
-    const isDarkMode = prefersDarkMode;
+    const isDarkMode = !prefersDarkMode;
     return createTheme({
       palette: {
         mode: isDarkMode ? 'dark' : 'light',
@@ -415,6 +416,13 @@ export default function App() {
         MuiIconButton: {
           defaultProps: {
             sx: {},
+          },
+        },
+        MuiPaper: {
+          defaultProps: {
+            sx: {
+              backgroundColor: isDarkMode ? '#181818' : '#f8f8f8',
+            },
           },
         },
       },

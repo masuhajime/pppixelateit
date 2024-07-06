@@ -62,9 +62,15 @@ export default function Sidebar(props: Props) {
             }}
             key={nodeType.name}
           >
-            <Typography variant="subtitle1" color="text.primary">
-              {nodeType.name}
-            </Typography>
+            <Box
+              sx={{
+                padding: '0px 8px 8px 8px',
+              }}
+            >
+              <Typography variant="subtitle2" color="text.secondary">
+                {nodeType.name}
+              </Typography>
+            </Box>
             {nodeType.nodes.map((node) => {
               return (
                 <Box
@@ -81,7 +87,7 @@ export default function Sidebar(props: Props) {
                       padding: '0px',
                       margin: '0px 0px',
                       '&:hover': {
-                        boxShadow: `0px 0px 1px 1px ${nodeType.color}`,
+                        boxShadow: `0px 0px 1px 1px rgb(${nodeType.color[0]}, ${nodeType.color[1]}, ${nodeType.color[2]})`,
                       },
                     }}
                   >
@@ -96,11 +102,13 @@ export default function Sidebar(props: Props) {
                         style={{
                           transitionDuration: '0',
                           marginRight: '8px',
-                          color: nodeType.color,
+                          color: `rgb(${nodeType.color[0]}, ${nodeType.color[1]}, ${nodeType.color[2]})`,
                           fontSize: '1.0rem',
                         }}
                       />
-                      {node.name}
+                      <Typography variant="body2" color="text.primary">
+                        {node.nameDisplay || node.name}
+                      </Typography>
                     </CardContentNoPadding>
                   </CardStyled>
                 </Box>
