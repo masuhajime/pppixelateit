@@ -1,12 +1,9 @@
 /* eslint-disable import/prefer-default-export */
 // @flow
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import PlayCircleIcon from '@mui/icons-material/PlayCircle';
-import StopCircleIcon from '@mui/icons-material/StopCircle';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
-import LoopIcon from '@mui/icons-material/Loop';
-import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ModeStandbyIcon from '@mui/icons-material/ModeStandby';
+import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
 import { Box, Typography, keyframes } from '@mui/material';
 import { NodeBaseData } from '../data/NodeData';
 

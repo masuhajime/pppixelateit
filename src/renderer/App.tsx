@@ -3,6 +3,9 @@ import './App.css';
 import {
   Box,
   IconButton,
+  Snackbar,
+  SnackbarContent,
+  Stack,
   ThemeProvider,
   createTheme,
   keyframes,
@@ -47,6 +50,8 @@ import ThemedBackground from '../components/ThemedBackground';
 import { getNodeBehavior } from '../flows/nodes/data/NodeData';
 import { PreparedFlowsDialog } from '../components/PreparedFlowsDialog';
 import { useShallow } from 'zustand/react/shallow';
+import { SnackbarStacks } from '../components/SnackbarStacks';
+import useSnackbar from '../store/snackbarStore';
 
 const spin = keyframes`
   from {
@@ -216,159 +221,167 @@ function Flow(props) {
   );
 
   return (
-    <div
-      style={{
-        // width: '100vw',
-        height: '100vh',
-      }}
-      className="reactflow-wrapper"
-      ref={reactFlowWrapper}
-    >
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        minZoom={0.2}
-        defaultViewport={{ x: 0, y: 0, zoom: 0.5 }}
-        onNodesChange={(changes: NodeChange[]) => {
-          debounceOneTimeTouch();
-          onNodesChange(changes);
+    <>
+      <Panel position="bottom-right">
+        <SnackbarStacks></SnackbarStacks>
+      </Panel>
+      <div
+        style={{
+          // width: '100vw',
+          height: '100vh',
         }}
-        onEdgesChange={(changes: EdgeChange[]) => {
-          debounceOneTimeTouch();
-          onEdgesChange(changes);
-        }}
-        isValidConnection={(connection: Connection) => {
-          // console.log('isValidConnection', connection);
-          // find nodes connected to target handle
-          // const node = getNodeSnapshot<NodeData>(nodeId);
-          if (connection.target === null || connection.targetHandle === null) {
-            return false;
-          }
-          const connecteds = useNodeStore
-            .getState()
-            .getEdgesConnectedToNodeAndHandle(
-              connection.target,
-              connection.targetHandle,
-            );
-          // console.log('connecteds', {
-          //   connection,
-          //   connecteds,
-          // });
-
-          if (connecteds.length > 0) {
-            return false;
-          }
-          if (
-            connection.targetHandle === null ||
-            connection.sourceHandle === null
-          ) {
-            return false;
-          }
-          return connection.targetHandle.includes(connection.sourceHandle);
-        }}
-        nodeTypes={nodeTypes}
-        edgeTypes={edgeTypes}
-        onConnect={onConnectCustom}
-        proOptions={{
-          hideAttribution: true,
-        }}
-        onDrop={(event: React.DragEvent<HTMLDivElement>) => {
-          onDrop(event);
-        }}
-        onDragOver={onDragOver}
-        onInit={(instance: ReactFlowInstance) => {
-          console.log('flow loaded:', instance);
-          init();
-          setReactFlowInstance(instance);
-        }}
-        fitView
+        className="reactflow-wrapper"
+        ref={reactFlowWrapper}
       >
-        <Panel position="top-left">
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-            }}
-          >
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          minZoom={0.2}
+          defaultViewport={{ x: 0, y: 0, zoom: 0.5 }}
+          onNodesChange={(changes: NodeChange[]) => {
+            debounceOneTimeTouch();
+            onNodesChange(changes);
+          }}
+          onEdgesChange={(changes: EdgeChange[]) => {
+            debounceOneTimeTouch();
+            onEdgesChange(changes);
+          }}
+          isValidConnection={(connection: Connection) => {
+            // console.log('isValidConnection', connection);
+            // find nodes connected to target handle
+            // const node = getNodeSnapshot<NodeData>(nodeId);
+            if (
+              connection.target === null ||
+              connection.targetHandle === null
+            ) {
+              return false;
+            }
+            const connecteds = useNodeStore
+              .getState()
+              .getEdgesConnectedToNodeAndHandle(
+                connection.target,
+                connection.targetHandle,
+              );
+            // console.log('connecteds', {
+            //   connection,
+            //   connecteds,
+            // });
+
+            if (connecteds.length > 0) {
+              return false;
+            }
+            if (
+              connection.targetHandle === null ||
+              connection.sourceHandle === null
+            ) {
+              return false;
+            }
+            return connection.targetHandle.includes(connection.sourceHandle);
+          }}
+          nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
+          onConnect={onConnectCustom}
+          proOptions={{
+            hideAttribution: true,
+          }}
+          onDrop={(event: React.DragEvent<HTMLDivElement>) => {
+            onDrop(event);
+          }}
+          onDragOver={onDragOver}
+          onInit={(instance: ReactFlowInstance) => {
+            console.log('flow loaded:', instance);
+            init();
+            setReactFlowInstance(instance);
+          }}
+          fitView
+        >
+          <Panel position="top-left">
             <Box
               sx={{
-                backgroundColor: 'rgba(128,128,128,0.5)',
-                borderRadius: '50%',
+                display: 'flex',
+                flexDirection: 'row',
               }}
             >
-              <IconButton
-                aria-label="settings"
-                onClick={() => {
-                  console.log('play');
-                  processController.start();
+              <Box
+                sx={{
+                  backgroundColor: 'rgba(128,128,128,0.5)',
+                  borderRadius: '50%',
                 }}
-                disabled={processStatus === 'processing'}
               >
-                {processStatus === 'processing' && (
-                  <AutorenewIcon
-                    sx={{
-                      animation: `${spin} 2s linear infinite`,
-                      color: '#29ADFF',
-                    }}
-                  />
-                )}
-                {processStatus !== 'processing' && (
-                  <PlayArrowIcon
-                    sx={{
-                      color: '#FF004D',
-                    }}
-                  />
-                )}
-              </IconButton>
-            </Box>
-            <Box
-              sx={{
-                backgroundColor: 'rgba(128,128,128,0.5)',
-                borderRadius: '50%',
-                marginLeft: '8px',
-              }}
-            >
-              <IconButton
-                aria-label="settings"
-                onClick={() => {
-                  processController.stop();
+                <IconButton
+                  aria-label="settings"
+                  onClick={() => {
+                    console.log('play');
+                    processController.start();
+                  }}
+                  disabled={processStatus === 'processing'}
+                >
+                  {processStatus === 'processing' && (
+                    <AutorenewIcon
+                      sx={{
+                        animation: `${spin} 2s linear infinite`,
+                        color: '#29ADFF',
+                      }}
+                    />
+                  )}
+                  {processStatus !== 'processing' && (
+                    <PlayArrowIcon
+                      sx={{
+                        color: '#FF004D',
+                      }}
+                    />
+                  )}
+                </IconButton>
+              </Box>
+              <Box
+                sx={{
+                  backgroundColor: 'rgba(128,128,128,0.5)',
+                  borderRadius: '50%',
+                  marginLeft: '8px',
                 }}
-                disabled={processStatus !== 'processing'}
               >
-                <StopIcon />
-              </IconButton>
-            </Box>
-            <Box
-              sx={{
-                backgroundColor: 'rgba(128,128,128,0.5)',
-                borderRadius: '50%',
-                marginLeft: '8px',
-              }}
-            >
-              <IconButton
-                aria-label="settings"
-                onClick={() => {
-                  // change all node preview to visible
-                  if (useNodeStore.getState().nodes.length === 0) {
-                    return;
-                  }
-                  const preview =
-                    !!useNodeStore.getState().nodes[0].data?.settings
-                      .enablePreview;
-                  useNodeStore.getState().setAllNodeEnablePreview(!preview);
+                <IconButton
+                  aria-label="settings"
+                  onClick={() => {
+                    processController.stop();
+                  }}
+                  disabled={processStatus !== 'processing'}
+                >
+                  <StopIcon />
+                </IconButton>
+              </Box>
+              <Box
+                sx={{
+                  backgroundColor: 'rgba(128,128,128,0.5)',
+                  borderRadius: '50%',
+                  marginLeft: '8px',
                 }}
-                disabled={processStatus === 'processing'}
               >
-                <VisibilityIcon />
-              </IconButton>
+                <IconButton
+                  aria-label="settings"
+                  onClick={() => {
+                    // change all node preview to visible
+                    if (useNodeStore.getState().nodes.length === 0) {
+                      return;
+                    }
+                    const preview =
+                      !!useNodeStore.getState().nodes[0].data?.settings
+                        .enablePreview;
+                    useNodeStore.getState().setAllNodeEnablePreview(!preview);
+                  }}
+                  disabled={processStatus === 'processing'}
+                >
+                  <VisibilityIcon />
+                </IconButton>
+              </Box>
+              {/* <div>TODO: version</div> */}
             </Box>
-            {/* <div>TODO: version</div> */}
-          </Box>
-        </Panel>
-        <Background />
-        <Controls />
-      </ReactFlow>
-    </div>
+          </Panel>
+          <Background />
+          <Controls />
+        </ReactFlow>
+      </div>
+    </>
   );
 }
 

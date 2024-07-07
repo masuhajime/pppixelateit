@@ -7,6 +7,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import { arrayBufferToBase64 } from '../../../process/w2b';
 import imageBase64TransparentBackground from '../../../assets/transparent-background';
+import useSnackbar from '../../../store/snackbarStore';
 
 type Props = {
   enabled?: boolean;
@@ -166,6 +167,7 @@ const togglePreview = (
   },
   completed?: boolean,
 ) => {
+  const { addSnackBar } = useSnackbar();
   return (
     <Box
       sx={{
@@ -234,6 +236,7 @@ const togglePreview = (
             }}
           />
           <ContentPasteIcon
+            // copy image to clipboard
             className="nodrag"
             sx={{
               fontSize: '1.2em',
@@ -246,6 +249,7 @@ const togglePreview = (
             }}
             onClick={() => {
               !!onImageClipboard && onImageClipboard();
+              addSnackBar('Image copied to clipboard');
             }}
           />
         </>
