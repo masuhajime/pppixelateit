@@ -53,6 +53,13 @@ export default class MenuBuilder {
           },
         },
         { type: 'separator' },
+        {
+          label: 'Settings',
+          accelerator: process.platform === 'darwin' ? 'Cmd+,' : undefined,
+          async click() {
+            ipcMain.emit('open-settings');
+          },
+        },
         // { label: 'Services', submenu: [] },
         // { type: 'separator' },
         // {
@@ -183,6 +190,13 @@ export default class MenuBuilder {
               shell.openExternal('https://masuone.itch.io/pixel-after-all');
             },
           },
+          {
+            label: 'Settings',
+            click() {
+              ipcMain.emit('open-settings');
+            },
+          },
+          { type: 'separator' },
           {
             label: 'Quit',
             click: () => {

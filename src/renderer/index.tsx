@@ -139,3 +139,8 @@ window.electron.ipcRenderer.on('file-new', async (arg) => {
 window.electron.ipcRenderer.on('file-new-template', async (arg) => {
   useConfigStore.getState().setOpenDialogPreparedFlows(true);
 });
+
+window.electron.ipcRenderer.on('open-settings', async (arg) => {
+  console.log('open-settings');
+  useConfigStore.getState().setOpenDialogSettings(true);
+});

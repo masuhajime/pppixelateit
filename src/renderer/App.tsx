@@ -51,7 +51,8 @@ import { getNodeBehavior } from '../flows/nodes/data/NodeData';
 import { PreparedFlowsDialog } from '../components/PreparedFlowsDialog';
 import { useShallow } from 'zustand/react/shallow';
 import { SnackbarStacks } from '../components/SnackbarStacks';
-import useSnackbar from '../store/snackbarStore';
+import { SettingsDialog } from '../components/SettingsDialog';
+import useConfigStore from '../store/configStore';
 
 const spin = keyframes`
   from {
@@ -414,10 +415,33 @@ function Main() {
   );
 }
 
+function solveTheme(theme: string, prefersColorSchemeDark: boolean) {
+  switch (theme) {
+    case 'light':
+      return false;
+    case 'dark':
+      return true;
+    case 'system':
+      return prefersColorSchemeDark;
+  }
+}
+
 export default function App() {
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const prefersColorSchemeDark = useMediaQuery('(prefers-color-scheme: dark)');
+  const [isDarkMode, setDarkMode] = React.useState(
+    solveTheme(useConfigStore.getState().theme, prefersColorSchemeDark),
+  );
+
+  useConfigStore.subscribe(
+    (state) => {
+      return state.theme;
+    },
+    (theme) => {
+      setDarkMode(solveTheme(theme, prefersColorSchemeDark));
+    },
+  );
+
   const theme = React.useMemo(() => {
-    const isDarkMode = !prefersDarkMode;
     return createTheme({
       palette: {
         mode: isDarkMode ? 'dark' : 'light',
@@ -440,10 +464,11 @@ export default function App() {
         },
       },
     });
-  }, [prefersDarkMode]);
+  }, [isDarkMode]);
   return (
     <ThemeProvider theme={theme}>
       <PreparedFlowsDialog />
+      <SettingsDialog />
       <Router>
         <Routes>
           <Route path="/" element={<Main />} />

@@ -119,7 +119,11 @@ export function PreparedFlowsDialog() {
   const [open, setOpen] = React.useState(false);
 
   useConfigStore.subscribe((state) => {
-    setOpen(state.getOpenDialogPreparedFlows());
+    if (state.openDialogPreparedFlows) {
+      setOpen(true);
+    } else if (!state.openDialogPreparedFlows) {
+      setOpen(false);
+    }
   });
 
   const handleClose = () => {

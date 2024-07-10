@@ -25,7 +25,8 @@ export type Channels =
   | 'file-save-as'
   | 'file-open'
   | 'file-new'
-  | 'file-new-template';
+  | 'file-new-template'
+  | 'open-settings';
 
 const electronHandler = {
   ipcRenderer: {

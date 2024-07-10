@@ -118,7 +118,7 @@
     "reactflow": "^11.9.4",
     "sharp": "^0.33.4",
     "uuid": "^9.0.1",
-    "zustand": "^4.4.5"
+    "zustand": "^4.5.4"
   },
   "devDependencies": {
     "@electron/notarize": "^2.1.0",
