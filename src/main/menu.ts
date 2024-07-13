@@ -169,9 +169,23 @@ export default class MenuBuilder {
       ],
     };
 
+    const editMenu: MenuItemConstructorOptions = {
+      label: 'Edit',
+      submenu: [
+        { role: 'undo' },
+        { role: 'redo' },
+        { type: 'separator' },
+        { role: 'cut' },
+        { role: 'copy' },
+        { role: 'paste' },
+        { role: 'selectAll' }
+      ],
+    };
+
     return [
       subMenuAbout,
       subMenuFile,
+      editMenu
       // subMenuWindow,
       // subMenuHelp
     ];
@@ -253,6 +267,18 @@ export default class MenuBuilder {
           },
         ],
       },
+      {
+        label: 'Edit',
+        submenu: [
+          { role: 'undo' },
+          { role: 'redo' },
+          { type: 'separator' },
+          { role: 'cut' },
+          { role: 'copy' },
+          { role: 'paste' },
+          { role: 'selectAll' }
+        ],
+      }
       // {
       //   label: 'Help',
       //   submenu: [
