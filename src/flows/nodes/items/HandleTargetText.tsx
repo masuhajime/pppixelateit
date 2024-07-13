@@ -16,13 +16,15 @@ type Props = {
   required?: boolean;
 };
 
-HandleTargetText.defaultProps = {
-  disableInput: false,
-  required: false,
-  value: '',
-  onChange: () => {},
-};
-export function HandleTargetText(props: Props) {
+export function HandleTargetText({
+  name,
+  handleId,
+  nodeId,
+  value = '',
+  onChange = () => {},
+  disableInput = false,
+  required = false,
+}: Props) {
   const ref = React.useRef<HTMLDivElement>(null);
 
   const updateNodeInternals = useUpdateNodeInternals();
@@ -36,19 +38,16 @@ export function HandleTargetText(props: Props) {
     setHandlePositionTop(ref.current.offsetTop + ref.current.offsetHeight / 2);
   }, [ref.current?.offsetTop]);
   React.useEffect(() => {
-    updateNodeInternals(props.nodeId);
+    updateNodeInternals(nodeId);
   }, [handlePositionTop]);
 
   const [text, setText] = React.useState('');
   React.useEffect(() => {
-    setText(props.value);
-  }, [props.value]);
+    setText(value);
+  }, [value]);
   const [connected, setConnected] = React.useState(false);
   useNodeStore.subscribe((state) => {
-    const c = state.getEdgesConnectedToNodeAndHandle(
-      props.nodeId,
-      props.handleId,
-    );
+    const c = state.getEdgesConnectedToNodeAndHandle(nodeId, handleId);
     const isConnected = c.length > 0;
     setConnected(isConnected);
   });
@@ -56,7 +55,7 @@ export function HandleTargetText(props: Props) {
   return (
     <Box className="node-item" ref={ref}>
       <TextField
-        label={props.name}
+        label={name}
         type="text"
         InputLabelProps={{
           shrink: true,
@@ -69,17 +68,17 @@ export function HandleTargetText(props: Props) {
         onChange={(e) => {
           if (!connected) {
             setText(e.target.value);
-            props.onChange && props.onChange(e.target.value);
+            onChange && onChange(e.target.value);
           }
         }}
-        disabled={props.disableInput || connected}
+        disabled={disableInput || connected}
       />
       <Handle
         type="target"
         position={Position.Left}
-        id={props.handleId}
+        id={handleId}
         style={
-          props.required
+          required
             ? NodeItemConfig.handleStyleFilled(
                 'Lime',
                 handlePositionTop,

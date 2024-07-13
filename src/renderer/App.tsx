@@ -189,9 +189,11 @@ function Flow(props) {
         return;
       }
 
-      const position = reactFlowInstance.project({
-        x: event.clientX - reactFlowBounds.left,
-        y: event.clientY - reactFlowBounds.top,
+      const position = reactFlowInstance.screenToFlowPosition({
+        // x: event.clientX - reactFlowBounds.left,
+        // y: event.clientY - reactFlowBounds.top,
+        x: event.clientX,
+        y: event.clientY,
       });
       let newNode = {
         id: `node-${type}-${uuidv4()}`,

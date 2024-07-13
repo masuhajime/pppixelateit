@@ -28,7 +28,9 @@ export function HandleTargetNumber({
 }: Props) {
   const ref = React.useRef<HTMLDivElement>(null);
   const updateNodeInternals = useUpdateNodeInternals();
-  const [handlePositionTop, setHandlePositionTop] = React.useState(0);
+  const [handlePositionTop, setHandlePositionTop] = React.useState<
+    number | undefined
+  >(undefined);
   React.useEffect(() => {
     if (!ref.current) {
       return;
@@ -42,7 +44,7 @@ export function HandleTargetNumber({
 
   const [value, setValue] = React.useState(number || 0);
   React.useEffect(() => {
-    setValue(number);
+    setValue(number || 0);
   }, [number]);
 
   const [connected, setConnected] = React.useState(false);
@@ -54,28 +56,39 @@ export function HandleTargetNumber({
 
   return (
     <Box className="node-item" ref={ref}>
+      {connected && (
+        <TextField
+          label={name}
+          type="text"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          placeholder="connected"
+          variant="outlined"
+          className="nodrag"
+          size="small"
+          sx={{ width: '100%' }}
+          disabled={true}
+        />
+      )}
       <TextField
         label={name}
-        type={connected ? 'text' : 'number'}
+        type={'number'}
         InputLabelProps={{
           shrink: true,
         }}
-        placeholder={connected ? '(Connected)' : undefined}
-        value={connected ? '(Connected)' : value}
+        value={value}
         variant="outlined"
         className="nodrag"
         size="small"
-        sx={{ width: '100%' }}
+        sx={{ width: '100%', display: connected ? 'none' : undefined }}
         onChange={(e) => {
-          if (!connected) {
-            const n = parseInt(e.target.value, 10);
-            setValue(n);
-            if (onChange) {
-              onChange(n);
-            }
+          const n = parseInt(e.target.value, 10);
+          setValue(n);
+          if (onChange) {
+            onChange(n);
           }
         }}
-        disabled={connected}
         InputProps={{
           inputProps: { type: 'number', min, max },
         }}

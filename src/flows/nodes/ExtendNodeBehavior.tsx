@@ -57,7 +57,7 @@ export const nodeBehavior: NodeBehaviorInterface = {
   initializeSettingsOnNodeCreate() {
     return {
       unit: 'pixel',
-      top: 11,
+      top: 10,
       bottom: 10,
       left: 10,
       right: 10,
