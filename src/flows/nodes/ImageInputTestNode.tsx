@@ -60,6 +60,10 @@ export function ImageInputTestNode({
           <MenuItem value="BuildingIsometric">Bulding Isometric</MenuItem>
           <MenuItem value="GirlA">GirlA</MenuItem>
           <MenuItem value="GirlB">GirlB</MenuItem>
+          <MenuItem value="DarkForest">DarkForest</MenuItem>
+          <MenuItem value="WhiteClouds">WhiteClouds</MenuItem>
+          <MenuItem value="GradientWB">GradientWB</MenuItem>
+          <MenuItem value="Gradient">Gradient</MenuItem>
         </Select>
       </FormControl>
       <HandleSourceImage

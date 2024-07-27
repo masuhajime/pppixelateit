@@ -19,6 +19,10 @@ import imageTestPortion from '../../assets/imageTestPortion';
 import imageTestBuildingFacade from '../../assets/imageTestBuildingFacade';
 import imageTestBuildingIsometric from '../../assets/imageTestBuildingIsometric';
 import imageTestGirlB from '../../assets/imageTestGirlB';
+import imageTestDarkForest from '../../assets/imageTestDarkForest';
+import imageTestWhiteClouds from '../../assets/imageTestWhiteClouds';
+import imageTestGradient from '../../assets/imageTestGradient';
+import imageTestGradientWB from '../../assets/imageTestGradientWB';
 
 export const getImageBufferForImageInputTest = (imageName?: string): Buffer => {
   switch (imageName) {
@@ -40,6 +44,14 @@ export const getImageBufferForImageInputTest = (imageName?: string): Buffer => {
       return base64ToBuffer(imageTestGirlA);
     case 'GirlB':
       return base64ToBuffer(imageTestGirlB);
+    case 'DarkForest':
+      return base64ToBuffer(imageTestDarkForest);
+    case 'WhiteClouds':
+      return base64ToBuffer(imageTestWhiteClouds);
+    case 'GradientWB':
+      return base64ToBuffer(imageTestGradientWB);
+    case 'Gradient':
+      return base64ToBuffer(imageTestGradient);
     default:
       throw new Error(`unknown image:${imageName}`);
   }

@@ -24,9 +24,24 @@ export const handleTargets: Record<string, HandleTarget> = {
   },
 };
 
-export type NodeData = {} & NodeBaseData & NodeBaseDataImageBuffer;
+export type NodeDataSettings = {
+  width: number;
+  height: number;
+  maxSlope: number;
+};
+export type NodeData = {
+  settings: NodeDataSettings;
+} & NodeBaseData &
+  NodeBaseDataImageBuffer;
 
 export const nodeBehavior: NodeBehaviorInterface = {
+  initializeSettingsOnNodeCreate() {
+    return {
+      width: 50,
+      height: 50,
+      maxSlope: 5,
+    };
+  },
   dataIncoming(
     nodeId: string,
     handleId: string,
@@ -53,7 +68,10 @@ export const nodeBehavior: NodeBehaviorInterface = {
     window.imageProcess
       .imageProcess('imageClahe', {
         buffer: node.data.imageBuffer.buffer,
-      } as ImageResizeParameter)
+        width: node.data.settings.width,
+        height: node.data.settings.height,
+        maxSlope: node.data.settings.maxSlope,
+      })
       .then((buffer) => {
         store.updateNodeData<NodeData>(nodeId, {
           completed: true,

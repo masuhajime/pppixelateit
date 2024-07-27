@@ -29,6 +29,9 @@ export const handleTargets = {
 export type NodeData = {
   settings?: {
     number?: number;
+    ditheringMatrix?: 'none' | 'matrix2' | 'matrix4';
+    ditheringStrength?: number;
+    seed?: number;
   };
 } & NodeBaseData &
   NodeBaseDataImageBuffer;
@@ -63,6 +66,9 @@ export const nodeBehavior: NodeBehaviorInterface = {
       .imageProcess('imageKmeans', {
         buffer: node.data.imageBuffer.buffer,
         number: node.data.settings?.number || 8,
+        ditheringMatrix: node.data.settings?.ditheringMatrix || 'none',
+        ditheringStrength: node.data.settings?.ditheringStrength || 4,
+        seed: node.data.settings?.seed || 0,
       } as ImageKmeansParameter)
       .then((buffer) => {
         store.updateNodeData<NodeData>(nodeId, {

@@ -1,6 +1,3 @@
-/* eslint-disable import/prefer-default-export */
-// @flow
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import { Typography } from '@mui/material';
@@ -11,6 +8,7 @@ type Props = {
   min?: number;
   max?: number;
   onSelect: (value: number) => void;
+  marks?: Array<{ value: number; label: string }>;
 };
 
 export function SliderValue(props: Props) {
@@ -22,11 +20,13 @@ export function SliderValue(props: Props) {
         aria-label="Small"
         valueLabelDisplay="on"
         value={Number.isInteger(value) ? value : 50}
-        min={min || 0}
-        max={max || 100}
+        min={min}
+        max={max}
         onChange={(event: Event, newValue: number | number[]) => {
           onSelect(newValue as number);
         }}
+        marks={props.marks}
+        step={!!props.marks ? null : 1}
       />
     </Box>
   );

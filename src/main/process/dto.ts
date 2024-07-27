@@ -10,6 +10,9 @@ export type ImageResizeParameter = {
 export type ImageKmeansParameter = {
   buffer: Buffer;
   number: number;
+  ditheringMatrix?: 'none' | 'matrix2' | 'matrix4';
+  ditheringStrength?: number;
+  seed?: number;
 };
 
 export type ImageColorPaletteParameter = {

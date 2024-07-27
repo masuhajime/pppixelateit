@@ -9,6 +9,7 @@ import { HandleSourceImage } from './items/HandleSourceImage';
 import { HandleTargetImage } from './items/HandleTargetImage';
 import { ImagePreview } from './items/ImagePreview';
 import { Separator } from './items/Separator';
+import { SliderValue } from './items/SliderValue';
 
 export function ClaheNode({ id, data, selected }: NodeProps<NodeData>) {
   return (
@@ -19,6 +20,40 @@ export function ClaheNode({ id, data, selected }: NodeProps<NodeData>) {
       displayBorder={selected}
     >
       <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
+
+      <SliderValue
+        label="Height"
+        onSelect={(v) => {
+          useNodeStore.getState().updateNodeSetting(id, {
+            height: v,
+          });
+        }}
+        value={data.settings.height}
+        min={1}
+        max={100}
+      />
+      <SliderValue
+        label="Width"
+        onSelect={(v) => {
+          useNodeStore.getState().updateNodeSetting(id, {
+            width: v,
+          });
+        }}
+        value={data.settings.width}
+        min={1}
+        max={100}
+      />
+      <SliderValue
+        label="Max slope"
+        onSelect={(v) => {
+          useNodeStore.getState().updateNodeSetting(id, {
+            maxSlope: v,
+          });
+        }}
+        value={data.settings.maxSlope}
+        min={0}
+        max={10}
+      />
       <Separator />
       <HandleSourceImage
         label="Image"
