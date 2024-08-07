@@ -219,6 +219,17 @@ ipcMain.handle('directory-read', async (event, directoryPath: string) => {
   });
 });
 
+ipcMain.handle('directory-exists', async (event, directoryPath: string) => {
+  // check directory exists
+  const exists = fs.existsSync(directoryPath);
+  if (!exists) {
+    return false;
+  }
+  // check is directory
+  const isDirectory = fs.statSync(directoryPath).isDirectory();
+  return exists && isDirectory;
+});
+
 ipcMain.handle('debug-string', async () => {
   return {
     a: path.resolve(__dirname),

@@ -9,6 +9,8 @@ import { HandleTargetDirectory } from './items/HandleTargetDirectory';
 import { HandleTargetImage } from './items/HandleTargetImage';
 import { HandleTargetText } from './items/HandleTargetText';
 import { Separator } from './items/Separator';
+import { Box, Typography } from '@mui/material';
+import ErrorIcon from '@mui/icons-material/Error';
 
 export function SaveImageNode({ id, data, selected }: NodeProps<NodeData>) {
   const dir = data.directory || data.settings.directory || '';
@@ -21,6 +23,32 @@ export function SaveImageNode({ id, data, selected }: NodeProps<NodeData>) {
       displayBorder={selected}
     >
       <HandleTargetImage handleId={handleTargets.image.id} nodeId={id} />
+      {!!data.errorMessage && (
+        <Box sx={{ px: 2, whiteSpace: 'pre-line' }}>
+          <Typography variant="body2" color="error.light">
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
+              }}
+            >
+              <ErrorIcon color="error" />
+              {data.errorMessage}
+            </Box>
+          </Typography>
+          <Typography
+            variant="body2"
+            color="error.light"
+            sx={{
+              whiteSpace: 'pre-line',
+              wordBreak: 'break-all',
+            }}
+          >
+            {data.directory}
+          </Typography>
+        </Box>
+      )}
       <HandleTargetDirectory
         directory={dir}
         placeholder="Select Directory"
@@ -37,7 +65,8 @@ export function SaveImageNode({ id, data, selected }: NodeProps<NodeData>) {
         name="file name"
         handleId={handleTargets.filename.id}
         nodeId={id}
-        defaultValue={file || ''}
+        // defaultValue={file || ''}
+        value={file || ''}
         onChange={(value) => {
           useNodeStore.getState().updateNodeData<NodeData>(id, {
             filename: value,

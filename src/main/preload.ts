@@ -93,6 +93,9 @@ const fsHandler = {
     // get all files in the directory
     return ipcRenderer.invoke('directory-read', path);
   },
+  isDirectory(path: string) {
+    return ipcRenderer.invoke('directory-exists', path);
+  }
 };
 contextBridge.exposeInMainWorld('fs', fsHandler);
 export type FsHandler = typeof fsHandler;

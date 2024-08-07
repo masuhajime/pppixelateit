@@ -27,6 +27,7 @@ export const handleTargets = {
 export type NodeData = {
   filename?: string;
   directory?: string;
+  errorMessage?: string;
   settings: {
     filename?: string;
     directory?: string;
@@ -95,12 +96,27 @@ export const nodeBehavior: NodeBehaviorInterface = {
     // // jimp instance to png
     // const pngBuffer = await jimpImage.getBufferAsync(Jimp.MIME_PNG);
 
+    // check directory exists
+    const isDirectory = await window.fs.isDirectory(directory);
+    // log
+    console.log('isDirectory', isDirectory);
+    if (!isDirectory) {
+      console.error('Directory not exists');
+      store.updateNodeData<NodeData>(nodeId, {
+        completed: true,
+        errorMessage: 'Directory not exists',
+      });
+      callback();
+      return;
+    }
+
     window.fs
       .saveAsBuffer(`${directory}/${filename}`, node.data.imageBuffer?.buffer)
       .then(() => {
         console.log('saved image' + `${directory}/${filename}`);
         store.updateNodeData<NodeData>(nodeId, {
           completed: true,
+          errorMessage: undefined,
         });
         callback();
         return 1;
@@ -118,10 +134,10 @@ export const nodeBehavior: NodeBehaviorInterface = {
     // await fs.writeBinaryFile(`${directory}/${filename}`, pngBuffer);
     console.log('saved image' + `${directory}/${filename}`);
 
-    store.updateNodeData<NodeData>(nodeId, {
-      completed: true,
-    });
-    callback();
+    // store.updateNodeData<NodeData>(nodeId, {
+    //   completed: true,
+    // });
+    // callback();
   },
   canStartProcess(nodeId: string): boolean {
     const node = getNodeSnapshot<NodeData>(nodeId);
